@@ -40,6 +40,10 @@ class CaminiToons {
     this._animationDocument.deleteSelection();
   }
 
+  moveDrawing(aDrawing, aDelta) {
+    this._animationDocument.moveDrawing(aDrawing, aDelta);
+  }
+
   usePen() {
     this.useToolNamed('pen');
   }

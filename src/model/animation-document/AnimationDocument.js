@@ -42,6 +42,10 @@ class AnimationDocument {
     subclassResponsibility();
   }
 
+  moveDrawing() {
+    subclassResponsibility();
+  }
+
 }
 
 export default AnimationDocument;

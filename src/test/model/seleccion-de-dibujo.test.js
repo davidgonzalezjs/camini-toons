@@ -1,7 +1,7 @@
 import MokedAnimationDocument from "../../model/animation-document/MokedAnimationDocument";
 import CaminiToons from "../../model/CaminiToons";
 
-import { clickEvent } from '../helpers/mouse-event-factory'
+import { clickEvent, mouseUpEvent, mouseMoveEvent } from '../helpers/mouse-event-factory'
 import { deleteKeyPressEvent, keyPressEvent } from '../helpers/keyboard-event-factory'
 import { mockPath, mockFunctionReturning } from "../helpers/mocks";
 import Optional from "../../model/Optional";
@@ -65,6 +65,32 @@ describe('Seleccion de dibujo', () => {
         caminiToons.handleKeyDown(keyPressEvent('x'));
 
         expect(animationDocument.deleteSelection).not.toBeCalled();
+    });
+
+    it('cuando se mantiene clickeado un dibujo y se mueve el mouse, se lo mueve', () => {
+        const aDrawing = mockPath();
+        animationDocument.hitTest = mockFunctionReturning(Optional.with(aDrawing));
+
+        const aClickEvent = clickEvent();
+        caminiToons.handleMouseDown(aClickEvent);
+
+        const aMouseMoveEvent = mouseMoveEvent({delta: {x: 10, y: 20}});
+        caminiToons.handleMouseMove(aMouseMoveEvent);
+        
+        expect(animationDocument.moveDrawing).toBeCalledWith(aDrawing, aMouseMoveEvent.delta);
+    });
+
+    it('cuando se esta moviendo un dibujo con el mouse y se desclickea, se lo deja de mover', () => {
+        const aDrawing = mockPath();
+        animationDocument.hitTest = mockFunctionReturning(Optional.with(aDrawing));
+
+        caminiToons.handleMouseDown(clickEvent());
+        caminiToons.handleMouseMove(mouseMoveEvent({delta: {x: 10, y: 20}}));
+        caminiToons.handleMouseUp(mouseUpEvent());
+
+        caminiToons.handleMouseMove(mouseMoveEvent({delta: {x: 11, y: 22}}));
+        
+        expect(animationDocument.moveDrawing).toBeCalledTimes(1);
     });
     
 });

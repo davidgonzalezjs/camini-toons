@@ -12,6 +12,7 @@ class MokedAnimationDocument extends AnimationDocument {
     this.deselectAllDrawings = jest.fn();
     this.selectDrawing = jest.fn();
     this.deleteSelection = jest.fn();
+    this.moveDrawing = jest.fn();
   }
 
 }

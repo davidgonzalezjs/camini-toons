@@ -43,6 +43,10 @@ class PaperJSAnimationDocument extends AnimationDocument {
     Paper.project.selectedItems.forEach(item => item.remove());
   }
 
+  moveDrawing(aDrawing, aDelta) {
+    aDrawing.position = aDrawing.position.add(aDelta);
+  }
+
 }
 
 export default PaperJSAnimationDocument;
