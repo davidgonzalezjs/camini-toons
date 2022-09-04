@@ -12,6 +12,7 @@ class PaperJSAnimationDocument extends AnimationDocument {
     Paper.view.onMouseDown = (event) => this.onMouseDown(event);
     Paper.view.onMouseDrag = (event) => this.onMouseMove(event);
     Paper.view.onMouseUp = (event) => this.onMouseUp(event);
+    Paper.view.onKeyDown = (event) => this.onKeyDown(event);
 
     Paper.view.draw();
   }
@@ -36,6 +37,10 @@ class PaperJSAnimationDocument extends AnimationDocument {
 
   selectDrawing(aDrawing) {
     aDrawing.selected = true;
+  }
+
+  deleteSelection() {
+    Paper.project.selectedItems.forEach(item => item.remove());
   }
 
 }

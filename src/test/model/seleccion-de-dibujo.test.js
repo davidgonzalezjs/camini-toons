@@ -2,6 +2,7 @@ import MokedAnimationDocument from "../../model/animation-document/MokedAnimatio
 import CaminiToons from "../../model/CaminiToons";
 
 import { clickEvent } from '../helpers/mouse-event-factory'
+import { deleteKeyPressEvent, keyPressEvent } from '../helpers/keyboard-event-factory'
 import { mockPath, mockFunctionReturning } from "../helpers/mocks";
 import Optional from "../../model/Optional";
 
@@ -52,6 +53,18 @@ describe('Seleccion de dibujo', () => {
         caminiToons.usePen();
 
         expect(animationDocument.deselectAllDrawings).toBeCalled();
+    });
+
+    it('cuando se presiona la tecla DELETE estando seleccionada la herramienta de seleccion se eliminan los elementos seleccionados', () => {
+        caminiToons.handleKeyDown(deleteKeyPressEvent);
+
+        expect(animationDocument.deleteSelection).toBeCalled();
+    });
+
+    it('cuando se presiona la tecla DELETE no estando seleccionada la herramienta de seleccion no se eliminan los elementos seleccionados', () => {
+        caminiToons.handleKeyDown(keyPressEvent('x'));
+
+        expect(animationDocument.deleteSelection).not.toBeCalled();
     });
     
 });

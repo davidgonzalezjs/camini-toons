@@ -35,6 +35,10 @@ class Pen extends Tool {
     this._currentPath.ifPresent(path => path.simplify(this._simplification));
     this._currentPath = Optional.empty();
   }
+
+  handleKeyDown(anEvent) {
+    
+  }
   
 }
 

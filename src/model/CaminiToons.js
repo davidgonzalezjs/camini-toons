@@ -36,6 +36,10 @@ class CaminiToons {
     this._animationDocument.selectDrawing(aDrawing);
   }
 
+  deleteSelection() {
+    this._animationDocument.deleteSelection();
+  }
+
   usePen() {
     this.useToolNamed('pen');
   }
@@ -60,6 +64,10 @@ class CaminiToons {
 
   handleMouseUp(anEvent) {
     this.selectedTool.handleMouseUp(anEvent, this);
+  }
+
+  handleKeyDown(anEvent) {
+    this.selectedTool.handleKeyDown(anEvent, this);
   }
 
 }

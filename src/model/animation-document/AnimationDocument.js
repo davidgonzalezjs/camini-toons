@@ -18,6 +18,10 @@ class AnimationDocument {
     this._listener.handleMouseUp(anEvent);
   }
 
+  onKeyDown(anEvent) {
+    this._listener.handleKeyDown(anEvent);
+  }
+
   hitTest(aPointToCheck) {
     subclassResponsibility();
   }
@@ -31,6 +35,10 @@ class AnimationDocument {
   }
 
   selectDrawing(aDrawing) {
+    subclassResponsibility();
+  }
+
+  deleteSelection() {
     subclassResponsibility();
   }
 

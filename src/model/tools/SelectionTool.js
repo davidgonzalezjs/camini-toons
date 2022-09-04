@@ -20,6 +20,10 @@ class SelectionTool extends Tool {
   handleMouseUp(anEvent, aCaminiToons) {
   }
 
+  handleKeyDown(anEvent, aCaminiToons) {
+    if (anEvent.key === 'delete') aCaminiToons.deleteSelection();
+  }
+
 }
 
 export default SelectionTool;

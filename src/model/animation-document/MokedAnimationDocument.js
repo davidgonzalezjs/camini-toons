@@ -11,6 +11,7 @@ class MokedAnimationDocument extends AnimationDocument {
     this.createPath = jest.fn(() => mockPath());
     this.deselectAllDrawings = jest.fn();
     this.selectDrawing = jest.fn();
+    this.deleteSelection = jest.fn();
   }
 
 }
