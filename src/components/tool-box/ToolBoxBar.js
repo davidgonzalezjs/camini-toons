@@ -1,0 +1,26 @@
+import Column from '../Column';
+
+import pencilIcon from '../../assets/pencil.svg'
+import pointerIcon from '../../assets/pointer.svg'
+
+import ToolBoxIcon from './ToolBoxIcon';
+
+const toolsIcons = {
+  pen: pencilIcon,
+  selectionTool: pointerIcon
+}
+
+export const ToolBoxBar = ({ selectedToolName, toolsNames, onToolIconClicked}) => {  
+  return (
+    <Column>
+      {toolsNames.map(toolName =>
+        <ToolBoxIcon
+          key={toolName}
+          src={toolsIcons[toolName]}
+          selected={toolName === selectedToolName}
+          onClick={() => onToolIconClicked(toolName)}
+        />
+      )}
+    </Column>
+  );
+}

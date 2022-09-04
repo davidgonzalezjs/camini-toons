@@ -1,4 +1,3 @@
-import Pen from './tools/Pen'
 import ToolBox from './tools/ToolBox';
 
 class CaminiToons {
@@ -15,9 +14,25 @@ class CaminiToons {
     return this._toolBox.selectedTool;
   }
 
+  get toolsNames() {
+    return this._toolBox.toolsNames;
+  }
+
   // Actions
-  createPath(aPathStyle, anInitialPosition) {
-    return this._animationDocument.createPath(aPathStyle)
+  createPath(aPathStyle) {
+    return this._animationDocument.createPath(aPathStyle);
+  }
+
+  usePen() {
+    this._toolBox.usePen();
+  }
+
+  useSelectionTool() {
+    this._toolBox.useSelectionTool();
+  }
+
+  useToolNamed(aToolName) {
+    this._toolBox.useToolNamed(aToolName);
   }
 
   // Event handling

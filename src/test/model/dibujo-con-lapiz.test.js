@@ -1,16 +1,8 @@
-import MokedAnimationDocument from "../model/animation-document/MokedAnimationDocument";
-import CaminiToons from "../model/CaminiToons";
+import MokedAnimationDocument from "../../model/animation-document/MokedAnimationDocument";
+import CaminiToons from "../../model/CaminiToons";
 
-import { clickEvent, mouseDragEvent, mouseUpEvent } from './mouse-event-factory'
-
-const mockPath = () => ({
-    add: jest.fn(),
-    simplify: jest.fn()
-});
-
-const mockFunctionReturning = value => jest.fn(() => value);
-
-const mockFunctionReturningSequence = values => jest.fn(() => values.shift());
+import { clickEvent, mouseDragEvent, mouseUpEvent } from '../helpers/mouse-event-factory'
+import { mockPath, mockFunctionReturning, mockFunctionReturningSequence } from "../helpers/mocks";
 
 describe('Dibujo con lapiz', () => {
     let animationDocument;
@@ -54,9 +46,6 @@ describe('Dibujo con lapiz', () => {
     });
     
     it('si mientras se estaba dibujando un trazo se desclickea el mouse y se lo mueve ya no se sigue dibujando', () => {
-        const mockedPath = mockPath();
-        animationDocument.createPath = mockFunctionReturning(mockedPath);
-        
         caminiToons.handleMouseDown(clickEvent({x: 10, y: 20}))
         caminiToons.handleMouseMove(mouseDragEvent({x: 15, y: 25}))
         caminiToons.handleMouseUp(mouseUpEvent({x: 15, y: 25}))
@@ -93,4 +82,21 @@ describe('Dibujo con lapiz', () => {
         expect(secondMockedPath.add.mock.calls[0][0].y).toBe(32);
     });
 
+    it('cuando se cambia el lapiz por una herramienta que no es de dibujo y se hace click no se dibuja ningun trazo', () => { 
+        caminiToons.useSelectionTool();
+        
+        caminiToons.handleMouseDown(clickEvent());
+
+        expect(animationDocument.createPath).toBeCalledTimes(0);
+    });
+
+    it('cuando se cambia una herramienta que no es de dibujo por el lapiz y se hace click se puede dibujar', () => { 
+        caminiToons.useSelectionTool();
+
+        caminiToons.usePen();
+        
+        caminiToons.handleMouseDown(clickEvent());
+
+        expect(animationDocument.createPath).toBeCalledTimes(1);
+    })
 });

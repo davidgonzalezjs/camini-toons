@@ -1,9 +1,12 @@
+
 import AnimationDocument from './AnimationDocument';
+import { mockPath } from '../../test/helpers/mocks';
 
 class MokedAnimationDocument extends AnimationDocument {
 
-  createPath(style) {
-    
+  constructor() {
+    super();
+    this.createPath = jest.fn(() => mockPath());
   }
 
 }
