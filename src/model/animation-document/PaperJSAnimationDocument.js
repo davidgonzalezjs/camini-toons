@@ -1,6 +1,7 @@
 import Paper from 'paper';
 
 import AnimationDocument from './AnimationDocument';
+import Optional from '../Optional';
 
 class PaperJSAnimationDocument extends AnimationDocument {
 
@@ -19,6 +20,22 @@ class PaperJSAnimationDocument extends AnimationDocument {
     const path = new Paper.Path();
     path.style = {...path.style, ...style};
     return path;
+  }
+
+  hitTest(aPointToCheck) {
+    const hitResult = Paper.project.hitTest(aPointToCheck);
+    
+    return hitResult == null
+      ? Optional.empty()
+      : Optional.with(hitResult.item);
+  }
+
+  deselectAllDrawings() {
+    Paper.project.deselectAll();
+  }
+
+  selectDrawing(aDrawing) {
+    aDrawing.selected = true;
   }
 
 }

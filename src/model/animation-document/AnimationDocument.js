@@ -18,7 +18,19 @@ class AnimationDocument {
     this._listener.handleMouseUp(anEvent);
   }
 
+  hitTest(aPointToCheck) {
+    subclassResponsibility();
+  }
+
   createPath(aPathStyle) {
+    subclassResponsibility();
+  }
+
+  deselectAllDrawings() {
+    subclassResponsibility();
+  }
+
+  selectDrawing(aDrawing) {
     subclassResponsibility();
   }
 

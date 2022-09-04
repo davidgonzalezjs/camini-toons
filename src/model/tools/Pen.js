@@ -1,3 +1,4 @@
+import Optional from "../Optional";
 import Tool from "./Tool";
 
 class Pen extends Tool {
@@ -12,7 +13,7 @@ class Pen extends Tool {
     }
     
     this._simplification = 3;
-    this._currentPath = null;
+    this._currentPath = Optional.empty();
   }
 
   get name() {
@@ -20,17 +21,19 @@ class Pen extends Tool {
   }
 
   handleMouseDown(anEvent, aCaminiToons) {
-    this._currentPath = aCaminiToons.createPath(this._style);
-    this._currentPath.add(anEvent.point);
+    const newPath = aCaminiToons.createPath(this._style);
+    newPath.add(anEvent.point);
+
+    this._currentPath = Optional.with(newPath);
   }
 
   handleMouseMove(anEvent, aCaminiToons) {
-    if (this._currentPath) this._currentPath.add(anEvent.point);
+    this._currentPath.ifPresent(path => path.add(anEvent.point))
   }
 
   handleMouseUp(anEvent, aCaminiToons) {
-    this._currentPath.simplify(this._simplification);
-    this._currentPath = null;
+    this._currentPath.ifPresent(path => path.simplify(this._simplification));
+    this._currentPath = Optional.empty();
   }
   
 }

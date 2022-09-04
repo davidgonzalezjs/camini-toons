@@ -18,20 +18,34 @@ class CaminiToons {
     return this._toolBox.toolsNames;
   }
 
+  // Accessing
+  hitTest(aPointToCheck) {
+    return this._animationDocument.hitTest(aPointToCheck);
+  }
+  
   // Actions
   createPath(aPathStyle) {
     return this._animationDocument.createPath(aPathStyle);
   }
 
+  deselectAllDrawings() {
+    this._animationDocument.deselectAllDrawings();
+  }
+
+  selectDrawing(aDrawing) {
+    this._animationDocument.selectDrawing(aDrawing);
+  }
+
   usePen() {
-    this._toolBox.usePen();
+    this.useToolNamed('pen');
   }
 
   useSelectionTool() {
-    this._toolBox.useSelectionTool();
+    this.useToolNamed('selectionTool');
   }
 
   useToolNamed(aToolName) {
+    this.deselectAllDrawings();
     this._toolBox.useToolNamed(aToolName);
   }
 
