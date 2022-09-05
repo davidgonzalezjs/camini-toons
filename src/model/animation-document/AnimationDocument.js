@@ -26,6 +26,10 @@ class AnimationDocument {
     subclassResponsibility();
   }
 
+  createFrame() {
+    subclassResponsibility();
+  }
+
   createPath(aPathStyle) {
     subclassResponsibility();
   }
