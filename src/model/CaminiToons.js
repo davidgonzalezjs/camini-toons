@@ -18,10 +18,6 @@ class CaminiToons {
     return this._toolBox.toolsNames;
   }
 
-  get currentFrameNumber() {
-    return 1;
-  }
-
   // Accessing
   hitTest(aPointToCheck) {
     return this._animationDocument.hitTest(aPointToCheck);

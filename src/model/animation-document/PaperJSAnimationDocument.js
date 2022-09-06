@@ -15,21 +15,16 @@ class PaperJSAnimationDocument extends AnimationDocument {
     Paper.view.onMouseUp = (event) => this.onMouseUp(event);
     Paper.view.onKeyDown = (event) => this.onKeyDown(event);
     
-    const layerPrototype = Object.getPrototypeOf(Paper.project.activeLayer);
-    extendLayerPrototype(layerPrototype);
+    extendPathPrototype(Paper);
+    extendLayerPrototype(Paper);
 
     Paper.project.activeLayer.initializeFrames();
 
     Paper.view.draw();
   }
 
-  createFrame() {
-    this.deselectAllDrawings();
-    Paper.project.activeLayer.createFrame();
-  }
-
-  goToFrame(aFrameNumber) {
-    Paper.project.activeLayer.goToFrame(aFrameNumber);
+  get activeLayer() {
+    return Paper.project.activeLayer;
   }
 
   createPath(style) {
@@ -46,25 +41,11 @@ class PaperJSAnimationDocument extends AnimationDocument {
       : Optional.with(hitResult.item);
   }
 
-  deselectAllDrawings() {
-    Paper.project.deselectAll();
-  }
-
-  selectDrawing(aDrawing) {
-    aDrawing.selected = true;
-  }
-
-  deleteSelection() {
-    Paper.project.selectedItems.forEach(item => item.remove());
-  }
-
-  moveDrawing(aDrawing, aDelta) {
-    aDrawing.position = aDrawing.position.add(aDelta);
-  }
-
 }
 
-function extendLayerPrototype(layerPrototype) {
+function extendLayerPrototype(paper) {
+  const layerPrototype = Object.getPrototypeOf(paper.project.activeLayer)
+  
   layerPrototype.initializeFrames = function() {
     this.frames = [this._children];
   }
@@ -96,6 +77,18 @@ function extendLayerPrototype(layerPrototype) {
     this._children = this.frames[aFrameNumber];
   }
   
+}
+
+function extendPathPrototype(paper) {
+  const pathPrototype = paper.Path.prototype;
+  
+  pathPrototype.deselect = function() {
+    this.selected = false;
+  }
+
+  pathPrototype.select = function() {
+    this.selected = true;
+  }
 }
 
 
