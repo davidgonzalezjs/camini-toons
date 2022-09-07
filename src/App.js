@@ -10,7 +10,7 @@ function App({createCaminiToons}) {
   const [caminiToons, setCaminiToons] = useState();
   const [toolsNames, setToolsNames] = useState([]);
   const [selectedToolName, setSelectedToolName] = useState('pen');
-  const [frames, setFrames] = useState([{number: 0}]);
+  const [frames, setFrames] = useState([{number: 1}]);
 
   useEffect(() => {
     const newCaminiToons = createCaminiToons(canvasRef.current);
@@ -30,11 +30,15 @@ function App({createCaminiToons}) {
 
   const handleCreateFrame = (layerName) => {
     caminiToons.createFrame();
-    setFrames([...frames, {number: frames.length}]);
+    setFrames([...frames, {number: frames.length + 1}]);
   };
 
   const handleFrameClick = frame => {
     caminiToons.goToFrame(frame.number);
+  };
+
+  const handlePlayAnimation = () => {
+    caminiToons.playAnimation();
   };
 
   return (
@@ -44,6 +48,8 @@ function App({createCaminiToons}) {
         onAddFrameClick={handleCreateFrame}
         onFrameClick={handleFrameClick}
       />
+
+      <button onClick={handlePlayAnimation}>Reproducir</button>
 
       <Row>
         <ToolBoxBar

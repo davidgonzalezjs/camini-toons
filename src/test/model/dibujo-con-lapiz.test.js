@@ -1,4 +1,4 @@
-import MokedAnimationDocument from "../../model/animation-document/MokedAnimationDocument";
+import LessMokedAnimationDocument from "../../model/animation-document/LessMokedAnimationDocument";
 import CaminiToons from "../../model/CaminiToons";
 
 import { clickEvent, mouseDragEvent, mouseUpEvent } from '../helpers/mouse-event-factory'
@@ -9,7 +9,7 @@ describe('Dibujo con lapiz', () => {
     let caminiToons;
 
     beforeEach(() => {
-        animationDocument = new MokedAnimationDocument();
+        animationDocument = new LessMokedAnimationDocument();
         caminiToons = new CaminiToons(animationDocument);
     });
 

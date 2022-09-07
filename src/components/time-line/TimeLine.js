@@ -13,8 +13,12 @@ const StyledLayer = styled(Row)`
   padding-left: 5px;
   padding-right: 5px;
   width: 200px;
-  border: 1px solid crimson;
   background-color: orange;
+`;
+
+const FramesContainer = styled(Row)`
+  flex-grow: 1;
+  background-color: lightgreen;
 `;
 
 const LayerLabel = styled.p`
@@ -31,9 +35,9 @@ const Timeline = ({ frames, onAddFrameClick, onFrameClick }) => {
   return (
     <TimeLineRow>
       <Layer name={'Layer 1'} onAddFrameClick={onAddFrameClick} />
-      <Row>
+      <FramesContainer>
         {frames.map(frame => <Frame onClick={() => onFrameClick(frame)}/>)}    
-      </Row>
+      </FramesContainer>
     </TimeLineRow>
   );
 };

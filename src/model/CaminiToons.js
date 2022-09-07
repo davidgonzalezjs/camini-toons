@@ -18,12 +18,19 @@ class CaminiToons {
     return this._toolBox.toolsNames;
   }
 
-  // Accessing
+  get currentFrameNumber() {
+    return this._animationDocument.currentFrameNumber;
+  }
+
   hitTest(aPointToCheck) {
     return this._animationDocument.hitTest(aPointToCheck);
   }
   
   // Actions
+  playAnimation() {
+    this._animationDocument.playAnimation();
+  }
+
   goToFrame(aFrameNumber) {
     this._animationDocument.goToFrame(aFrameNumber);
   }

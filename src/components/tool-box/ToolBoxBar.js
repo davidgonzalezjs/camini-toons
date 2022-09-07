@@ -1,9 +1,15 @@
+import styled from 'styled-components'
+
 import Column from '../Column';
 
 import pencilIcon from '../../assets/pencil.svg'
 import pointerIcon from '../../assets/pointer.svg'
 
 import ToolBoxIcon from './ToolBoxIcon';
+
+const StyledToolBoxBar = styled(Column)`
+  background-color: lightblue;
+`;
 
 const toolsIcons = {
   pen: pencilIcon,
@@ -12,7 +18,7 @@ const toolsIcons = {
 
 export const ToolBoxBar = ({ selectedToolName, toolsNames, onToolIconClicked}) => {  
   return (
-    <Column>
+    <StyledToolBoxBar>
       {toolsNames.map(toolName =>
         <ToolBoxIcon
           key={toolName}
@@ -21,6 +27,6 @@ export const ToolBoxBar = ({ selectedToolName, toolsNames, onToolIconClicked}) =
           onClick={() => onToolIconClicked(toolName)}
         />
       )}
-    </Column>
+    </StyledToolBoxBar>
   );
 }

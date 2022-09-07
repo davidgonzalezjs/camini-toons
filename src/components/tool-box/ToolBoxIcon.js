@@ -8,7 +8,7 @@ const ToolBoxIcon = styled.img`
   border-radius: 5px;
 
   ${props => props.selected && css`
-    background-color: lightgrey;
+    background-color: azure;
   `}
 `;
 

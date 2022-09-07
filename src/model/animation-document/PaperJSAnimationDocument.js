@@ -14,6 +14,7 @@ class PaperJSAnimationDocument extends AnimationDocument {
     Paper.view.onMouseDrag = (event) => this.onMouseMove(event);
     Paper.view.onMouseUp = (event) => this.onMouseUp(event);
     Paper.view.onKeyDown = (event) => this.onKeyDown(event);
+    Paper.view.onFrame = (event) => this.onFrame(event);
     
     extendPathPrototype(Paper);
     extendLayerPrototype(Paper);
@@ -59,6 +60,10 @@ function extendLayerPrototype(paper) {
     this._children = newChildren;
   }
 
+  layerPrototype.numberOfFrames = function() {
+    return this.frames.length;
+  }
+
   layerPrototype.goToFrame = function(aFrameNumber) {
     this.hideCurrentFrame()
     this.changeCurrentFrame(aFrameNumber);
@@ -74,7 +79,7 @@ function extendLayerPrototype(paper) {
   }
 
   layerPrototype.changeCurrentFrame = function(aFrameNumber) {
-    this._children = this.frames[aFrameNumber];
+    this._children = this.frames[aFrameNumber - 1];
   }
   
 }
@@ -88,6 +93,10 @@ function extendPathPrototype(paper) {
 
   pathPrototype.select = function() {
     this.selected = true;
+  }
+
+  pathPrototype.moveBy = function(aDelta) {
+    this.position = this.position.add(aDelta);
   }
 }
 
