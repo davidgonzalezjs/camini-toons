@@ -1,17 +1,23 @@
+import Optional from './Optional';
+
 class Clock {
 
   constructor({ frameRate }) {
     this._frameRate = frameRate;
+    this._listener = Optional.empty();
   }
 
   get frameDurationInSeconds() {
     return 1 / this._frameRate;
   }
 
-  tick(elapsedTimeInSeconds, newFrameHandler) {
+  registerListener(aListener) {
+    this._listener = Optional.with(aListener);
+  }
+
+  onTimePass(elapsedTimeInSeconds) {
     if (this.isNewFrame(elapsedTimeInSeconds)) {
-        newFrameHandler();    
-        this._lastFrameAnimationTime = elapsedTimeInSeconds;
+      this.tick(elapsedTimeInSeconds);
     }
   }
 
@@ -19,6 +25,11 @@ class Clock {
     this._lastFrameAnimationTime = this._lastFrameAnimationTime || elapsedTimeInSeconds;
     
     return elapsedTimeInSeconds > this._lastFrameAnimationTime + this.frameDurationInSeconds;
+  }
+
+  tick(elapsedTimeInSeconds) {
+    this._listener.ifPresent(listener => listener.tick());
+    this._lastFrameAnimationTime = elapsedTimeInSeconds;
   }
 
 }

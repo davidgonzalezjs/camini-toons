@@ -1,9 +1,27 @@
+import styled from 'styled-components';
+
 import React, { useRef, useState, useEffect } from 'react';
 
+import caminiToonsLogo from './assets/Camini-Toons-logo.png';
+
+import Column from './components/Column';
 import Row from './components/Row';
 import {ToolBoxBar} from './components/tool-box/ToolBoxBar';
 import TimeLine from './components/time-line/TimeLine';
+import {PlaybackBar} from './components/playback/PlaybackBar';
 import Canvas from './components/Canvas';
+
+const AppContainer = styled(Column)`
+  align-items: stretch;
+  background-color: mediumpurple;
+`;
+
+const AppLogo = () =>
+  <img
+    style={{margin: 'auto'}}
+    width={'300px'}
+    src={caminiToonsLogo}
+  />;
 
 function App({createCaminiToons}) {
   const canvasRef = useRef(null)
@@ -11,6 +29,7 @@ function App({createCaminiToons}) {
   const [toolsNames, setToolsNames] = useState([]);
   const [selectedToolName, setSelectedToolName] = useState('pen');
   const [frames, setFrames] = useState([{number: 1}]);
+  const [frameRate, setFrameRate] = useState(6);
 
   useEffect(() => {
     const newCaminiToons = createCaminiToons(canvasRef.current);
@@ -41,15 +60,27 @@ function App({createCaminiToons}) {
     caminiToons.playAnimation();
   };
 
+  const handleRepeatAnimation = () => {
+
+  }
+
   return (
-    <div>
+    <AppContainer>
+      <Row>
+        <AppLogo />
+      </Row>
+      
       <TimeLine
         frames={frames}
         onAddFrameClick={handleCreateFrame}
         onFrameClick={handleFrameClick}
       />
 
-      <button onClick={handlePlayAnimation}>Reproducir</button>
+      <PlaybackBar
+        frameRate={frameRate}
+        onPlay={handlePlayAnimation}
+        onRepeat={handleRepeatAnimation}
+      />
 
       <Row>
         <ToolBoxBar
@@ -64,8 +95,12 @@ function App({createCaminiToons}) {
           height={canvasHeight}
           selectedToolName={selectedToolName}
         />
+
+        <Column style={{backgroundColor: 'lightBlue', flexGrow: 1}}>
+          
+        </Column>
       </Row>
-    </div>
+    </AppContainer>
   );
 }
 

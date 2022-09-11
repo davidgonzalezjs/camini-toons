@@ -1,4 +1,5 @@
 import MokedAnimationDocument from "../../model/animation-document/MokedAnimationDocument";
+import Clock from "../../model/Clock";
 import CaminiToons from "../../model/CaminiToons";
 
 import { clickEvent, mouseUpEvent, mouseMoveEvent } from '../helpers/mouse-event-factory'
@@ -12,7 +13,7 @@ describe('Seleccion de dibujo', () => {
 
     beforeEach(() => {
         animationDocument = new MokedAnimationDocument();
-        caminiToons = new CaminiToons(animationDocument);
+        caminiToons = new CaminiToons(animationDocument, new Clock({frameRate: 6}));
         caminiToons.useSelectionTool();
     });
 

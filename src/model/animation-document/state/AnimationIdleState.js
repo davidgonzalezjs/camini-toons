@@ -1,7 +1,9 @@
 class AnimationIdleState {
-    onFrame(anEvent) {
+    
+    tickFor(anAnimationDocument) {
 
     }
+
 }
 
 export default AnimationIdleState;

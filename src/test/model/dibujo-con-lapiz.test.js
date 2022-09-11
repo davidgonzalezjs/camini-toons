@@ -1,4 +1,5 @@
 import LessMokedAnimationDocument from "../../model/animation-document/LessMokedAnimationDocument";
+import Clock from "../../model/Clock";
 import CaminiToons from "../../model/CaminiToons";
 
 import { clickEvent, mouseDragEvent, mouseUpEvent } from '../helpers/mouse-event-factory'
@@ -10,7 +11,7 @@ describe('Dibujo con lapiz', () => {
 
     beforeEach(() => {
         animationDocument = new LessMokedAnimationDocument();
-        caminiToons = new CaminiToons(animationDocument);
+        caminiToons = new CaminiToons(animationDocument, new Clock({frameRate: 6}));
     });
 
     it('cuando se hace click sobre el lienzo se dibuja un punto', () => {

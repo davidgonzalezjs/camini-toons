@@ -2,11 +2,12 @@ import ToolBox from './tools/ToolBox';
 
 class CaminiToons {
 
-  constructor(anAnimationDocument) {
-    anAnimationDocument.registerListener(this);
-
+  constructor(anAnimationDocument, aClock) {
     this._animationDocument = anAnimationDocument;
     this._toolBox = new ToolBox();
+    this._clock = aClock;
+
+    this._clock.registerListener(this);
   }
 
   // Accessing
@@ -26,7 +27,7 @@ class CaminiToons {
     return this._animationDocument.hitTest(aPointToCheck);
   }
   
-  // Actions
+  // Actions - Timeline
   playAnimation() {
     this._animationDocument.playAnimation();
   }
@@ -39,6 +40,7 @@ class CaminiToons {
     this._animationDocument.createFrame();
   }
 
+  // Actions - Drawing
   createPath(aPathStyle) {
     return this._animationDocument.createPath(aPathStyle);
   }
@@ -59,6 +61,7 @@ class CaminiToons {
     this._animationDocument.moveDrawing(aDrawing, aDelta);
   }
 
+  // Actions - Tools
   usePen() {
     this.useToolNamed('pen');
   }
@@ -87,6 +90,10 @@ class CaminiToons {
 
   handleKeyDown(anEvent) {
     this.selectedTool.handleKeyDown(anEvent, this);
+  }
+
+  tick() {
+    this._animationDocument.tick();
   }
 
 }

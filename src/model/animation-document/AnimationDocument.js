@@ -1,7 +1,5 @@
 import {subclassResponsibility} from '../errors'
 
-
-import Clock from '../Clock';
 import AnimationIdleState from './state/AnimationIdleState';
 import AnimationPlayingState from './state/AnimationPlayingState';
 
@@ -11,7 +9,6 @@ class AnimationDocument {
     this._selectedDrawings = [];
     this._currentFrameNumber = 1;
 
-    this._clock = new Clock({frameRate: 6});
     this._state = new AnimationIdleState();
   }
 
@@ -41,11 +38,6 @@ class AnimationDocument {
     this._state = new AnimationIdleState();
   }
 
-  createFrame() {
-    this.activeLayer.createFrame();
-    this.goToFrame(this._currentFrameNumber + 1);
-  }
-
   goToFrame(aFrameNumber) {
     this.deselectAllDrawings();
     this.activeLayer.goToFrame(aFrameNumber);
@@ -54,6 +46,15 @@ class AnimationDocument {
 
   goToNextFrame() {
     this.goToFrame(this._currentFrameNumber + 1)
+  }
+
+  tick() {
+    this._state.tickFor(this);
+  }
+
+  createFrame() {
+    this.activeLayer.createFrame();
+    this.goToFrame(this._currentFrameNumber + 1);
   }
 
   hitTest(aPointToCheck) {
@@ -81,30 +82,6 @@ class AnimationDocument {
 
   moveDrawing(aDrawing, aDelta) {
     aDrawing.moveBy(aDelta);
-  }
-
-  registerListener(aListener) {
-    this._listener = aListener;
-  }
-  
-  onMouseDown(anEvent) {
-    this._listener.handleMouseDown(anEvent);
-  }
-
-  onMouseMove(anEvent) {
-    this._listener.handleMouseMove(anEvent);
-  }
-
-  onMouseUp(anEvent) {
-    this._listener.handleMouseUp(anEvent);
-  }
-
-  onKeyDown(anEvent) {
-    this._listener.handleKeyDown(anEvent);
-  }
-
-  onFrame(anEvent) {
-    this._clock.tick(anEvent.time, () => this._state.onFrame(this));
   }
 
 }

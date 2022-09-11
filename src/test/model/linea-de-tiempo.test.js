@@ -1,4 +1,5 @@
 import LessMokedAnimationDocument from "../../model/animation-document/LessMokedAnimationDocument";
+import Clock from "../../model/Clock";
 import CaminiToons from "../../model/CaminiToons";
 
 import { } from '../helpers/mouse-event-factory'
@@ -10,7 +11,7 @@ describe('Linea de tiempo', () => {
 
   beforeEach(() => {
     animationDocument = new LessMokedAnimationDocument();
-    caminiToons = new CaminiToons(animationDocument);
+    caminiToons = new CaminiToons(animationDocument, new Clock({frameRate: 6}));
   });
 
   it('una animacion nueva comienza en el frame 1', () => {

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const Frame = styled.div`
   background-color: greenyellow;
-  border: 2px solid darkgreen;
+  border-right: 1px solid darkgreen;
   width: 15px;
     
   &::before {

@@ -1,6 +1,6 @@
 class AnimationPlayingState {
 
-  onFrame(anAnimationDocument) {
+  tickFor(anAnimationDocument) {
     if (anAnimationDocument.isAtLastFrame()) {
       anAnimationDocument.stopPlaying();
     }

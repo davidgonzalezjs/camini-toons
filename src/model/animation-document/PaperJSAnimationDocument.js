@@ -1,41 +1,31 @@
-import Paper from 'paper';
-
 import AnimationDocument from './AnimationDocument';
 import Optional from '../Optional';
 
 
 class PaperJSAnimationDocument extends AnimationDocument {
 
-  constructor(anHTMLCanvas) {
-    super()
-    Paper.setup(anHTMLCanvas);
-    
-    Paper.view.onMouseDown = (event) => this.onMouseDown(event);
-    Paper.view.onMouseDrag = (event) => this.onMouseMove(event);
-    Paper.view.onMouseUp = (event) => this.onMouseUp(event);
-    Paper.view.onKeyDown = (event) => this.onKeyDown(event);
-    Paper.view.onFrame = (event) => this.onFrame(event);
-    
-    extendPathPrototype(Paper);
-    extendLayerPrototype(Paper);
+  constructor(paper) {
+    super();
+    this._paper = paper;
 
-    Paper.project.activeLayer.initializeFrames();
+    extendPathPrototype(this._paper);
+    extendLayerPrototype(this._paper);
 
-    Paper.view.draw();
+    this._paper.project.activeLayer.initializeFrames();
   }
 
   get activeLayer() {
-    return Paper.project.activeLayer;
+    return this._paper.project.activeLayer;
   }
 
   createPath(style) {
-    const path = new Paper.Path();
+    const path = new this._paper.Path();
     path.style = {...path.style, ...style};
     return path;
   }
 
   hitTest(aPointToCheck) {
-    const hitResult = Paper.project.hitTest(aPointToCheck);
+    const hitResult = this._paper.project.hitTest(aPointToCheck);
     
     return hitResult == null
       ? Optional.empty()
