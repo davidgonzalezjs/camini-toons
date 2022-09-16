@@ -3,7 +3,6 @@ import Clock from "../../model/Clock";
 import CaminiToons from "../../model/CaminiToons";
 
 import { } from '../helpers/mouse-event-factory'
-import { mockPath, mockFunctionReturning, mockFunctionReturningSequence } from "../helpers/mocks";
 
 describe('Linea de tiempo', () => {
   let animationDocument;
@@ -26,14 +25,25 @@ describe('Linea de tiempo', () => {
     expect(caminiToons.currentFrameNumber).toBe(2);
   });
 
-  xit('cuando se reproduce una animacion se vuelve al primer frame', () => {
-    caminiToons.createFrame();
-    animationDocument.activeLayer.numberOfFrames = 2;
+  it('cuando se solicita comenzar a reproducir animacion se vuelve al primer frame', () => {
     caminiToons.playAnimation();
 
-    animationDocument.onFrame({time: 0, delta: 0});
-  
     expect(animationDocument.activeLayer.goToFrame.mock.calls[0][0]).toBe(1);
+  });
+
+  it('cuando se una animacion se esta reproduciendo avanza un frame por cada tick', () => {
+    //animationDocument.activeLayer.numberOfFrames = 3;
+    animationDocument.activeLayer.frames = {length: 3}; // TODO: corregir esto. Ver comentario en PaperJSAnimationDocument
+    caminiToons.playAnimation();
+    
+    caminiToons.tick();
+    caminiToons.tick();
+    caminiToons.tick();
+
+    expect(caminiToons.currentFrameNumber).toBe(3);
+    expect(animationDocument.activeLayer.goToFrame.mock.calls[1][0]).toBe(1);
+    expect(animationDocument.activeLayer.goToFrame.mock.calls[2][0]).toBe(2);
+    expect(animationDocument.activeLayer.goToFrame.mock.calls[3][0]).toBe(3);
   });
 
 });

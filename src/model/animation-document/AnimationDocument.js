@@ -22,6 +22,7 @@ class AnimationDocument {
 
   get lastFrameNumber() {
     return this.activeLayer.frames.length;
+    //return this.activeLayer.numberOfFrames; // TODO: ver por que esto rompe
   }
 
   isAtLastFrame() {
