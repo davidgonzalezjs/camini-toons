@@ -1,0 +1,1 @@
+export const subclassResponsibility = () => { throw "Subclass responsibility" };
