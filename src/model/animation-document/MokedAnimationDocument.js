@@ -1,13 +1,16 @@
 
 import AnimationDocument from './AnimationDocument';
-import { mockPath } from '../../test/helpers/mocks';
+import { mockLayer, mockPath } from '../../test/helpers/mocks';
 import Optional from '../Optional';
 
 class MokedAnimationDocument extends AnimationDocument {
 
   constructor() {
-    super();
-    this.hitTest = jest.fn(() => Optional.empty());
+    super({
+      createFrameContent: mockLayer,
+      hitTest: jest.fn(() => Optional.empty())
+    });
+
     this.createFrame = jest.fn(() => mockPath());
     this.createPath = jest.fn(() => mockPath());
     this.deselectAllDrawings = jest.fn();

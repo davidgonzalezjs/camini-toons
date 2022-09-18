@@ -1,19 +1,36 @@
 import {subclassResponsibility} from '../errors'
 
+import Optional from '../Optional';
+
+import AnimationLayer from '../AnimationLayer';
+import Frame from '../Frame';
+
 import AnimationIdleState from './state/AnimationIdleState';
 import AnimationPlayingState from './state/AnimationPlayingState';
 
 class AnimationDocument {
 
-  constructor() {
+  constructor({createFrameContent, hitTest}) {
+    this._createFrameContent = createFrameContent;
+    this._hitTestFunction = hitTest;
+
     this._selectedDrawings = [];
+    
     this._currentFrameNumber = 1;
+
+    this._animationLayers = [this.createAnimationLayer()]
+    this._activeLayer = this._animationLayers[0];
 
     this._state = new AnimationIdleState();
   }
 
+  createAnimationLayer() {
+    const createFrameFunction = () => new Frame({createContent: () => this._createFrameContent()});
+    return new AnimationLayer({createFrameFunction});
+  }
+
   get activeLayer() {
-    return subclassResponsibility();
+    return this._activeLayer;
   }
 
   get currentFrameNumber() {
@@ -21,8 +38,7 @@ class AnimationDocument {
   }
 
   get lastFrameNumber() {
-    return this.activeLayer.frames.length;
-    //return this.activeLayer.numberOfFrames; // TODO: ver por que esto rompe
+    return this.activeLayer.lastFrameNumber;
   }
 
   isAtLastFrame() {
@@ -59,7 +75,11 @@ class AnimationDocument {
   }
 
   hitTest(aPointToCheck) {
-    subclassResponsibility();
+    const hitResult = this._hitTestFunction(aPointToCheck);
+    
+    return hitResult == null
+      ? Optional.empty()
+      : Optional.with(hitResult.item);
   }
 
   createPath(aPathStyle) {

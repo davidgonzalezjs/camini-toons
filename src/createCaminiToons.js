@@ -7,6 +7,7 @@ import CaminiToons from "./model/CaminiToons";
 
 export function createCaminiToons(anHTMLCanvas) {
   Paper.setup(anHTMLCanvas);
+  Paper.project.activeLayer.remove();
   Paper.view.draw();
 
   const clock = new Clock({frameRate: 6});

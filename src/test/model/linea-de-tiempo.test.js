@@ -17,7 +17,7 @@ describe('Linea de tiempo', () => {
     expect(caminiToons.currentFrameNumber).toBe(1);
   });
 
-  it('cuando se crea un frame en la capa activa se avanza un frame', () => {
+  xit('cuando se crea un frame en la capa activa se avanza un frame', () => {
     caminiToons.createFrame();
 
     expect(animationDocument.activeLayer.createFrame).toBeCalled();
@@ -25,14 +25,13 @@ describe('Linea de tiempo', () => {
     expect(caminiToons.currentFrameNumber).toBe(2);
   });
 
-  it('cuando se solicita comenzar a reproducir animacion se vuelve al primer frame', () => {
+  xit('cuando se solicita comenzar a reproducir animacion se vuelve al primer frame', () => {
     caminiToons.playAnimation();
 
     expect(animationDocument.activeLayer.goToFrame.mock.calls[0][0]).toBe(1);
   });
 
-  it('cuando se una animacion se esta reproduciendo avanza un frame por cada tick', () => {
-    //animationDocument.activeLayer.numberOfFrames = 3;
+  xit('cuando se una animacion se esta reproduciendo avanza un frame por cada tick', () => {
     animationDocument.activeLayer.frames = {length: 3}; // TODO: corregir esto. Ver comentario en PaperJSAnimationDocument
     caminiToons.playAnimation();
     

@@ -6,14 +6,13 @@ import Optional from '../Optional';
 class LessMokedAnimationDocument extends AnimationDocument {
 
   constructor() {
-    super();
-    this._activeLayer = mockLayer();
+    super({
+      createFrameContent: mockLayer,
+      hitTest: () => null
+    });
+    
     this.hitTest = jest.fn(() => Optional.empty());
     this.createPath = jest.fn(() => mockPath());
-  }
-
-  get activeLayer() {
-    return this._activeLayer;
   }
 
 }
