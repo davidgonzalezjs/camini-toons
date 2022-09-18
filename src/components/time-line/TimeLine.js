@@ -40,7 +40,7 @@ const LayerIcon = styled(Icon)`
 
 const VisibilityButton = () => <LayerIcon src={eyeIcon} active />
 const LockButton = () => <LayerIcon src={lockIcon} />;
-const OnionSkinButton = () => <LayerIcon src={onionIcon} />;
+const OnionSkinButton = (props) => <LayerIcon {...props} src={onionIcon} />;
 
 const AddFrameButton = (props) => <LayerIcon {...props} active src={newFrameIcon} />;
 
@@ -49,12 +49,12 @@ const LayerLabel = styled.p`
 `;
 
 
-const Layer = ({name, onAddFrameClick}) =>
+const Layer = ({name, onAddFrameClick, onOnionSkinClick}) =>
   <StyledLayer>
     <Row>
       <LockButton />
       <VisibilityButton />
-      <OnionSkinButton />
+      <OnionSkinButton onClick={onOnionSkinClick}/>
     </Row>
     
     <LayerLabel>{name}</LayerLabel>
@@ -63,10 +63,14 @@ const Layer = ({name, onAddFrameClick}) =>
   </StyledLayer>
 
 
-const Timeline = ({ frames, onAddFrameClick, onFrameClick }) => {
+const Timeline = ({ frames, onAddFrameClick, onOnionSkinClick, onFrameClick }) => {
   return (
     <TimeLineRow>
-      <Layer name={'Layer 1'} onAddFrameClick={onAddFrameClick} />
+      <Layer
+        name={'Layer 1'}
+        onAddFrameClick={onAddFrameClick}
+        onOnionSkinClick={onOnionSkinClick}
+      />
       <FramesContainer>
         {frames.map(frame => <Frame onClick={() => onFrameClick(frame)}/>)}    
       </FramesContainer>

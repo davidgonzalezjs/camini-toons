@@ -15,18 +15,19 @@ class AnimationDocument {
     this._hitTestFunction = hitTest;
 
     this._selectedDrawings = [];
-    
+    this._animationLayers = [];
     this._currentFrameNumber = 1;
-
-    this._animationLayers = [this.createAnimationLayer()]
-    this._activeLayer = this._animationLayers[0];
-
     this._state = new AnimationIdleState();
+
+    this.createAnimationLayer();
   }
 
   createAnimationLayer() {
     const createFrameFunction = () => new Frame({createContent: () => this._createFrameContent()});
-    return new AnimationLayer({createFrameFunction});
+    const newLayer = new AnimationLayer({createFrameFunction});
+
+    this._animationLayers.push(newLayer);
+    this._activeLayer = newLayer;
   }
 
   get activeLayer() {
@@ -45,19 +46,25 @@ class AnimationDocument {
     return this._currentFrameNumber === this.lastFrameNumber;
   }
 
-  playAnimation() {;
+  playAnimation() {
     this.goToFrame(1);
+    this.startPlaying();
+  }
+
+  startPlaying() {
     this._currentFrameNumber = 0; // Aclaracion: se setea en 0 que para que arranque a reproducir el frame numero 1
     this._state = new AnimationPlayingState();
+    this.activeLayer.startPlaying();
   }
 
   stopPlaying() {
     this._state = new AnimationIdleState();
+    this.activeLayer.stopPlaying();
   }
 
   goToFrame(aFrameNumber) {
     this.deselectAllDrawings();
-    this.activeLayer.goToFrame(aFrameNumber);
+    this.activeLayer.showFrame(aFrameNumber);
     this._currentFrameNumber = aFrameNumber;
   }
 
@@ -69,9 +76,17 @@ class AnimationDocument {
     this._state.tickFor(this);
   }
 
+  activateOnionSkin() {
+    this.activeLayer.activateOnionSkin();
+  }
+
+  deactivateOnionSkin() {
+    this.activeLayer.deactivateOnionSkin();
+  }
+
   createFrame() {
     this.activeLayer.createFrame();
-    this.goToFrame(this._currentFrameNumber + 1);
+    this.goToFrame(this.activeLayer.lastFrameNumber);
   }
 
   hitTest(aPointToCheck) {

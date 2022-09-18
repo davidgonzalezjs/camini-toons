@@ -6,7 +6,8 @@ export const mockPath = () => ({
 export const mockLayer = () => ({
     createFrame: jest.fn(),
     goToFrame: jest.fn(),
-    numberOfFrames: jest.fn()
+    numberOfFrames: jest.fn(),
+    activate: jest.fn(),
 });
 
 export const mockFunctionReturning = value => jest.fn(() => value);

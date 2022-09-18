@@ -10,6 +10,11 @@ class CaminiToons {
     this._clock.registerListener(this);
   }
 
+  // Testing
+  isOnionSkinEnabled() {
+    return this._animatinoLayer.hasOnionSkinEnabled();
+  }
+
   // Accessing
   get selectedTool() {
     return this._toolBox.selectedTool;
@@ -38,6 +43,10 @@ class CaminiToons {
 
   createFrame() {
     this._animationDocument.createFrame();
+  }
+
+  activateOnionSkin() {
+    this._animationDocument.activateOnionSkin();
   }
 
   // Actions - Drawing

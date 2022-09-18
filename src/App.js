@@ -33,7 +33,7 @@ function App({createCaminiToons}) {
 
   useEffect(() => {
     const newCaminiToons = createCaminiToons(canvasRef.current);
-    
+    window.caminiToons = newCaminiToons;
     setCaminiToons(newCaminiToons);
     setSelectedToolName(newCaminiToons.selectedTool.name);
     setToolsNames(newCaminiToons.toolsNames);
@@ -62,7 +62,18 @@ function App({createCaminiToons}) {
 
   const handleRepeatAnimation = () => {
 
-  }
+  };
+
+  const handleOnionSkinClick = () => {
+    // TODO: se rompe el encapsulamiento
+    const layer = caminiToons._animationDocument.activeLayer; 
+    if (layer.hasOnionSkinEnabled()) {
+      layer.deactivateOnionSkin();
+    }
+    else {
+      layer.activateOnionSkin();
+    }
+  };
 
   return (
     <AppContainer>
@@ -73,6 +84,7 @@ function App({createCaminiToons}) {
       <TimeLine
         frames={frames}
         onAddFrameClick={handleCreateFrame}
+        onOnionSkinClick={handleOnionSkinClick}
         onFrameClick={handleFrameClick}
       />
 

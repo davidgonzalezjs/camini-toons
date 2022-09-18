@@ -1,58 +1,107 @@
-import Frame from './Frame'
-
 class AnimationLayer {
-    
-    constructor({createFrameFunction}) {
+
+    constructor({ createFrameFunction }) {
         this._createFrameFunction = createFrameFunction;
 
+        this._hasOnionSkinEnabled = false;
         this._frames = [];
-        this.insertFrame();
-        this._currentFrameNumber = 1;
+        this._frameNumbersShowingOnionSkin = [];
+        
+        this.createFrame();
+        this.makeVisibleFrameNumber(1);
     }
 
-    existFrameAtFrameNumber(aFrameNumber) {
-        return aFrameNumber >= 1 && aFrameNumber <= this.lastFrameNumber;
-    }
-
+    // Testing
     isVisibleFrame(aFrameNumber) {
         return this.findFrame(aFrameNumber).isVisible();
     }
 
-    get currentFrameNumber() {
-        return this._currentFrameNumber;
+    hasOnionSkinEnabled() {
+        return this._hasOnionSkinEnabled;
     }
 
+    // Accessing
     get lastFrameNumber() {
         return this._frames.length;
     }
 
+    get frameNumbersShowingOnionSkin() {
+        return this._frameNumbersShowingOnionSkin;
+    }
+
+    // Actions
     createFrame() {
-        this.insertFrame();
-        this.goToNextFrame();
+        this._frames.push(this._createFrameFunction());
     }
 
-    goToFrame(aFrameNumber) {
-        this.currentFrame.hide();
-        this.findFrame(aFrameNumber).show();
+    showFrame(aFrameNumber) {
+        this.hideVisibleFrame();
+        this.makeVisibleFrameNumber(aFrameNumber);
 
-        this._currentFrameNumber = aFrameNumber;
+        if (!this._isPlaying && this.hasOnionSkinEnabled()) {
+            this.removeCurrentOnionSkins();
+            this.showNewOnionSkins();
+        };
     }
 
-    goToNextFrame() {
-        this.goToFrame(this.currentFrameNumber + 1);
+    activateOnionSkin() {
+        this._hasOnionSkinEnabled = true;
+        this.showNewOnionSkins();
+    }
+
+    deactivateOnionSkin() {
+        this._hasOnionSkinEnabled = false;
+        this.removeCurrentOnionSkins();
     }
 
     // PRIVATE
-    get currentFrame() {
-        return this.findFrame(this.currentFrameNumber);
+    existFrameAtFrameNumber(aFrameNumber) {
+        return aFrameNumber >= 1 && aFrameNumber <= this.lastFrameNumber;
+    }
+
+    get visibleFrame() {
+        return this._frames[this._visibleFrameNumber - 1];
     }
 
     findFrame(aFrameNumber) {
         return this._frames[aFrameNumber - 1];
     }
 
-    insertFrame() {
-        this._frames.push(this._createFrameFunction());
+    hideVisibleFrame() {
+        this.visibleFrame.hide();
+    }
+
+    makeVisibleFrameNumber(aFrameNumber) {
+        this.findFrame(aFrameNumber).show();
+        this._visibleFrameNumber = aFrameNumber;
+    }
+
+    showNewOnionSkins() {
+        const previousFramesShowingOnionSkin = [this._visibleFrameNumber - 1].filter(frameNumber => this.existFrameAtFrameNumber(frameNumber)); 
+        previousFramesShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).showOnionSkin('red'));
+        
+        const nextFramesShowingOnionSkin = [this._visibleFrameNumber + 1].filter(frameNumber => this.existFrameAtFrameNumber(frameNumber));
+        nextFramesShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).showOnionSkin('green'));
+        
+        this._frameNumbersShowingOnionSkin = previousFramesShowingOnionSkin.concat(nextFramesShowingOnionSkin);
+    }
+
+    removeCurrentOnionSkins() {
+        this._frameNumbersShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).hideOnionSkin());
+        this._frameNumbersShowingOnionSkin = []
+    }
+
+    startPlaying() {
+        this._isPlaying = true;
+        this.removeCurrentOnionSkins();
+    }
+
+    stopPlaying() {
+        this._isPlaying = false;
+
+        if (this.hasOnionSkinEnabled()) {
+            this.showNewOnionSkins();
+        }
     }
 }
 
