@@ -32,6 +32,10 @@ class CaminiToons {
     return this._animationDocument.currentFrameNumber;
   }
 
+  get framesDetails() {
+    return this._animationDocument.framesDetails;
+  }
+
   hitTest(aPointToCheck) {
     return this._animationDocument.hitTest(aPointToCheck);
   }

@@ -29,6 +29,10 @@ class AnimationLayer {
         return this._frameNumbersShowingOnionSkin;
     }
 
+    get framesDetails() {
+        return [...Array(this.lastFrameNumber)].map((_, index) => ({number: index + 1}));
+    }
+
     // Actions
     createFrame() {
         this._frames.push(this._createFrameFunction());

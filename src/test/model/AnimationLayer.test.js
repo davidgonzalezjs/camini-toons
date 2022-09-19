@@ -37,4 +37,14 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isVisibleFrame(2)).toBe(true);
     });
 
+    it('can be ask for details about its frames', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.createFrame();
+
+        expect(animationLayer.framesDetails).toEqual([
+            {number: 1},
+            {number: 2}
+        ]);
+    });
+
 });

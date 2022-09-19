@@ -30,6 +30,7 @@ function App({createCaminiToons}) {
   const [selectedToolName, setSelectedToolName] = useState('pen');
   const [frames, setFrames] = useState([{number: 1}]);
   const [frameRate, setFrameRate] = useState(6);
+  const [currentFrameNumber, setCurrentFrameNumber] = useState(1);
 
   useEffect(() => {
     const newCaminiToons = createCaminiToons(canvasRef.current);
@@ -38,6 +39,7 @@ function App({createCaminiToons}) {
     setSelectedToolName(newCaminiToons.selectedTool.name);
     setToolsNames(newCaminiToons.toolsNames);
     setFrameRate(newCaminiToons.frameRate);
+    setCurrentFrameNumber(newCaminiToons.currentFrameNumber);
   }, [createCaminiToons]);
 
   const canvasWidth = 1280;
@@ -50,11 +52,13 @@ function App({createCaminiToons}) {
 
   const handleCreateFrame = (layerName) => {
     caminiToons.createFrame();
-    setFrames([...frames, {number: frames.length + 1}]);
+    setFrames(caminiToons.framesDetails);
+    setCurrentFrameNumber(caminiToons.currentFrameNumber);
   };
 
   const handleFrameClick = frame => {
     caminiToons.goToFrame(frame.number);
+    setCurrentFrameNumber(caminiToons.currentFrameNumber);
   };
 
   const handlePlayAnimation = () => {
@@ -99,6 +103,7 @@ function App({createCaminiToons}) {
       />
 
       <PlaybackBar
+        currentFrameNumber={currentFrameNumber}
         frameRate={frameRate}
         onFrameRateChage={handleFrameRateChange}
         onPlay={handlePlayAnimation}

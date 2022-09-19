@@ -31,9 +31,12 @@ const PlaybackBarContainer = styled(Row)`
   align-items: center;
 `;
 
-export const PlaybackBar = ({frameRate, onFrameRateChage, onPlay, onRepeat}) =>
+export const PlaybackBar = ({currentFrameNumber, frameRate, onFrameRateChage, onPlay, onRepeat}) =>
     <PlaybackBarContainer>
         <PlayButton active onClick={onPlay} />
         <RepeatButton active onClick={onRepeat} />
         <FrameRateDisplay frameRate={frameRate} onFrameRateChage={onFrameRateChage} />
+        <div>
+          <strong>Frame actual: </strong>{currentFrameNumber}
+        </div>
     </PlaybackBarContainer>;

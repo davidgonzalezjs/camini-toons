@@ -42,6 +42,10 @@ class AnimationDocument {
     return this.activeLayer.lastFrameNumber;
   }
 
+  get framesDetails() {
+    return this.activeLayer.framesDetails;
+  }
+
   isAtLastFrame() {
     return this._currentFrameNumber === this.lastFrameNumber;
   }
