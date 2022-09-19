@@ -11,18 +11,18 @@ const PlaybackIcon = styled(Icon)`
   height: 25px;
 `;
 
-const FrameRateInput = styled.input`
+const FrameRateInput = styled.input.attrs({ type: 'number' })`
   margin: 3px;
-  width: 20px;
+  width: 40px;
   text-align: end;
 `;
 
 const PlayButton = (props) => <PlaybackIcon {...props} src={playIcon} />;
 const RepeatButton = (props) => <PlaybackIcon {...props} src={repeatIcon} />;
 
-const FrameRateDisplay = ({frameRate}) =>
+const FrameRateDisplay = ({frameRate, onFrameRateChage}) =>
   <div>
-    <strong>Frame rate:</strong><FrameRateInput value={frameRate} /> fps
+    <strong>Frame rate:</strong><FrameRateInput value={frameRate} onChange={onFrameRateChage} /> fps
   </div>;
 
 const PlaybackBarContainer = styled(Row)`
@@ -31,9 +31,9 @@ const PlaybackBarContainer = styled(Row)`
   align-items: center;
 `;
 
-export const PlaybackBar = ({frameRate, onPlay, onRepeat}) =>
+export const PlaybackBar = ({frameRate, onFrameRateChage, onPlay, onRepeat}) =>
     <PlaybackBarContainer>
         <PlayButton active onClick={onPlay} />
         <RepeatButton active onClick={onRepeat} />
-        <FrameRateDisplay frameRate={frameRate} />
+        <FrameRateDisplay frameRate={frameRate} onFrameRateChage={onFrameRateChage} />
     </PlaybackBarContainer>;

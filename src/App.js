@@ -37,6 +37,7 @@ function App({createCaminiToons}) {
     setCaminiToons(newCaminiToons);
     setSelectedToolName(newCaminiToons.selectedTool.name);
     setToolsNames(newCaminiToons.toolsNames);
+    setFrameRate(newCaminiToons.frameRate);
   }, [createCaminiToons]);
 
   const canvasWidth = 1280;
@@ -75,6 +76,15 @@ function App({createCaminiToons}) {
     }
   };
 
+  const handleFrameRateChange = (anEvent) => {
+    const newFrameRate = parseInt(anEvent.target.value);
+    
+    if (!isNaN(newFrameRate) && newFrameRate > 0) {
+      caminiToons.changeFrameRateTo(newFrameRate);
+      setFrameRate(newFrameRate);
+    }
+  };
+
   return (
     <AppContainer>
       <Row>
@@ -90,6 +100,7 @@ function App({createCaminiToons}) {
 
       <PlaybackBar
         frameRate={frameRate}
+        onFrameRateChage={handleFrameRateChange}
         onPlay={handlePlayAnimation}
         onRepeat={handleRepeatAnimation}
       />

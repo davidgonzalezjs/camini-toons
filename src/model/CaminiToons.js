@@ -24,6 +24,10 @@ class CaminiToons {
     return this._toolBox.toolsNames;
   }
 
+  get frameRate() {
+    return this._clock.frameRate;
+  }
+
   get currentFrameNumber() {
     return this._animationDocument.currentFrameNumber;
   }
@@ -47,6 +51,10 @@ class CaminiToons {
 
   activateOnionSkin() {
     this._animationDocument.activateOnionSkin();
+  }
+
+  changeFrameRateTo(aFrameRate) {
+    this._clock.changeFrameRateTo(aFrameRate);
   }
 
   // Actions - Drawing
