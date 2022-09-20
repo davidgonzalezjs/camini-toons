@@ -1,3 +1,4 @@
+import Optional from './Optional';
 import ToolBox from './tools/ToolBox';
 
 class CaminiToons {
@@ -8,6 +9,7 @@ class CaminiToons {
     this._clock = aClock;
 
     this._clock.registerListener(this);
+    this._listener = Optional.empty();
   }
 
   // Testing
@@ -47,10 +49,12 @@ class CaminiToons {
 
   goToFrame(aFrameNumber) {
     this._animationDocument.goToFrame(aFrameNumber);
+    this._listener.ifPresent(listener => listener.handleFrameChanged());
   }
 
   createFrame() {
     this._animationDocument.createFrame();
+    this._listener.ifPresent(listener => listener.handleFrameCreated());
   }
 
   activateOnionSkin() {
@@ -94,6 +98,13 @@ class CaminiToons {
   useToolNamed(aToolName) {
     this.deselectAllDrawings();
     this._toolBox.useToolNamed(aToolName);
+    this._listener.ifPresent(listener => listener.handleToolChanged(aToolName));
+  }
+
+  // 
+  registerListener(aListener) {
+    this._listener = Optional.with(aListener);
+    this._animationDocument.registerListener(aListener);
   }
 
   // Event handling

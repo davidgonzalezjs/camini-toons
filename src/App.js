@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
+
+import {useCaminiToons} from './useCaminiToons';
 
 import caminiToonsLogo from './assets/Camini-Toons-logo.png';
 
@@ -25,69 +27,25 @@ const AppLogo = () =>
 
 function App({createCaminiToons}) {
   const canvasRef = useRef(null)
-  const [caminiToons, setCaminiToons] = useState();
-  const [toolsNames, setToolsNames] = useState([]);
-  const [selectedToolName, setSelectedToolName] = useState('pen');
-  const [frames, setFrames] = useState([{number: 1}]);
-  const [frameRate, setFrameRate] = useState(6);
-  const [currentFrameNumber, setCurrentFrameNumber] = useState(1);
+  
+  const {
+    toolsNames,
+    selectedToolName,
+    frames,
+    frameRate,
+    currentFrameNumber,
 
-  useEffect(() => {
-    const newCaminiToons = createCaminiToons(canvasRef.current);
-    window.caminiToons = newCaminiToons;
-    setCaminiToons(newCaminiToons);
-    setSelectedToolName(newCaminiToons.selectedTool.name);
-    setToolsNames(newCaminiToons.toolsNames);
-    setFrameRate(newCaminiToons.frameRate);
-    setCurrentFrameNumber(newCaminiToons.currentFrameNumber);
-  }, [createCaminiToons]);
+    handleToolIconClicked,
+    handleCreateFrame,
+    handleFrameClick,
+    handlePlayAnimation,
+    handleRepeatAnimation,
+    handleOnionSkinClick,
+    handleFrameRateChange
+  } = useCaminiToons(canvasRef, createCaminiToons);
 
   const canvasWidth = 1280;
   const canvasHeight = 720;
-
-  const handleToolIconClicked = aToolName => {
-    caminiToons.useToolNamed(aToolName);
-    setSelectedToolName(aToolName);
-  };
-
-  const handleCreateFrame = (layerName) => {
-    caminiToons.createFrame();
-    setFrames(caminiToons.framesDetails);
-    setCurrentFrameNumber(caminiToons.currentFrameNumber);
-  };
-
-  const handleFrameClick = frame => {
-    caminiToons.goToFrame(frame.number);
-    setCurrentFrameNumber(caminiToons.currentFrameNumber);
-  };
-
-  const handlePlayAnimation = () => {
-    caminiToons.playAnimation();
-  };
-
-  const handleRepeatAnimation = () => {
-
-  };
-
-  const handleOnionSkinClick = () => {
-    // TODO: se rompe el encapsulamiento
-    const layer = caminiToons._animationDocument.activeLayer; 
-    if (layer.hasOnionSkinEnabled()) {
-      layer.deactivateOnionSkin();
-    }
-    else {
-      layer.activateOnionSkin();
-    }
-  };
-
-  const handleFrameRateChange = (anEvent) => {
-    const newFrameRate = parseInt(anEvent.target.value);
-    
-    if (!isNaN(newFrameRate) && newFrameRate > 0) {
-      caminiToons.changeFrameRateTo(newFrameRate);
-      setFrameRate(newFrameRate);
-    }
-  };
 
   return (
     <AppContainer>

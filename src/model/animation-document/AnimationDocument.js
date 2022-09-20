@@ -19,6 +19,8 @@ class AnimationDocument {
     this._currentFrameNumber = 1;
     this._state = new AnimationIdleState();
 
+    this._listener = Optional.empty();
+
     this.createAnimationLayer();
   }
 
@@ -69,6 +71,8 @@ class AnimationDocument {
     this.deselectAllDrawings();
     this.activeLayer.showFrame(aFrameNumber);
     this._currentFrameNumber = aFrameNumber;
+
+    this._listener.ifPresent(listener => listener.handleFrameChanged(aFrameNumber));
   }
 
   goToNextFrame() {
@@ -121,6 +125,10 @@ class AnimationDocument {
 
   moveDrawing(aDrawing, aDelta) {
     aDrawing.moveBy(aDelta);
+  }
+
+  registerListener(aListener) {
+    this._listener = Optional.with(aListener);
   }
 
 }
