@@ -23,8 +23,7 @@ class AnimationDocument {
   }
 
   createAnimationLayer() {
-    const createFrameFunction = () => new Frame({createContent: () => this._createFrameContent()});
-    const newLayer = new AnimationLayer({createFrameFunction});
+    const newLayer = new AnimationLayer({createFrameContent: () => this._createFrameContent()});
 
     this._animationLayers.push(newLayer);
     this._activeLayer = newLayer;

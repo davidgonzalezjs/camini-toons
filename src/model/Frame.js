@@ -2,8 +2,8 @@ import Optional from './Optional';
 
 class Frame {
 
-    constructor({createContent}) {
-        this._content = createContent();
+    constructor(content) {
+        this._content = content;
         this._optionalOnionSkin = Optional.empty();
         this.hide();
     }

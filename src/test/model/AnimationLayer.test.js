@@ -1,13 +1,7 @@
-import AnimationLayer from '../../model/AnimationLayer'
-import Frame from '../../model/Frame';
+import AnimationLayer from '../../model/AnimationLayer';
+import {createFrameContent} from '../helpers/mocks';
 
-const createContent = () => ({
-    activateOnionSkin: jest.fn(),
-    activate: jest.fn(),
-});
-const createFrameFunction = () => new Frame({createContent});
-
-const createAnimationLayer = () => new AnimationLayer({createFrameFunction});
+const createAnimationLayer = () => new AnimationLayer({createFrameContent});
 
 describe('AnimationLayer', () => {
 

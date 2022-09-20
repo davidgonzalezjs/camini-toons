@@ -1,7 +1,9 @@
+import Frame from './Frame';
+
 class AnimationLayer {
 
-    constructor({ createFrameFunction }) {
-        this._createFrameFunction = createFrameFunction;
+    constructor({ createFrameContent }) {
+        this._createFrameContent = createFrameContent;
 
         this._hasOnionSkinEnabled = false;
         this._frames = [];
@@ -35,7 +37,7 @@ class AnimationLayer {
 
     // Actions
     createFrame() {
-        this._frames.push(this._createFrameFunction());
+        this._frames.push(new Frame(this._createFrameContent()));
     }
 
     showFrame(aFrameNumber) {
