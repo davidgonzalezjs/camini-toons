@@ -34,6 +34,7 @@ function App({createCaminiToons}) {
     frameRate,
     currentFrameNumber,
     layersDetails,
+    isPlayingOnALoop,
 
     handleToolIconClicked,
     handleCreateFrame,
@@ -67,6 +68,7 @@ function App({createCaminiToons}) {
       <PlaybackBar
         currentFrameNumber={currentFrameNumber}
         frameRate={frameRate}
+        isPlayingOnALoop={isPlayingOnALoop}
         onFrameRateChage={handleFrameRateChange}
         onPlay={handlePlayAnimation}
         onRepeat={handleRepeatAnimation}

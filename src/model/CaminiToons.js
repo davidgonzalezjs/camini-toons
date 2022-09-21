@@ -13,8 +13,8 @@ class CaminiToons {
   }
 
   // Testing
-  isOnionSkinEnabled() {
-    return this._animatinoLayer.hasOnionSkinEnabled();
+  isPlayingOnALoop() {
+    return this._animationDocument.isPlayingOnALoop();
   }
 
   // Accessing
@@ -43,6 +43,16 @@ class CaminiToons {
   }
   
   // Actions - Timeline
+  activatePlayOnALoop() {
+    this._animationDocument.activatePlayOnALoop();
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+  }
+
+  deactivatePlayOnALoop() {
+    this._animationDocument.deactivatePlayOnALoop();
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+  }
+
   playAnimation() {
     this._animationDocument.playAnimation();
   }

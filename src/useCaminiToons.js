@@ -8,6 +8,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const [layersDetails, setLayersDetails] = useState([]);
   const [frameRate, setFrameRate] = useState(6);
   const [currentFrameNumber, setCurrentFrameNumber] = useState(1);
+  const [isPlayingOnALoop, setIsPlayingOnALoop] = useState(false);
 
   useEffect(() => {
     const newCaminiToons = createCaminiToons(canvasRef.current);
@@ -26,11 +27,13 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
         setLayersDetails(newCaminiToons.layersDetails);
       },
       handleVisibilityClick() {
-        console.log(newCaminiToons.layersDetails[0])
         setLayersDetails(newCaminiToons.layersDetails)
       },
       handleOnionSkinChanged() {
         setLayersDetails(newCaminiToons.layersDetails)
+      },
+      handlePlayBackUpdate() {
+        setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop());
       }
     });
 
@@ -43,6 +46,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     setFrameRate(newCaminiToons.frameRate);
     setCurrentFrameNumber(newCaminiToons.currentFrameNumber);
     setLayersDetails(newCaminiToons.layersDetails);
+    setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop())
   }, [createCaminiToons]);
 
   const handleToolIconClicked = aToolName => {
@@ -62,7 +66,12 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   };
 
   const handleRepeatAnimation = () => {
-
+    if (caminiToons.isPlayingOnALoop()) {
+      caminiToons.deactivatePlayOnALoop();
+    }
+    else {
+      caminiToons.activatePlayOnALoop();
+    }
   };
 
   const handleVisibilityClick = () => {
@@ -107,6 +116,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     frameRate,
     currentFrameNumber,
     layersDetails,
+    isPlayingOnALoop,
 
     handleToolIconClicked,
     handleCreateFrame,

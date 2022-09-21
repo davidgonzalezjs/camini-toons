@@ -17,6 +17,7 @@ class AnimationDocument {
     this._selectedDrawings = [];
     this._animationLayers = [];
     this._currentFrameNumber = 1;
+    this._isPlayingOnALoop = false;
     this._state = new AnimationIdleState();
 
     this._listener = Optional.empty();
@@ -49,6 +50,18 @@ class AnimationDocument {
 
   isAtLastFrame() {
     return this._currentFrameNumber === this.lastFrameNumber;
+  }
+
+  isPlayingOnALoop() {
+    return this._isPlayingOnALoop;
+  }
+
+  activatePlayOnALoop() {
+    this._isPlayingOnALoop = true;
+  }
+
+  deactivatePlayOnALoop() {
+    this._isPlayingOnALoop = false;
   }
 
   playAnimation() {

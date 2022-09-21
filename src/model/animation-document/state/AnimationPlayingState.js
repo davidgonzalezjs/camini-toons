@@ -1,11 +1,21 @@
 class AnimationPlayingState {
 
   tickFor(anAnimationDocument) {
-    if (anAnimationDocument.isAtLastFrame()) {
-      anAnimationDocument.stopPlaying();
+    if (anAnimationDocument.isPlayingOnALoop()) {
+      if (anAnimationDocument.isAtLastFrame()) {
+        anAnimationDocument.goToFrame(1);
+      }
+      else {
+        anAnimationDocument.goToNextFrame();
+      }
     }
     else {
-      anAnimationDocument.goToNextFrame();
+      if (anAnimationDocument.isAtLastFrame()) {
+        anAnimationDocument.stopPlaying();
+      }
+      else {
+        anAnimationDocument.goToNextFrame();
+      }
     }
   }
 
