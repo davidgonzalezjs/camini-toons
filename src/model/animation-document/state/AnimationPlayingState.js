@@ -1,5 +1,9 @@
 class AnimationPlayingState {
 
+  isPlaying() {
+    return true;
+  }
+
   tickFor(anAnimationDocument) {
     if (anAnimationDocument.isPlayingOnALoop()) {
       if (anAnimationDocument.isAtLastFrame()) {

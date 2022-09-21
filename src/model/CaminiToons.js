@@ -13,6 +13,10 @@ class CaminiToons {
   }
 
   // Testing
+  isPlaying() {
+    return this._animationDocument.isPlaying();
+  }
+
   isPlayingOnALoop() {
     return this._animationDocument.isPlayingOnALoop();
   }
@@ -55,6 +59,12 @@ class CaminiToons {
 
   playAnimation() {
     this._animationDocument.playAnimation();
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+  }
+
+  stopAnimation() {
+    this._animationDocument.stopAnimation();
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
   }
 
   goToFrame(aFrameNumber) {

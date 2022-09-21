@@ -52,6 +52,10 @@ class AnimationDocument {
     return this._currentFrameNumber === this.lastFrameNumber;
   }
 
+  isPlaying() {
+    return this._state.isPlaying();
+  }
+
   isPlayingOnALoop() {
     return this._isPlayingOnALoop;
   }
@@ -69,6 +73,11 @@ class AnimationDocument {
     this.startPlaying();
   }
 
+  stopAnimation() {
+    this.stopPlaying();
+    this.goToFrame(1);
+  }
+
   startPlaying() {
     this._currentFrameNumber = 0; // Aclaracion: se setea en 0 que para que arranque a reproducir el frame numero 1
     this._state = new AnimationPlayingState();
@@ -78,6 +87,8 @@ class AnimationDocument {
   stopPlaying() {
     this._state = new AnimationIdleState();
     this.activeLayer.stopPlaying();
+    
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
   }
 
   goToFrame(aFrameNumber) {

@@ -4,6 +4,7 @@ import Row from '../Row';
 import {Icon} from '../Icon';
 
 import playIcon from '../../assets/timeline/play.svg';
+import stopIcon from '../../assets/timeline/stop.png';
 import repeatIcon from '../../assets/timeline/repeat.svg';
 
 const PlaybackIcon = styled(Icon)`
@@ -18,6 +19,7 @@ const FrameRateInput = styled.input.attrs({ type: 'number' })`
 `;
 
 const PlayButton = (props) => <PlaybackIcon {...props} src={playIcon} />;
+const StopButton = (props) => <PlaybackIcon {...props} src={stopIcon} />;
 const RepeatButton = (props) => <PlaybackIcon {...props} src={repeatIcon} />;
 
 const FrameRateDisplay = ({frameRate, onFrameRateChage}) =>
@@ -31,9 +33,10 @@ const PlaybackBarContainer = styled(Row)`
   align-items: center;
 `;
 
-export const PlaybackBar = ({currentFrameNumber, frameRate, isPlayingOnALoop, onFrameRateChage, onPlay, onRepeat}) =>
+export const PlaybackBar = ({currentFrameNumber, frameRate, isPlaying, isPlayingOnALoop, onFrameRateChage, onPlay, onStop, onRepeat}) =>
     <PlaybackBarContainer>
-        <PlayButton active onClick={onPlay} />
+        <PlayButton active={!isPlaying} onClick={onPlay} />
+        <StopButton active={isPlaying} onClick={onStop} />
         <RepeatButton active={isPlayingOnALoop} onClick={onRepeat} />
         <FrameRateDisplay frameRate={frameRate} onFrameRateChage={onFrameRateChage} />
         <div>

@@ -8,6 +8,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const [layersDetails, setLayersDetails] = useState([]);
   const [frameRate, setFrameRate] = useState(6);
   const [currentFrameNumber, setCurrentFrameNumber] = useState(1);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayingOnALoop, setIsPlayingOnALoop] = useState(false);
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
         setLayersDetails(newCaminiToons.layersDetails)
       },
       handlePlayBackUpdate() {
+        setIsPlaying(newCaminiToons.isPlaying());
         setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop());
       }
     });
@@ -63,6 +65,10 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
 
   const handlePlayAnimation = () => {
     caminiToons.playAnimation();
+  };
+
+  const handleStopAnimation = () => {
+    caminiToons.stopAnimation();
   };
 
   const handleRepeatAnimation = () => {
@@ -109,6 +115,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const handleLayerNameChanged = (layerIndex, newName) => {
     caminiToons.changeNameOfLayer(layerIndex, newName);
   };
+  
 
   return {
     toolsNames,
@@ -116,12 +123,14 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     frameRate,
     currentFrameNumber,
     layersDetails,
+    isPlaying,
     isPlayingOnALoop,
 
     handleToolIconClicked,
     handleCreateFrame,
     handleFrameClick,
     handlePlayAnimation,
+    handleStopAnimation,
     handleRepeatAnimation,
     handleVisibilityClick,
     handleOnionSkinClick,

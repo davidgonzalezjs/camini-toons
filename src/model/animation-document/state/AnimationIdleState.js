@@ -1,5 +1,9 @@
 class AnimationIdleState {
     
+    isPlaying() {
+        return false;
+    }
+
     tickFor(anAnimationDocument) {
 
     }

@@ -97,4 +97,21 @@ describe('AnimationLayer', () => {
         expect(animationDocument._currentFrameNumber).toBe(3);
     });
 
+    it(`an animation can be stopped in the middle`, () => {
+        const animationDocument = createAnimationDocument();
+        animationDocument.createFrame();
+        animationDocument.createFrame();
+        animationDocument.goToFrame(1);
+        animationDocument.playAnimation();
+        animationDocument.tick();
+        
+        animationDocument.stopAnimation();
+
+        animationDocument.tick();
+        animationDocument.tick();
+        animationDocument.tick();
+
+        expect(animationDocument._currentFrameNumber).toBe(1);
+    });
+
 });
