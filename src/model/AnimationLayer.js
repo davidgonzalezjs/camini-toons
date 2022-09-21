@@ -6,6 +6,7 @@ class AnimationLayer {
         this._name = name;
         this._createFrameContent = createFrameContent;
 
+        this._isVisible = true;
         this._hasOnionSkinEnabled = false;
         this._frames = [];
         this._frameNumbersShowingOnionSkin = [];
@@ -39,6 +40,8 @@ class AnimationLayer {
     get details() {
         return {
             name: this.name,
+            isVisible: this._isVisible,
+            hasOnionSkinEnabled: this.hasOnionSkinEnabled(),
             frames: this._frames.map((_, index) => ({number: index + 1}))
         };
     }
@@ -53,8 +56,11 @@ class AnimationLayer {
     }
 
     showFrame(aFrameNumber) {
+        
         this.hideVisibleFrame();
         this.makeVisibleFrameNumber(aFrameNumber);
+
+        if (!this.isVisible()) this.hideVisibleFrame();
 
         if (!this._isPlaying && this.hasOnionSkinEnabled()) {
             this.removeCurrentOnionSkins();
@@ -62,9 +68,26 @@ class AnimationLayer {
         };
     }
 
+    isVisible() {
+        return this._isVisible;
+    }
+
+    hide() {
+        this._isVisible = false;
+        this.hideVisibleFrame();
+        this.deactivateOnionSkin();
+    }
+
+    show() {
+        this._isVisible = true;
+        this.visibleFrame.show();
+    }
+
     activateOnionSkin() {
-        this._hasOnionSkinEnabled = true;
-        this.showNewOnionSkins();
+        if (this.isVisible()) {
+            this._hasOnionSkinEnabled = true;
+            this.showNewOnionSkins();
+        }
     }
 
     deactivateOnionSkin() {

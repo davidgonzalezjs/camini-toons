@@ -24,6 +24,13 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
       },
       handleLayerNameChanged() {
         setLayersDetails(newCaminiToons.layersDetails);
+      },
+      handleVisibilityClick() {
+        console.log(newCaminiToons.layersDetails[0])
+        setLayersDetails(newCaminiToons.layersDetails)
+      },
+      handleOnionSkinChanged() {
+        setLayersDetails(newCaminiToons.layersDetails)
       }
     });
 
@@ -58,14 +65,26 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
 
   };
 
+  const handleVisibilityClick = () => {
+    // TODO: se rompe el encapsulamiento
+    const layer = caminiToons._animationDocument.activeLayer; 
+    
+    if (layer.isVisible()) {
+      caminiToons.hideLayer(0);
+    }
+    else {
+      caminiToons.showLayer(0);
+    }
+  }
+
   const handleOnionSkinClick = () => {
     // TODO: se rompe el encapsulamiento
     const layer = caminiToons._animationDocument.activeLayer; 
     if (layer.hasOnionSkinEnabled()) {
-      layer.deactivateOnionSkin();
+      caminiToons.deactivateOnionSkin();
     }
     else {
-      layer.activateOnionSkin();
+      caminiToons.activateOnionSkin();
     }
   };
   
@@ -94,6 +113,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handleFrameClick,
     handlePlayAnimation,
     handleRepeatAnimation,
+    handleVisibilityClick,
     handleOnionSkinClick,
     handleFrameRateChange,
     handleLayerNameChanged

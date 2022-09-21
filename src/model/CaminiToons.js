@@ -59,6 +59,12 @@ class CaminiToons {
 
   activateOnionSkin() {
     this._animationDocument.activateOnionSkin();
+    this._listener.ifPresent(listener => listener.handleOnionSkinChanged());
+  }
+
+  deactivateOnionSkin() {
+    this._animationDocument.deactivateOnionSkin();
+    this._listener.ifPresent(listener => listener.handleOnionSkinChanged())
   }
 
   changeFrameRateTo(aFrameRate) {
@@ -105,6 +111,16 @@ class CaminiToons {
   changeNameOfLayer(aLayerIndex, newLayerName) {
     this._animationDocument.changeNameOfLayer(aLayerIndex, newLayerName);
     this._listener.ifPresent(listener => listener.handleLayerNameChanged());
+  }
+
+  showLayer(aLayerIndex) {
+    this._animationDocument.showLayer(aLayerIndex);
+    this._listener.ifPresent(listener => listener.handleVisibilityClick());
+  }
+
+  hideLayer(aLayerIndex) {
+    this._animationDocument.hideLayer(aLayerIndex);
+    this._listener.ifPresent(listener => listener.handleVisibilityClick());
   }
 
   // 

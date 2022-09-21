@@ -38,7 +38,7 @@ const LayerIcon = styled(Icon)`
   height: 25px;
 `;
 
-const VisibilityButton = () => <LayerIcon src={eyeIcon} active />
+const VisibilityButton = (props) => <LayerIcon {...props} src={eyeIcon} />
 const LockButton = () => <LayerIcon src={lockIcon} />;
 const OnionSkinButton = (props) => <LayerIcon {...props} src={onionIcon} />;
 
@@ -53,12 +53,12 @@ const LayerLabel = styled.input`
 `;
 
 
-const Layer = ({index, name, onLayerNameChanged, onAddFrameClick, onOnionSkinClick}) =>
+const Layer = ({index, name, isVisible, hasOnionSkinEnabled, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick}) =>
   <StyledLayer>
     <Row>
       <LockButton />
-      <VisibilityButton />
-      <OnionSkinButton onClick={onOnionSkinClick}/>
+      <VisibilityButton active={isVisible} onClick={onVisibilityClick}/>
+      <OnionSkinButton active={hasOnionSkinEnabled} onClick={onOnionSkinClick}/>
     </Row>
     
     <LayerLabel value={name} onChange={event => onLayerNameChanged(index, event.target.value)}/>
@@ -67,7 +67,7 @@ const Layer = ({index, name, onLayerNameChanged, onAddFrameClick, onOnionSkinCli
   </StyledLayer>
 
 
-const Timeline = ({ layersDetails, onLayerNameChanged, onAddFrameClick, onOnionSkinClick, onFrameClick }) => {
+const Timeline = ({ layersDetails, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick, onFrameClick }) => {
   return (
     <TimeLineRow>
       {layersDetails.map((layersDetail, index) =>
@@ -75,8 +75,11 @@ const Timeline = ({ layersDetails, onLayerNameChanged, onAddFrameClick, onOnionS
           <Layer
             index={index}
             name={layersDetail.name}
+            isVisible={layersDetail.isVisible}
+            hasOnionSkinEnabled={layersDetail.hasOnionSkinEnabled}
             onLayerNameChanged={onLayerNameChanged}
             onAddFrameClick={onAddFrameClick}
+            onVisibilityClick={onVisibilityClick}
             onOnionSkinClick={onOnionSkinClick}
           />
           <FramesContainer>

@@ -131,6 +131,14 @@ class AnimationDocument {
     this._animationLayers[aLayerIndex].changeNameTo(newLayerName);
   }
 
+  showLayer(aLayerIndex) {
+    this._animationLayers[aLayerIndex].show();
+  }
+
+  hideLayer(aLayerIndex) {
+    this._animationLayers[aLayerIndex].hide();
+  }
+
   registerListener(aListener) {
     this._listener = Optional.with(aListener);
   }

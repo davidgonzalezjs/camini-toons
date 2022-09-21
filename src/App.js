@@ -40,6 +40,7 @@ function App({createCaminiToons}) {
     handleFrameClick,
     handlePlayAnimation,
     handleRepeatAnimation,
+    handleVisibilityClick,
     handleOnionSkinClick,
     handleFrameRateChange,
     handleLayerNameChanged
@@ -58,6 +59,7 @@ function App({createCaminiToons}) {
         layersDetails={layersDetails}
         onLayerNameChanged={handleLayerNameChanged}
         onAddFrameClick={handleCreateFrame}
+        onVisibilityClick={handleVisibilityClick}
         onOnionSkinClick={handleOnionSkinClick}
         onFrameClick={handleFrameClick}
       />
