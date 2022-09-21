@@ -5,7 +5,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const [caminiToons, setCaminiToons] = useState(null);
   const [toolsNames, setToolsNames] = useState([]);
   const [selectedToolName, setSelectedToolName] = useState('pen');
-  const [frames, setFrames] = useState([{number: 1}]);
+  const [layersDetails, setLayersDetails] = useState([]);
   const [frameRate, setFrameRate] = useState(6);
   const [currentFrameNumber, setCurrentFrameNumber] = useState(1);
 
@@ -13,14 +13,17 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     const newCaminiToons = createCaminiToons(canvasRef.current);
 
     newCaminiToons.registerListener({
-      handleFrameChanged() {
-        setCurrentFrameNumber(newCaminiToons.currentFrameNumber)
-      },
       handleToolChanged() {
         setSelectedToolName(newCaminiToons.selectedTool.name);
       },
+      handleFrameChanged() {
+        setCurrentFrameNumber(newCaminiToons.currentFrameNumber)
+      },
       handleFrameCreated() {
-        setFrames(newCaminiToons.framesDetails);
+        setLayersDetails(newCaminiToons.layersDetails);
+      },
+      handleLayerNameChanged() {
+        setLayersDetails(newCaminiToons.layersDetails);
       }
     });
 
@@ -32,6 +35,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     setToolsNames(newCaminiToons.toolsNames);
     setFrameRate(newCaminiToons.frameRate);
     setCurrentFrameNumber(newCaminiToons.currentFrameNumber);
+    setLayersDetails(newCaminiToons.layersDetails);
   }, [createCaminiToons]);
 
   const handleToolIconClicked = aToolName => {
@@ -74,12 +78,16 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     }
   };
 
+  const handleLayerNameChanged = (layerIndex, newName) => {
+    caminiToons.changeNameOfLayer(layerIndex, newName);
+  };
+
   return {
     toolsNames,
     selectedToolName,
-    frames,
     frameRate,
     currentFrameNumber,
+    layersDetails,
 
     handleToolIconClicked,
     handleCreateFrame,
@@ -87,6 +95,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handlePlayAnimation,
     handleRepeatAnimation,
     handleOnionSkinClick,
-    handleFrameRateChange
+    handleFrameRateChange,
+    handleLayerNameChanged
   }
 }

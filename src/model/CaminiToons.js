@@ -34,8 +34,8 @@ class CaminiToons {
     return this._animationDocument.currentFrameNumber;
   }
 
-  get framesDetails() {
-    return this._animationDocument.framesDetails;
+  get layersDetails() {
+    return this._animationDocument.layersDetails;
   }
 
   hitTest(aPointToCheck) {
@@ -99,6 +99,12 @@ class CaminiToons {
     this.deselectAllDrawings();
     this._toolBox.useToolNamed(aToolName);
     this._listener.ifPresent(listener => listener.handleToolChanged(aToolName));
+  }
+
+  // Actions - Layers
+  changeNameOfLayer(aLayerIndex, newLayerName) {
+    this._animationDocument.changeNameOfLayer(aLayerIndex, newLayerName);
+    this._listener.ifPresent(listener => listener.handleLayerNameChanged());
   }
 
   // 

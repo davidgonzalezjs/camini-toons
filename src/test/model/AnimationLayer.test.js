@@ -1,7 +1,7 @@
 import AnimationLayer from '../../model/AnimationLayer';
 import {createFrameContent} from '../helpers/mocks';
 
-const createAnimationLayer = () => new AnimationLayer({createFrameContent});
+const createAnimationLayer = (props = {}) => new AnimationLayer({name: props.name || 'layer name', createFrameContent});
 
 describe('AnimationLayer', () => {
 
@@ -31,14 +31,30 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isVisibleFrame(2)).toBe(true);
     });
 
-    it('can be ask for details about its frames', () => {
-        const animationLayer = createAnimationLayer();
+    it('can be ask for details about it', () => {
+        const animationLayer = createAnimationLayer({name: 'layer name'});
         animationLayer.createFrame();
 
-        expect(animationLayer.framesDetails).toEqual([
-            {number: 1},
-            {number: 2}
-        ]);
+        expect(animationLayer.details).toEqual({
+            name: 'layer name',
+            frames: [
+                {number: 1},
+                {number: 2}
+            ]
+        });
+    });
+
+    it('has a name', () => {
+        const animationLayer = createAnimationLayer({name: 'layer name'});
+
+        expect(animationLayer.name).toBe('layer name');
+    });
+
+    it(`can change it's name`, () => {
+        const animationLayer = createAnimationLayer({name: 'original name'});
+        animationLayer.changeNameTo('another name')
+
+        expect(animationLayer.name).toBe('another name');
     });
 
 });

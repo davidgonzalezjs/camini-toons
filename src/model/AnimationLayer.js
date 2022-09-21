@@ -2,7 +2,8 @@ import Frame from './Frame';
 
 class AnimationLayer {
 
-    constructor({ createFrameContent }) {
+    constructor({ name, createFrameContent }) {
+        this._name = name;
         this._createFrameContent = createFrameContent;
 
         this._hasOnionSkinEnabled = false;
@@ -23,6 +24,10 @@ class AnimationLayer {
     }
 
     // Accessing
+    get name() {
+        return this._name;
+    }
+
     get lastFrameNumber() {
         return this._frames.length;
     }
@@ -31,11 +36,18 @@ class AnimationLayer {
         return this._frameNumbersShowingOnionSkin;
     }
 
-    get framesDetails() {
-        return [...Array(this.lastFrameNumber)].map((_, index) => ({number: index + 1}));
+    get details() {
+        return {
+            name: this.name,
+            frames: this._frames.map((_, index) => ({number: index + 1}))
+        };
     }
 
     // Actions
+    changeNameTo(aNewName) {
+        this._name = aNewName;
+    }
+
     createFrame() {
         this._frames.push(new Frame(this._createFrameContent()));
     }

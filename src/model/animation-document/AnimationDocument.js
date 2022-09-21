@@ -25,14 +25,14 @@ class AnimationDocument {
   }
 
   createAnimationLayer() {
-    const newLayer = new AnimationLayer({createFrameContent: () => this._createFrameContent()});
+    const newLayer = new AnimationLayer({name: `Capa 1`, createFrameContent: () => this._createFrameContent()});
 
     this._animationLayers.push(newLayer);
-    this._activeLayer = newLayer;
+    this._activeLayerIndex = 0;
   }
 
   get activeLayer() {
-    return this._activeLayer;
+    return this._animationLayers[this._activeLayerIndex];
   }
 
   get currentFrameNumber() {
@@ -43,8 +43,8 @@ class AnimationDocument {
     return this.activeLayer.lastFrameNumber;
   }
 
-  get framesDetails() {
-    return this.activeLayer.framesDetails;
+  get layersDetails() {
+    return [this.activeLayer.details];
   }
 
   isAtLastFrame() {
@@ -125,6 +125,10 @@ class AnimationDocument {
 
   moveDrawing(aDrawing, aDelta) {
     aDrawing.moveBy(aDelta);
+  }
+
+  changeNameOfLayer(aLayerIndex, newLayerName) {
+    this._animationLayers[aLayerIndex].changeNameTo(newLayerName);
   }
 
   registerListener(aListener) {

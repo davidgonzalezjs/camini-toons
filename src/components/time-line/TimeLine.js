@@ -44,12 +44,16 @@ const OnionSkinButton = (props) => <LayerIcon {...props} src={onionIcon} />;
 
 const AddFrameButton = (props) => <LayerIcon {...props} active src={newFrameIcon} />;
 
-const LayerLabel = styled.p`
+const LayerLabel = styled.input`
   flex-grow: 1;
+  width: 90px;
+  border: none;
+  background-color: inherit;
+  filter: brightness(120%);
 `;
 
 
-const Layer = ({name, onAddFrameClick, onOnionSkinClick}) =>
+const Layer = ({index, name, onLayerNameChanged, onAddFrameClick, onOnionSkinClick}) =>
   <StyledLayer>
     <Row>
       <LockButton />
@@ -57,23 +61,29 @@ const Layer = ({name, onAddFrameClick, onOnionSkinClick}) =>
       <OnionSkinButton onClick={onOnionSkinClick}/>
     </Row>
     
-    <LayerLabel>{name}</LayerLabel>
+    <LayerLabel value={name} onChange={event => onLayerNameChanged(index, event.target.value)}/>
     
     <AddFrameButton onClick={() => onAddFrameClick(name)} />
   </StyledLayer>
 
 
-const Timeline = ({ frames, onAddFrameClick, onOnionSkinClick, onFrameClick }) => {
+const Timeline = ({ layersDetails, onLayerNameChanged, onAddFrameClick, onOnionSkinClick, onFrameClick }) => {
   return (
     <TimeLineRow>
-      <Layer
-        name={'Layer 1'}
-        onAddFrameClick={onAddFrameClick}
-        onOnionSkinClick={onOnionSkinClick}
-      />
-      <FramesContainer>
-        {frames.map(frame => <Frame onClick={() => onFrameClick(frame)}/>)}    
-      </FramesContainer>
+      {layersDetails.map((layersDetail, index) =>
+        <>
+          <Layer
+            index={index}
+            name={layersDetail.name}
+            onLayerNameChanged={onLayerNameChanged}
+            onAddFrameClick={onAddFrameClick}
+            onOnionSkinClick={onOnionSkinClick}
+          />
+          <FramesContainer>
+            {layersDetail.frames.map(frame => <Frame onClick={() => onFrameClick(frame)}/>)}    
+          </FramesContainer>
+        </>
+      )}
     </TimeLineRow>
   );
 };
