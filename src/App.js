@@ -59,6 +59,7 @@ function App({createCaminiToons}) {
       </Row>
       
       <TimeLine
+        currentFrameNumber={currentFrameNumber}
         layersDetails={layersDetails}
         onLayerNameChanged={handleLayerNameChanged}
         onAddFrameClick={handleCreateFrame}

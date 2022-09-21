@@ -67,7 +67,7 @@ const Layer = ({index, name, isVisible, hasOnionSkinEnabled, onLayerNameChanged,
   </StyledLayer>
 
 
-const Timeline = ({ layersDetails, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick, onFrameClick }) => {
+const Timeline = ({ currentFrameNumber, layersDetails, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick, onFrameClick }) => {
   return (
     <TimeLineRow>
       {layersDetails.map((layersDetail, index) =>
@@ -83,7 +83,7 @@ const Timeline = ({ layersDetails, onLayerNameChanged, onAddFrameClick, onVisibi
             onOnionSkinClick={onOnionSkinClick}
           />
           <FramesContainer>
-            {layersDetail.frames.map(frame => <Frame onClick={() => onFrameClick(frame)}/>)}    
+            {layersDetail.frames.map(frame => <Frame isCurrentFrame={frame.number === currentFrameNumber} onClick={() => onFrameClick(frame)}/>)}    
           </FramesContainer>
         </>
       )}
