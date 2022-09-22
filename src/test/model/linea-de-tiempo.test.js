@@ -18,7 +18,7 @@ describe('Linea de tiempo', () => {
   });
 
   xit('cuando se crea un frame en la capa activa se avanza un frame', () => {
-    caminiToons.createFrame();
+    caminiToons.createFrameOnLayer(1);
 
     expect(animationDocument.activeLayer.createFrame).toBeCalled();
     expect(animationDocument.activeLayer.goToFrame).toBeCalledWith(2);

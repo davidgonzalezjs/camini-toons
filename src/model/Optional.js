@@ -20,6 +20,18 @@ class Optional {
     subclassResponsibility();
   }
 
+  get() {
+    subclassResponsibility();
+  }
+
+  map(aMappingFunction) {
+    subclassResponsibility();
+  }
+
+  getOrElse(elseFunction) {
+    subclassResponsibility();
+  }
+
 }
 
 class NonEmptyOptional extends Optional {
@@ -33,11 +45,35 @@ class NonEmptyOptional extends Optional {
     return aFunction(this._element);
   }
 
+  map(aMappingFunction) {
+    return Optional.with(aMappingFunction(this._element));
+  }
+
+  get() {
+    return this._element;
+  }
+
+  getOrElse(elseFunction) {
+    return this.get();
+  }
+
 }
 
 class EmptyOptional extends Optional {
 
   ifPresent(aFunction) {
+    return this;
+  }
+
+  get() {
+    throw "Cannot get an element of an empty optional";
+  }
+
+  getOrElse(elseFunction) {
+    return elseFunction();
+  }
+
+  map(aMappingFunction) {
     return this;
   }
   
