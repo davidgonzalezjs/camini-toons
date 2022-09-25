@@ -12,6 +12,7 @@ import {ToolBoxBar} from './components/tool-box/ToolBoxBar';
 import TimeLine from './components/time-line/TimeLine';
 import {PlaybackBar} from './components/playback/PlaybackBar';
 import Canvas from './components/Canvas';
+import {PenStylePanel} from './components/contextual-penel/PenStylePanel';
 
 const AppContainer = styled(Column)`
   align-items: stretch;
@@ -49,7 +50,10 @@ function App({createCaminiToons}) {
     handleFrameRateChange,
     handleLayerClick,
     handleLayerNameChanged,
-    handleCreateLayerClick
+    handleCreateLayerClick,
+
+    penStyle,
+    handlePenStyleChanged
   } = useCaminiToons(canvasRef, createCaminiToons);
 
   const canvasWidth = 1280;
@@ -100,7 +104,7 @@ function App({createCaminiToons}) {
         />
 
         <Column style={{backgroundColor: 'lightBlue', flexGrow: 1}}>
-          
+          <PenStylePanel penStyle={penStyle} onChange={handlePenStyleChanged}/>
         </Column>
       </Row>
     </AppContainer>

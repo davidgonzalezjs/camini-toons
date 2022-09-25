@@ -100,4 +100,53 @@ describe('Dibujo con lapiz', () => {
 
         expect(animationDocument.createPath).toBeCalledTimes(1);
     })
+
+    it('se puede consultar el estilo del lapiz', () => {
+        expect(caminiToons.penStyle).toEqual({
+            strokeCap: 'round',
+            strokeColor: "black",
+            strokeWidth: 3,
+            smoothing: 3
+        });
+    });
+
+    it('se puede cambiar el color del trazo', () => { 
+        const initialStyle = caminiToons.penStyle;
+        const newStokeColor = 'red';
+        caminiToons.changePenStyle({strokeColor: newStokeColor});
+
+        expect(caminiToons.penStyle).toEqual({
+            strokeCap: initialStyle.strokeCap,
+            strokeColor: newStokeColor,
+            strokeWidth: initialStyle.strokeWidth,
+            smoothing: initialStyle.smoothing
+        });
+    });
+
+    it('se puede cambiar el grosor del trazo', () => { 
+        const initialStyle = caminiToons.penStyle;
+        const newStrokeWidth = initialStyle.strokeWidth + 10;
+        caminiToons.changePenStyle({strokeWidth: newStrokeWidth});
+
+        expect(caminiToons.penStyle).toEqual({
+            strokeCap: initialStyle.strokeCap,
+            strokeColor: initialStyle.strokeColor,
+            strokeWidth: newStrokeWidth,
+            smoothing: initialStyle.smoothing
+        });
+    });
+
+    it('se puede cambiar el suavizado del trazo', () => { 
+        const initialStyle = caminiToons.penStyle;
+        const newSmoothing = initialStyle.smoothing + 10;
+        caminiToons.changePenStyle({smoothing: newSmoothing});
+
+        expect(caminiToons.penStyle).toEqual({
+            strokeCap: initialStyle.strokeCap,
+            strokeColor: initialStyle.strokeColor,
+            strokeWidth: initialStyle.strokeWidth,
+            smoothing: newSmoothing
+        });
+    });
+
 });

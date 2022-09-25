@@ -16,12 +16,20 @@ class ToolBox {
     return this._selectedTool;
   }
 
+  get pen() {
+    return this.toolNamed('pen'); 
+  }
+
   get toolsNames() {
     return this._tools.map(tool => tool.name);
   }
 
+  toolNamed(aToolName) {
+    return this._tools.find(tool => tool.name === aToolName);
+  }
+
   useToolNamed(aToolName) {
-    this._selectedTool = this._tools.find(tool => tool.name === aToolName);
+    this._selectedTool = this.toolNamed(aToolName);
   }
 
   usePen() {

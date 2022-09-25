@@ -34,6 +34,10 @@ class CaminiToons {
     return this._toolBox.toolsNames;
   }
 
+  get penStyle() {
+    return this._toolBox.pen.style;
+  }
+
   get frameRate() {
     return this._clock.frameRate;
   }
@@ -147,6 +151,11 @@ class CaminiToons {
     this.deselectAllDrawings();
     this._toolBox.useToolNamed(aToolName);
     this._listener.ifPresent(listener => listener.handleToolChanged(aToolName));
+  }
+
+  changePenStyle(newPenStyle) {
+    this._toolBox.pen.changeStyleTo(newPenStyle);
+    this._listener.ifPresent(listener => listener.handleToolChanged('pen'));
   }
 
   // Actions - Layers

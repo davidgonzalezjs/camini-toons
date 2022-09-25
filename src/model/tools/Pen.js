@@ -9,15 +9,23 @@ class Pen extends Tool {
     this._style = {
       strokeCap: 'round',
       strokeColor: "black",
-      strokeWidth: 3
+      strokeWidth: 3,
+      smoothing: 3
     }
     
-    this._simplification = 3;
     this._currentPath = Optional.empty();
   }
 
   get name() {
     return 'pen';
+  }
+
+  get style() {
+    return {...this._style};
+  }
+
+  changeStyleTo(newStyle) {
+    this._style = {...this._style, ...newStyle};
   }
 
   handleMouseDown(anEvent, aCaminiToons) {
@@ -32,7 +40,7 @@ class Pen extends Tool {
   }
 
   handleMouseUp(anEvent, aCaminiToons) {
-    this._currentPath.ifPresent(path => path.simplify(this._simplification));
+    this._currentPath.ifPresent(path => path.simplify(this.style.smoothing));
     this._currentPath = Optional.empty();
   }
 

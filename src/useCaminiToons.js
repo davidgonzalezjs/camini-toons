@@ -11,6 +11,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const [lastFrameNumber, setLastFrameNumber] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayingOnALoop, setIsPlayingOnALoop] = useState(false);
+  const [penStyle, setPenStyle] = useState({});
 
   useEffect(() => {
     const newCaminiToons = createCaminiToons(canvasRef.current);
@@ -18,6 +19,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     newCaminiToons.registerListener({
       handleToolChanged() {
         setSelectedToolName(newCaminiToons.selectedTool.name);
+        setPenStyle(newCaminiToons.penStyle);
       },
       handleFrameChanged() {
         setCurrentFrameNumber(newCaminiToons.currentFrameNumber)
@@ -50,7 +52,8 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     setFrameRate(newCaminiToons.frameRate);
     setCurrentFrameNumber(newCaminiToons.currentFrameNumber);
     setLayersDetails(newCaminiToons.layersDetails);
-    setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop())
+    setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop());
+    setPenStyle(newCaminiToons.penStyle);
   }, [createCaminiToons]);
 
   const handleToolIconClicked = aToolName => {
@@ -120,6 +123,11 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const handleCreateLayerClick = () => {
     caminiToons.createAnimationLayer();
   };
+
+  const handlePenStyleChanged = (newStyle) => {
+    setPenStyle({...penStyle, ...newStyle});
+    caminiToons.changePenStyle(newStyle);
+  };
   
 
   return {
@@ -143,6 +151,9 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handleLayerClick,
     handleFrameRateChange,
     handleLayerNameChanged,
-    handleCreateLayerClick
+    handleCreateLayerClick,
+    
+    penStyle,
+    handlePenStyleChanged
   }
 }
