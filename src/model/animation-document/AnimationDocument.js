@@ -68,7 +68,7 @@ class AnimationDocument {
   }
 
   isAtLastFrame() {
-    return this._currentFrameNumber === this.lastFrameNumber;
+    return this.currentFrameNumber === this.lastFrameNumber;
   }
 
   isPlaying() {
@@ -123,15 +123,31 @@ class AnimationDocument {
   }
 
   goToFrame(aFrameNumber) {
-    this.deselectAllDrawings();
-    this._animationLayers.forEach(layer => layer.showFrame(aFrameNumber));
-    this._currentFrameNumber = aFrameNumber;
+    //const targetFrame = aFrameNumber;
+    
+    // TODO: ver por que con los shortcuts esto esta medio buggeado
+    const targetFrame =
+      aFrameNumber < 1
+      ? 1 
+      : aFrameNumber > this.lastFrameNumber
+        ? this.lastFrameNumber 
+        : aFrameNumber;
+    
+    //console.log(`aFrameNumber: ${aFrameNumber} | targetFrame: ${targetFrame} | current: ${this._currentFrameNumber} | last: ${this.lastFrameNumber}`)
 
-    this._listener.ifPresent(listener => listener.handleFrameChanged(aFrameNumber));
+    this.deselectAllDrawings();
+    this._currentFrameNumber = targetFrame;
+    this._animationLayers.forEach(layer => layer.showFrame(targetFrame));
+    
+    this._listener.ifPresent(listener => listener.handleFrameChanged(targetFrame));
   }
 
   goToNextFrame() {
-    this.goToFrame(this._currentFrameNumber + 1)
+    this.goToFrame(this._currentFrameNumber + 1);
+  }
+
+  goToPreviousFrame() {
+    this.goToFrame(this._currentFrameNumber - 1);
   }
 
   tick() {

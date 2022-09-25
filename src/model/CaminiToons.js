@@ -10,6 +10,16 @@ class CaminiToons {
 
     this._clock.registerListener(this);
     this._listener = Optional.empty();
+
+    this._shortCuts = {
+      '.': () => this.goToNextFrame(),
+      ',': () => this.goToPreviousFrame(),
+      'v': () => this.useSelectionTool(),
+      'y': () => this.usePen(),
+      'e': () => this.useEraser(),
+      '*': () => this.createFrameOnLayer(this._animationDocument._activeLayerIndex), // TODO: se esta rompiendo el encapsulamiento
+      'l': () => this.createAnimationLayer()
+    }
   }
 
   // Testing
@@ -94,6 +104,14 @@ class CaminiToons {
   goToFrame(aFrameNumber) {
     this._animationDocument.goToFrame(aFrameNumber);
     this._listener.ifPresent(listener => listener.handleFrameChanged());
+  }
+
+  goToNextFrame() {
+    this.goToFrame(this.currentFrameNumber + 1);
+  }
+
+  goToPreviousFrame() {
+    this.goToFrame(this.currentFrameNumber - 1);
   }
 
   createFrameOnLayer(aLayerIndex) {
@@ -226,6 +244,8 @@ class CaminiToons {
   }
 
   handleKeyDown(anEvent) {
+    Optional.fromNullable(this._shortCuts[anEvent.key]).ifPresent(shortCutCommand => shortCutCommand());
+    
     this.selectedTool.handleKeyDown(anEvent, this);
   }
 
