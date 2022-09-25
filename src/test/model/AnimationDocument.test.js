@@ -55,6 +55,43 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(1);
     });
 
+    it(`when tries to go to a frame after the last frame it goes to the last frame`, () => {
+        const animationDocument = createAnimationDocument();
+        animationDocument.createFrameOnLayer(0);
+
+        animationDocument.goToFrame(3);
+
+        expect(animationDocument.currentFrameNumber).toBe(2);
+    });
+
+    it(`when tries to go to a frame before the first frame it goes to the first frame`, () => {
+        const animationDocument = createAnimationDocument();
+        
+        animationDocument.goToFrame(0);
+
+        expect(animationDocument.currentFrameNumber).toBe(1);
+    });
+
+    it(`when there is some next frame can go to the next frame`, () => {
+        const animationDocument = createAnimationDocument();
+        animationDocument.createFrameOnLayer(0);
+        animationDocument.goToFrame(1);
+
+        animationDocument.goToNextFrame();
+
+        expect(animationDocument.currentFrameNumber).toBe(2);
+    });
+
+    it(`can go to the previous frame`, () => {
+        const animationDocument = createAnimationDocument();
+        animationDocument.createFrameOnLayer(0);
+        animationDocument.goToFrame(2);
+
+        animationDocument.goToPreviousFrame();
+
+        expect(animationDocument.currentFrameNumber).toBe(1);
+    });
+
     it(`when it's iddle it does not change frame during a tick`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
