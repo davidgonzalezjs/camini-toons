@@ -98,7 +98,10 @@ class AnimationLayer {
         this.visibleFrame.activate();
     }
 
-    activateOnionSkin() {
+    activateOnionSkin(onionSkinSettings) {
+        this.removeCurrentOnionSkins(); // TODO: agrega test
+        this._onionSkinSettings = onionSkinSettings;
+
         if (this.isVisible()) {
             this._hasOnionSkinEnabled = true;
             this.showNewOnionSkins();
@@ -129,13 +132,35 @@ class AnimationLayer {
     }
 
     showNewOnionSkins() {
-        const previousFramesShowingOnionSkin = [this._visibleFrameNumber - 1].filter(frameNumber => this.existFrameAtFrameNumber(frameNumber)); 
-        previousFramesShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).get().showOnionSkin('red'));
+        const {beforeColor, afterColor, numberOfFramesBefore, numberOfFramesAfter, opacityStep} = this._onionSkinSettings;
         
-        const nextFramesShowingOnionSkin = [this._visibleFrameNumber + 1].filter(frameNumber => this.existFrameAtFrameNumber(frameNumber));
-        nextFramesShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).get().showOnionSkin('green'));
+        const previousFramesShowingOnionSkin =
+            new Array(numberOfFramesBefore)
+                .fill()
+                .map((_, index) => index + 1)
+                .map(offset => this._visibleFrameNumber - offset)
+                .filter(frameNumber => this.existFrameAtFrameNumber(frameNumber));
         
-        this._frameNumbersShowingOnionSkin = previousFramesShowingOnionSkin.concat(nextFramesShowingOnionSkin);
+        previousFramesShowingOnionSkin
+            .reduce((opacity, frameNumber) => {
+                this.findFrame(frameNumber).get().showOnionSkin(beforeColor, opacity);
+                return opacity - opacityStep;
+            }, 1 - opacityStep);
+        
+        const nextFramesShowingOnionSkin =
+            new Array(numberOfFramesAfter)
+                .fill()
+                .map((_, index) => index + 1)
+                .map(offset => this._visibleFrameNumber + offset)
+                .filter(frameNumber => this.existFrameAtFrameNumber(frameNumber));
+
+        nextFramesShowingOnionSkin
+            .reduce((opacity, frameNumber) => {
+                this.findFrame(frameNumber).get().showOnionSkin(afterColor, opacity);
+                return opacity - opacityStep;
+            }, 1 - opacityStep);
+
+        this._frameNumbersShowingOnionSkin = previousFramesShowingOnionSkin.reverse().concat(nextFramesShowingOnionSkin);
     }
 
     removeCurrentOnionSkins() {

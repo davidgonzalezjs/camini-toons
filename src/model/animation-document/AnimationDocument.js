@@ -19,6 +19,8 @@ class AnimationDocument {
     this._isPlayingOnALoop = false;
     this._state = new AnimationIdleState();
 
+    this._onionSkinSettings = {beforeColor: 'red', afterColor: 'green', numberOfFramesBefore: 3, numberOfFramesAfter: 3, opacityStep: 0.22};
+
     this._listener = Optional.empty();
 
     this._activeLayerIndex = 0;
@@ -55,6 +57,10 @@ class AnimationDocument {
       ...animationLayer.details,
       isActive: index === this._activeLayerIndex
     }));
+  }
+
+  get onionSkinSettings() {
+    return this._onionSkinSettings;
   }
 
   hasVisibleFrameAt({layerIndex, frameNumber}) {
@@ -133,11 +139,19 @@ class AnimationDocument {
   }
 
   activateOnionSkinOnLayer(layerIndex) {
-    this._animationLayers[layerIndex].activateOnionSkin();
+    this._animationLayers[layerIndex].activateOnionSkin(this.onionSkinSettings);
   }
 
   deactivateOnionSkinOnLayer(layerIndex) {
     this._animationLayers[layerIndex].deactivateOnionSkin();
+  }
+
+  changeOnionSkinSettings(newOnionSkinSettings) { // TODO: agregar test
+    this._animationLayers
+      .filter(layer => layer.hasOnionSkinEnabled())
+      .forEach(layer => layer.activateOnionSkin(newOnionSkinSettings));
+    
+    this._onionSkinSettings = newOnionSkinSettings;
   }
 
   createFrameOnLayer(aLayerIndex) {

@@ -31,12 +31,12 @@ class Frame {
         this.hideOnionSkin();
     }
 
-    showOnionSkin(aStokeColor) {
+    showOnionSkin(aStokeColor, opacity) {
         const onionSkin = this._content.clone();
         
         onionSkin.locked = true;
         onionSkin.strokeColor = aStokeColor;
-        onionSkin.opacity = 0.6;
+        onionSkin.opacity = opacity;
         onionSkin.visible = true;
 
         this._optionalOnionSkin = Optional.with(onionSkin);

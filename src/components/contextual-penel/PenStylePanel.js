@@ -1,21 +1,6 @@
-import styled from 'styled-components';
-
 import Column from '../Column';
 import Row from '../Row';
-
-const Label = styled.label`
-    width: 90px;
-`;
-
-const Input = styled.input`
-    width: 90px;
-`;
-
-const ColorInput = styled(Input)`
-    padding: 0;
-    margin: 3px;
-    border: none;
-`;
+import {Label, Input, ColorPicker} from '../input/Input';
 
 export function PenStylePanel({penStyle, onChange}) {
     
@@ -25,7 +10,7 @@ export function PenStylePanel({penStyle, onChange}) {
             <Column style={{gap: '10px'}}>
             <Row>
                 <Label>Color</Label>
-                <ColorInput type="color" value={penStyle.strokeColor} onChange={event => onChange({strokeColor: event.target.value})} />
+                <ColorPicker color={penStyle.strokeColor} onChange={color => onChange({strokeColor: color})} />
             </Row>
             <Row>
                 <Label>Grosor</Label>

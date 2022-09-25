@@ -87,7 +87,7 @@ describe('AnimationLayer', () => {
         animationLayer.createFrame();
         animationLayer.createFrame();
         animationLayer.showFrame(2);
-        animationLayer.activateOnionSkin();
+        animationLayer.activateOnionSkin({beforeColor: 'red', afterColor: 'green', numberOfFramesBefore: 1, numberOfFramesAfter: 1, opacityStep: 0.5});
  
         animationLayer.hide();
 
@@ -98,7 +98,7 @@ describe('AnimationLayer', () => {
         const animationLayer = createAnimationLayer();
         animationLayer.hide();
 
-        animationLayer.activateOnionSkin();
+        animationLayer.activateOnionSkin({beforeColor: 'red', afterColor: 'green', numberOfFramesBefore: 1, numberOfFramesAfter: 1, opacityStep: 0.5});
 
         expect(animationLayer.hasOnionSkinEnabled()).toBe(false);
     });

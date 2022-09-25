@@ -4,6 +4,14 @@ import {createFrameContent} from '../helpers/mocks';
 
 const createAnimationLayer = () => new AnimationLayer({createFrameContent});
 
+const onionSkinSettingsWithOneFrameAfterAndBefore = {
+  beforeColor: 'red',
+  afterColor: 'green',
+  numberOfFramesBefore: 1,
+  numberOfFramesAfter: 1,
+  opacityStep: 0.5
+};
+
 describe('Onion skin', () => {
 
   it('starts disabled', () => {
@@ -16,7 +24,7 @@ describe('Onion skin', () => {
   it(`GIVEN there are no frames before and after the current frame WHEN it's enabled THEN there are no frames showing an onion skin`, () => {
     const animationLayer = createAnimationLayer();
 
-    animationLayer.activateOnionSkin();
+    animationLayer.activateOnionSkin(onionSkinSettingsWithOneFrameAfterAndBefore);
 
     expect(animationLayer.hasOnionSkinEnabled()).toBe(true);
     expect(animationLayer.frameNumbersShowingOnionSkin).toEqual([]);
@@ -27,7 +35,7 @@ describe('Onion skin', () => {
     animationLayer.createFrame();
     animationLayer.showFrame(1);
 
-    animationLayer.activateOnionSkin();
+    animationLayer.activateOnionSkin(onionSkinSettingsWithOneFrameAfterAndBefore);
 
     expect(animationLayer.frameNumbersShowingOnionSkin).toEqual([2]);
   });
@@ -37,7 +45,7 @@ describe('Onion skin', () => {
     animationLayer.createFrame();
     animationLayer.showFrame(2);
 
-    animationLayer.activateOnionSkin();
+    animationLayer.activateOnionSkin(onionSkinSettingsWithOneFrameAfterAndBefore);
 
     expect(animationLayer.frameNumbersShowingOnionSkin).toEqual([1]);
   });
@@ -45,7 +53,7 @@ describe('Onion skin', () => {
   it(`GIVEN it is enabled WHEN it's deactivated THEN there are no frames showing an onion skin`, () => {
     const animationLayer = createAnimationLayer();
     animationLayer.createFrame();
-    animationLayer.activateOnionSkin();
+    animationLayer.activateOnionSkin(onionSkinSettingsWithOneFrameAfterAndBefore);
 
     animationLayer.deactivateOnionSkin();
 
@@ -56,7 +64,7 @@ describe('Onion skin', () => {
   it(`GIVEN it is enabled WHEN it's deactivated and change the current frame THEN there are no frames showing an onion skin`, () => {
     const animationLayer = createAnimationLayer();
     animationLayer.createFrame();
-    animationLayer.activateOnionSkin();
+    animationLayer.activateOnionSkin(onionSkinSettingsWithOneFrameAfterAndBefore);
     animationLayer.deactivateOnionSkin();
 
     animationLayer.showFrame(1);
@@ -71,11 +79,35 @@ describe('Onion skin', () => {
     animationLayer.createFrame();
     animationLayer.createFrame();
     animationLayer.createFrame();
-    animationLayer.activateOnionSkin();
+    animationLayer.activateOnionSkin(onionSkinSettingsWithOneFrameAfterAndBefore);
 
     animationLayer.showFrame(2);
 
     expect(animationLayer.frameNumbersShowingOnionSkin).toEqual([1, 3]);
   });
 
+  it(`GIVEN there are many frames before WHEN it's enabled AND configure to show many onions before THEN there are many frames showing an onion skin before`, () => {
+    const animationLayer = createAnimationLayer();
+    animationLayer.createFrame();
+    animationLayer.createFrame();
+    animationLayer.createFrame();
+    animationLayer.showFrame(4);
+
+    animationLayer.activateOnionSkin({...onionSkinSettingsWithOneFrameAfterAndBefore, numberOfFramesBefore: 2});
+
+    expect(animationLayer.frameNumbersShowingOnionSkin).toEqual([2, 3]);
+  });
+
+  it(`GIVEN there are many frames after WHEN it's enabled AND configure to show many onions before THEN there are many frames showing an onion skin before`, () => {
+    const animationLayer = createAnimationLayer();
+    animationLayer.createFrame();
+    animationLayer.createFrame();
+    animationLayer.createFrame();
+    animationLayer.createFrame();
+    animationLayer.showFrame(1);
+
+    animationLayer.activateOnionSkin({...onionSkinSettingsWithOneFrameAfterAndBefore, numberOfFramesAfter: 3});
+
+    expect(animationLayer.frameNumbersShowingOnionSkin).toEqual([2, 3, 4]);
+  });
 });

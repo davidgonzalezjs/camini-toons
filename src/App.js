@@ -11,6 +11,7 @@ import Row from './components/Row';
 import {ToolBoxBar} from './components/tool-box/ToolBoxBar';
 import TimeLine from './components/time-line/TimeLine';
 import {PlaybackBar} from './components/playback/PlaybackBar';
+import {OnionSkinBar} from './components/onion-skin/OnionSkinBar';
 import Canvas from './components/Canvas';
 import {PenStylePanel} from './components/contextual-penel/PenStylePanel';
 
@@ -55,7 +56,10 @@ function App({createCaminiToons}) {
     penStyle,
     handlePenStyleChanged,
 
-    handleDeleteFrameClick
+    handleDeleteFrameClick,
+
+    onionSkinSettings,
+    handleOnionSkinSettingsChange,
   } = useCaminiToons(canvasRef, createCaminiToons);
 
   const canvasWidth = 1280;
@@ -81,16 +85,19 @@ function App({createCaminiToons}) {
         onDeleteFrameClick={handleDeleteFrameClick}
       />
 
-      <PlaybackBar
-        currentFrameNumber={currentFrameNumber}
-        frameRate={frameRate}
-        isPlaying={isPlaying}
-        isPlayingOnALoop={isPlayingOnALoop}
-        onFrameRateChage={handleFrameRateChange}
-        onPlay={handlePlayAnimation}
-        onStop={handleStopAnimation}
-        onRepeat={handleRepeatAnimation}
-      />
+      <Row>
+        <PlaybackBar
+          currentFrameNumber={currentFrameNumber}
+          frameRate={frameRate}
+          isPlaying={isPlaying}
+          isPlayingOnALoop={isPlayingOnALoop}
+          onFrameRateChage={handleFrameRateChange}
+          onPlay={handlePlayAnimation}
+          onStop={handleStopAnimation}
+          onRepeat={handleRepeatAnimation}
+        />
+        <OnionSkinBar onionSkinSettings={onionSkinSettings} onChange={handleOnionSkinSettingsChange}/>
+      </Row>
 
       <Row>
         <ToolBoxBar

@@ -54,6 +54,10 @@ class CaminiToons {
     return this._animationDocument.layersDetails;
   }
 
+  get onionSkinSettings() {
+    return this._animationDocument.onionSkinSettings;
+  }
+
   hitTest(aPointToCheck) {
     return this._animationDocument.hitTest(aPointToCheck);
   }
@@ -106,6 +110,11 @@ class CaminiToons {
 
   deactivateOnionSkinOnLayer(aLayerIndex) {
     this._animationDocument.deactivateOnionSkinOnLayer(aLayerIndex);
+    this._listener.ifPresent(listener => listener.handleOnionSkinChanged());
+  }
+
+  changeOnionSkinSettings(newOnionSkinSettings) {
+    this._animationDocument.changeOnionSkinSettings(newOnionSkinSettings);
     this._listener.ifPresent(listener => listener.handleOnionSkinChanged());
   }
 
