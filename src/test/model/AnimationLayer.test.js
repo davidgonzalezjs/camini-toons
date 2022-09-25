@@ -21,7 +21,7 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isVisibleFrame(2)).toBe(false);
     });
 
-    it.only(`it does not have a visible frame for a frame number larger than it's last frame`, () => {
+    it(`it does not have a visible frame for a frame number larger than it's last frame`, () => {
         const animationLayer = createAnimationLayer();
         
         expect(animationLayer.isVisibleFrame(animationLayer.lastFrameNumber + 1)).toBe(false);
@@ -131,4 +131,11 @@ describe('AnimationLayer', () => {
         expect(animationLayer.name).toBe('another name');
     });
 
+    it('can delete a frame', () => {
+        const animationLayer = createAnimationLayer({});
+        
+        animationLayer.deleteFrame(1);
+
+        expect(animationLayer.existFrameAtFrameNumber(1)).toBe(false);
+    })
 });

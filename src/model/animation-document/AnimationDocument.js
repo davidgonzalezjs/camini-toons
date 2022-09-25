@@ -147,6 +147,10 @@ class AnimationDocument {
     this.goToFrame(this.activeLayer.lastFrameNumber);
   }
 
+  deleteFrameOnLayer({layerIndex, frameNumber}) {
+    this._animationLayers[layerIndex].deleteFrame(frameNumber);
+  }
+
   hitTest(aPointToCheck) {
     const hitResult = this._hitTestFunction(aPointToCheck);
     

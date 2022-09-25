@@ -125,8 +125,11 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   };
 
   const handlePenStyleChanged = (newStyle) => {
-    setPenStyle({...penStyle, ...newStyle});
     caminiToons.changePenStyle(newStyle);
+  };
+
+  const handleDeleteFrameClick = ({layerIndex, frameNumber}) => {
+    caminiToons.deleteFrame({layerIndex, frameNumber});
   };
   
 
@@ -154,6 +157,8 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handleCreateLayerClick,
     
     penStyle,
-    handlePenStyleChanged
+    handlePenStyleChanged,
+
+    handleDeleteFrameClick
   }
 }

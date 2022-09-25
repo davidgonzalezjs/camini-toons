@@ -26,6 +26,11 @@ class Frame {
         this.hideOnionSkin();
     }
 
+    deleteContent() {
+        this._content.remove();
+        this.hideOnionSkin();
+    }
+
     showOnionSkin(aStokeColor) {
         const onionSkin = this._content.clone();
         

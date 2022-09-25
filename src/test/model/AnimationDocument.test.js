@@ -234,5 +234,19 @@ describe('AnimationLayer', () => {
 
         expect(animationDocument.isVisibleLayer(0)).toBe(true);
     });
+
+    it('can delete a frame from a layer', () => {
+        const animationDocument = createAnimationDocument();
+        animationDocument.createAnimationLayer();
+        animationDocument.createFrameOnLayer(0);
+        animationDocument.createFrameOnLayer(1);
+
+        animationDocument.deleteFrameOnLayer({layerIndex: 1, frameNumber: 2});
+
+        const layersDetails = animationDocument.layersDetails;
+
+        expect(layersDetails[0].frames.length).toBe(2);
+        expect(layersDetails[1].frames.length).toBe(1);
+    });
     
 });

@@ -93,6 +93,12 @@ class CaminiToons {
     this._listener.ifPresent(listener => listener.handleLayerUpdate());
   }
 
+  deleteFrame({layerIndex, frameNumber}) {
+    this._animationDocument.deleteFrameOnLayer({layerIndex, frameNumber});
+    this.goToFrame(frameNumber);
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+  }
+
   activateOnionSkinOnLayer(aLayerIndex) {
     this._animationDocument.activateOnionSkinOnLayer(aLayerIndex);
     this._listener.ifPresent(listener => listener.handleOnionSkinChanged());
@@ -100,7 +106,7 @@ class CaminiToons {
 
   deactivateOnionSkinOnLayer(aLayerIndex) {
     this._animationDocument.deactivateOnionSkinOnLayer(aLayerIndex);
-    this._listener.ifPresent(listener => listener.handleOnionSkinChanged())
+    this._listener.ifPresent(listener => listener.handleOnionSkinChanged());
   }
 
   changeFrameRateTo(aFrameRate) {

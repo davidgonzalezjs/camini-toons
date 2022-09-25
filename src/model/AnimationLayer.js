@@ -17,8 +17,16 @@ class AnimationLayer {
     }
 
     // Testing
+    isVisible() {
+        return this._isVisible;
+    }
+
     isVisibleFrame(aFrameNumber) {
         return this.findFrame(aFrameNumber).map(frame => frame.isVisible()).getOrElse(() => false);
+    }
+
+    existFrameAtFrameNumber(aFrameNumber) {
+        return aFrameNumber >= 1 && aFrameNumber <= this.lastFrameNumber;
     }
 
     hasOnionSkinEnabled() {
@@ -68,8 +76,11 @@ class AnimationLayer {
         };
     }
 
-    isVisible() {
-        return this._isVisible;
+    deleteFrame(aFrameNumber) {
+        const frameIndex = aFrameNumber - 1;
+
+        this._frames[frameIndex].deleteContent();
+        this._frames.splice(frameIndex, 1);
     }
 
     hide() {
@@ -100,10 +111,6 @@ class AnimationLayer {
     }
 
     // PRIVATE
-    existFrameAtFrameNumber(aFrameNumber) {
-        return aFrameNumber >= 1 && aFrameNumber <= this.lastFrameNumber;
-    }
-
     get visibleFrame() {
         return this._frames[this._visibleFrameNumber - 1];
     }

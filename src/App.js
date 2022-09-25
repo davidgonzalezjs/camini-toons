@@ -53,7 +53,9 @@ function App({createCaminiToons}) {
     handleCreateLayerClick,
 
     penStyle,
-    handlePenStyleChanged
+    handlePenStyleChanged,
+
+    handleDeleteFrameClick
   } = useCaminiToons(canvasRef, createCaminiToons);
 
   const canvasWidth = 1280;
@@ -76,6 +78,7 @@ function App({createCaminiToons}) {
         onOnionSkinClick={handleOnionSkinClick}
         onFrameClick={handleFrameClick}
         onCreateLayerClick={handleCreateLayerClick}
+        onDeleteFrameClick={handleDeleteFrameClick}
       />
 
       <PlaybackBar
