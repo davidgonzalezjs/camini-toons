@@ -21,6 +21,10 @@ class CaminiToons {
     return this._animationDocument.isPlayingOnALoop();
   }
 
+  isVisibleLayer(aLayerIndex) {
+    return this._animationDocument.isVisibleLayer(aLayerIndex);
+  }
+
   // Accessing
   get selectedTool() {
     return this._toolBox.selectedTool;
@@ -38,6 +42,10 @@ class CaminiToons {
     return this._animationDocument.currentFrameNumber;
   }
 
+  get lastFrameNumber() {
+    return this._animationDocument.lastFrameNumber;
+  }
+
   get layersDetails() {
     return this._animationDocument.layersDetails;
   }
@@ -47,6 +55,10 @@ class CaminiToons {
   }
   
   // Actions - Timeline
+  hasOnionSkinEnabledOnLayer(aLayerIndex) {
+    return this._animationDocument.hasOnionSkinEnabledOnLayer(aLayerIndex);
+  }
+
   activatePlayOnALoop() {
     this._animationDocument.activatePlayOnALoop();
     this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
@@ -72,23 +84,33 @@ class CaminiToons {
     this._listener.ifPresent(listener => listener.handleFrameChanged());
   }
 
-  createFrame() {
-    this._animationDocument.createFrame();
-    this._listener.ifPresent(listener => listener.handleFrameCreated());
+  createFrameOnLayer(aLayerIndex) {
+    this._animationDocument.createFrameOnLayer(aLayerIndex);
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());
   }
 
-  activateOnionSkin() {
-    this._animationDocument.activateOnionSkin();
+  activateOnionSkinOnLayer(aLayerIndex) {
+    this._animationDocument.activateOnionSkinOnLayer(aLayerIndex);
     this._listener.ifPresent(listener => listener.handleOnionSkinChanged());
   }
 
-  deactivateOnionSkin() {
-    this._animationDocument.deactivateOnionSkin();
+  deactivateOnionSkinOnLayer(aLayerIndex) {
+    this._animationDocument.deactivateOnionSkinOnLayer(aLayerIndex);
     this._listener.ifPresent(listener => listener.handleOnionSkinChanged())
   }
 
   changeFrameRateTo(aFrameRate) {
     this._clock.changeFrameRateTo(aFrameRate);
+  }
+
+  createAnimationLayer() {
+    this._animationDocument.createAnimationLayer();
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+  }
+
+  activateLayer(aLayerIndex) {
+    this._animationDocument.activateLayer(aLayerIndex);
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());
   }
 
   // Actions - Drawing

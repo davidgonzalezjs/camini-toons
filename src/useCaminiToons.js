@@ -8,6 +8,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const [layersDetails, setLayersDetails] = useState([]);
   const [frameRate, setFrameRate] = useState(6);
   const [currentFrameNumber, setCurrentFrameNumber] = useState(1);
+  const [lastFrameNumber, setLastFrameNumber] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayingOnALoop, setIsPlayingOnALoop] = useState(false);
 
@@ -21,17 +22,18 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
       handleFrameChanged() {
         setCurrentFrameNumber(newCaminiToons.currentFrameNumber)
       },
-      handleFrameCreated() {
-        setLayersDetails(newCaminiToons.layersDetails);
-      },
       handleLayerNameChanged() {
         setLayersDetails(newCaminiToons.layersDetails);
       },
       handleVisibilityClick() {
-        setLayersDetails(newCaminiToons.layersDetails)
+        setLayersDetails(newCaminiToons.layersDetails);
       },
       handleOnionSkinChanged() {
-        setLayersDetails(newCaminiToons.layersDetails)
+        setLayersDetails(newCaminiToons.layersDetails);
+      },
+      handleLayerUpdate() {
+        setLayersDetails(newCaminiToons.layersDetails);
+        setLastFrameNumber(newCaminiToons.lastFrameNumber);
       },
       handlePlayBackUpdate() {
         setIsPlaying(newCaminiToons.isPlaying());
@@ -55,12 +57,12 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.useToolNamed(aToolName);
   };
 
-  const handleCreateFrame = (layerName) => {
-    caminiToons.createFrame();
+  const handleCreateFrame = (layerIndex) => {
+    caminiToons.createFrameOnLayer(layerIndex);
   };
 
-  const handleFrameClick = frame => {
-    caminiToons.goToFrame(frame.number);
+  const handleFrameClick = ({layerIndex, frameNumber}) => {
+    caminiToons.goToFrame(frameNumber);
   };
 
   const handlePlayAnimation = () => {
@@ -80,26 +82,21 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     }
   };
 
-  const handleVisibilityClick = () => {
-    // TODO: se rompe el encapsulamiento
-    const layer = caminiToons._animationDocument.activeLayer; 
-    
-    if (layer.isVisible()) {
-      caminiToons.hideLayer(0);
+  const handleVisibilityClick = (layerIndex) => {
+    if (caminiToons.isVisibleLayer(layerIndex)) {
+      caminiToons.hideLayer(layerIndex);
     }
     else {
-      caminiToons.showLayer(0);
+      caminiToons.showLayer(layerIndex);
     }
   }
 
-  const handleOnionSkinClick = () => {
-    // TODO: se rompe el encapsulamiento
-    const layer = caminiToons._animationDocument.activeLayer; 
-    if (layer.hasOnionSkinEnabled()) {
-      caminiToons.deactivateOnionSkin();
+  const handleOnionSkinClick = (layerIndex) => {
+    if (caminiToons.hasOnionSkinEnabledOnLayer(layerIndex)) {
+      caminiToons.deactivateOnionSkinOnLayer(layerIndex);
     }
     else {
-      caminiToons.activateOnionSkin();
+      caminiToons.activateOnionSkinOnLayer(layerIndex);
     }
   };
   
@@ -112,8 +109,16 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     }
   };
 
+  const handleLayerClick = (layerIndex) => {
+    caminiToons.activateLayer(layerIndex);
+  }
+
   const handleLayerNameChanged = (layerIndex, newName) => {
     caminiToons.changeNameOfLayer(layerIndex, newName);
+  };
+
+  const handleCreateLayerClick = () => {
+    caminiToons.createAnimationLayer();
   };
   
 
@@ -122,6 +127,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     selectedToolName,
     frameRate,
     currentFrameNumber,
+    lastFrameNumber,
     layersDetails,
     isPlaying,
     isPlayingOnALoop,
@@ -134,7 +140,9 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handleRepeatAnimation,
     handleVisibilityClick,
     handleOnionSkinClick,
+    handleLayerClick,
     handleFrameRateChange,
-    handleLayerNameChanged
+    handleLayerNameChanged,
+    handleCreateLayerClick
   }
 }

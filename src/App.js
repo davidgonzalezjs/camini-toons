@@ -33,6 +33,7 @@ function App({createCaminiToons}) {
     selectedToolName,
     frameRate,
     currentFrameNumber,
+    lastFrameNumber,
     layersDetails,
     isPlaying,
     isPlayingOnALoop,
@@ -46,7 +47,9 @@ function App({createCaminiToons}) {
     handleVisibilityClick,
     handleOnionSkinClick,
     handleFrameRateChange,
-    handleLayerNameChanged
+    handleLayerClick,
+    handleLayerNameChanged,
+    handleCreateLayerClick
   } = useCaminiToons(canvasRef, createCaminiToons);
 
   const canvasWidth = 1280;
@@ -60,12 +63,15 @@ function App({createCaminiToons}) {
       
       <TimeLine
         currentFrameNumber={currentFrameNumber}
+        lastFrameNumber={lastFrameNumber}
         layersDetails={layersDetails}
+        onLayerClick={handleLayerClick}
         onLayerNameChanged={handleLayerNameChanged}
         onAddFrameClick={handleCreateFrame}
         onVisibilityClick={handleVisibilityClick}
         onOnionSkinClick={handleOnionSkinClick}
         onFrameClick={handleFrameClick}
+        onCreateLayerClick={handleCreateLayerClick}
       />
 
       <PlaybackBar

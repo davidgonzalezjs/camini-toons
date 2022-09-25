@@ -8,11 +8,12 @@ import {Icon} from '../Icon'
 
 import newFrameIcon from '../../assets/layer/new-frame.svg';
 
+import Column from '../Column'
 import Row from '../Row'
-import Frame from './Frame'
+import {Frame} from './Frame'
 
-const TimeLineRow = styled(Row)`
-  height: 40px;
+const LayersContainer = styled(Column)`
+  //height: 40px;
   align-items: stretch;
 `;
 
@@ -20,7 +21,7 @@ const StyledLayer = styled(Row)`
   align-items: center;
   padding-left: 5px;
   padding-right: 5px;
-  background-color: orange;
+  background-color: ${props => props.isActive ? '#FFFF00' : 'orange'};
   gap: 5px;
   width: 320px;
   border: 2px solid darkorange;
@@ -53,41 +54,53 @@ const LayerLabel = styled.input`
 `;
 
 
-const Layer = ({index, name, isVisible, hasOnionSkinEnabled, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick}) =>
-  <StyledLayer>
+const Layer = ({index, name, isActive, isVisible, hasOnionSkinEnabled, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick}) =>
+  <StyledLayer isActive={isActive}>
     <Row>
       <LockButton />
-      <VisibilityButton active={isVisible} onClick={onVisibilityClick}/>
-      <OnionSkinButton active={hasOnionSkinEnabled} onClick={onOnionSkinClick}/>
+      <VisibilityButton active={isVisible} onClick={() => onVisibilityClick(index)}/>
+      <OnionSkinButton active={hasOnionSkinEnabled} onClick={() => onOnionSkinClick(index)}/>
     </Row>
     
     <LayerLabel value={name} onChange={event => onLayerNameChanged(index, event.target.value)}/>
     
-    <AddFrameButton onClick={() => onAddFrameClick(name)} />
+    <AddFrameButton onClick={() => onAddFrameClick(index)} />
   </StyledLayer>
 
 
-const Timeline = ({ currentFrameNumber, layersDetails, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick, onFrameClick }) => {
+const Timeline = ({ currentFrameNumber, lastFrameNumber, layersDetails, onLayerClick, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick, onFrameClick, onCreateLayerClick }) => {
   return (
-    <TimeLineRow>
-      {layersDetails.map((layersDetail, index) =>
-        <>
-          <Layer
-            index={index}
-            name={layersDetail.name}
-            isVisible={layersDetail.isVisible}
-            hasOnionSkinEnabled={layersDetail.hasOnionSkinEnabled}
-            onLayerNameChanged={onLayerNameChanged}
-            onAddFrameClick={onAddFrameClick}
-            onVisibilityClick={onVisibilityClick}
-            onOnionSkinClick={onOnionSkinClick}
-          />
-          <FramesContainer>
-            {layersDetail.frames.map(frame => <Frame isCurrentFrame={frame.number === currentFrameNumber} onClick={() => onFrameClick(frame)}/>)}    
-          </FramesContainer>
-        </>
-      )}
-    </TimeLineRow>
+    <>
+      <div>
+        <button onClick={onCreateLayerClick}>Crear capa</button>
+      </div>
+      <LayersContainer>
+        {layersDetails.map((layersDetail, layerIndex) =>
+          <Row onClick={() => onLayerClick(layerIndex)}>
+            <Layer
+              index={layerIndex}
+              name={layersDetail.name}
+              isActive={layersDetail.isActive}
+              isVisible={layersDetail.isVisible}
+              hasOnionSkinEnabled={layersDetail.hasOnionSkinEnabled}
+              onLayerNameChanged={onLayerNameChanged}
+              onAddFrameClick={onAddFrameClick}
+              onVisibilityClick={onVisibilityClick}
+              onOnionSkinClick={onOnionSkinClick}
+            />
+            <FramesContainer>
+              {layersDetail.frames.map(frame => <Frame isCurrentFrame={frame.number === currentFrameNumber} onClick={() => onFrameClick({layerIndex, frameNumber: frame.number})}/>)}
+              {new Array(lastFrameNumber - layersDetail.frames.length)
+                .fill()
+                .map((_, index) => {
+                  const frame = {number: layersDetail.frames.length + index + 1};
+                  return <Frame isCurrentFrame={frame.number === currentFrameNumber} isEmpty={true} onClick={() => onFrameClick({layerIndex, frameNumber: frame.number})}/>;
+                })}
+            </FramesContainer>
+          </Row>
+        )}
+      </LayersContainer>
+    </>
   );
 };
 

@@ -3,7 +3,6 @@ import {subclassResponsibility} from '../errors'
 import Optional from '../Optional';
 
 import AnimationLayer from '../AnimationLayer';
-import Frame from '../Frame';
 
 import AnimationIdleState from './state/AnimationIdleState';
 import AnimationPlayingState from './state/AnimationPlayingState';
@@ -22,14 +21,21 @@ class AnimationDocument {
 
     this._listener = Optional.empty();
 
+    this._activeLayerIndex = 0;
     this.createAnimationLayer();
   }
 
   createAnimationLayer() {
-    const newLayer = new AnimationLayer({name: `Capa 1`, createFrameContent: () => this._createFrameContent()});
+    const newLayer = new AnimationLayer({name: `Capa ${this._animationLayers.length + 1}`, createFrameContent: () => this._createFrameContent()});
 
     this._animationLayers.push(newLayer);
-    this._activeLayerIndex = 0;
+    //this._activeLayerIndex = this._animationLayers.length - 1;
+
+    this.goToFrame(this._currentFrameNumber);
+  }
+
+  get activeLayerIndex() {
+    return this._activeLayerIndex;
   }
 
   get activeLayer() {
@@ -41,11 +47,18 @@ class AnimationDocument {
   }
 
   get lastFrameNumber() {
-    return this.activeLayer.lastFrameNumber;
+    return this._animationLayers.reduce((lastFrameNumber, layer) => Math.max(lastFrameNumber, layer.lastFrameNumber), 0);
   }
 
   get layersDetails() {
-    return [this.activeLayer.details];
+    return this._animationLayers.map((animationLayer, index) => ({
+      ...animationLayer.details,
+      isActive: index === this._activeLayerIndex
+    }));
+  }
+
+  hasVisibleFrameAt({layerIndex, frameNumber}) {
+    return this._animationLayers[layerIndex].isVisibleFrame(frameNumber);
   }
 
   isAtLastFrame() {
@@ -58,6 +71,14 @@ class AnimationDocument {
 
   isPlayingOnALoop() {
     return this._isPlayingOnALoop;
+  }
+
+  isVisibleLayer(aLayerIndex) {
+    return this._animationLayers[aLayerIndex].isVisible();
+  }
+
+  hasOnionSkinEnabledOnLayer(aLayerIndex) {
+    return this._animationLayers[aLayerIndex].hasOnionSkinEnabled();
   }
 
   activatePlayOnALoop() {
@@ -81,19 +102,23 @@ class AnimationDocument {
   startPlaying() {
     this._currentFrameNumber = 0; // Aclaracion: se setea en 0 que para que arranque a reproducir el frame numero 1
     this._state = new AnimationPlayingState();
-    this.activeLayer.startPlaying();
+    this._animationLayers.forEach(layer => layer.startPlaying());  // TODO: escribir test verificando esto
   }
 
   stopPlaying() {
     this._state = new AnimationIdleState();
-    this.activeLayer.stopPlaying();
-    
+    this._animationLayers.forEach(layer => layer.stopPlaying()); // TODO: escribir test verificando esto
     this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+  }
+
+  activateLayer(aLayerIndex) {
+    this._activeLayerIndex = aLayerIndex; // TODO: agregar test
+    this._animationLayers[aLayerIndex].activateFrame();
   }
 
   goToFrame(aFrameNumber) {
     this.deselectAllDrawings();
-    this.activeLayer.showFrame(aFrameNumber);
+    this._animationLayers.forEach(layer => layer.showFrame(aFrameNumber));
     this._currentFrameNumber = aFrameNumber;
 
     this._listener.ifPresent(listener => listener.handleFrameChanged(aFrameNumber));
@@ -107,15 +132,17 @@ class AnimationDocument {
     this._state.tickFor(this);
   }
 
-  activateOnionSkin() {
-    this.activeLayer.activateOnionSkin();
+  activateOnionSkinOnLayer(layerIndex) {
+    this._animationLayers[layerIndex].activateOnionSkin();
   }
 
-  deactivateOnionSkin() {
-    this.activeLayer.deactivateOnionSkin();
+  deactivateOnionSkinOnLayer(layerIndex) {
+    this._animationLayers[layerIndex].deactivateOnionSkin();
   }
 
-  createFrame() {
+  createFrameOnLayer(aLayerIndex) {
+    this._activeLayerIndex = aLayerIndex; // TODO: agregar test
+    
     this.activeLayer.createFrame();
     this.goToFrame(this.activeLayer.lastFrameNumber);
   }
@@ -161,6 +188,10 @@ class AnimationDocument {
 
   hideLayer(aLayerIndex) {
     this._animationLayers[aLayerIndex].hide();
+  }
+
+  changeActiveLayerTo(aLayerIndex) {
+    this._activeLayerIndex = aLayerIndex;
   }
 
   registerListener(aListener) {

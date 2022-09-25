@@ -1,4 +1,5 @@
 import Frame from './Frame';
+import Optional from './Optional'
 
 class AnimationLayer {
 
@@ -17,7 +18,7 @@ class AnimationLayer {
 
     // Testing
     isVisibleFrame(aFrameNumber) {
-        return this.findFrame(aFrameNumber).isVisible();
+        return this.findFrame(aFrameNumber).map(frame => frame.isVisible()).getOrElse(() => false);
     }
 
     hasOnionSkinEnabled() {
@@ -56,7 +57,6 @@ class AnimationLayer {
     }
 
     showFrame(aFrameNumber) {
-        
         this.hideVisibleFrame();
         this.makeVisibleFrameNumber(aFrameNumber);
 
@@ -83,6 +83,10 @@ class AnimationLayer {
         this.visibleFrame.show();
     }
 
+    activateFrame() {
+        this.visibleFrame.activate();
+    }
+
     activateOnionSkin() {
         if (this.isVisible()) {
             this._hasOnionSkinEnabled = true;
@@ -105,30 +109,30 @@ class AnimationLayer {
     }
 
     findFrame(aFrameNumber) {
-        return this._frames[aFrameNumber - 1];
+        return Optional.fromNullable(this._frames[aFrameNumber - 1]);
     }
 
     hideVisibleFrame() {
-        this.visibleFrame.hide();
+        this.visibleFrame && this.visibleFrame.hide();
     }
 
     makeVisibleFrameNumber(aFrameNumber) {
-        this.findFrame(aFrameNumber).show();
+        this.findFrame(aFrameNumber).ifPresent(frame => frame.show());
         this._visibleFrameNumber = aFrameNumber;
     }
 
     showNewOnionSkins() {
         const previousFramesShowingOnionSkin = [this._visibleFrameNumber - 1].filter(frameNumber => this.existFrameAtFrameNumber(frameNumber)); 
-        previousFramesShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).showOnionSkin('red'));
+        previousFramesShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).get().showOnionSkin('red'));
         
         const nextFramesShowingOnionSkin = [this._visibleFrameNumber + 1].filter(frameNumber => this.existFrameAtFrameNumber(frameNumber));
-        nextFramesShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).showOnionSkin('green'));
+        nextFramesShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).get().showOnionSkin('green'));
         
         this._frameNumbersShowingOnionSkin = previousFramesShowingOnionSkin.concat(nextFramesShowingOnionSkin);
     }
 
     removeCurrentOnionSkins() {
-        this._frameNumbersShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).hideOnionSkin());
+        this._frameNumbersShowingOnionSkin.forEach(frameNumber => this.findFrame(frameNumber).get().hideOnionSkin());
         this._frameNumbersShowingOnionSkin = []
     }
 

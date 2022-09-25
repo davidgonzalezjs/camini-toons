@@ -12,6 +12,10 @@ class Frame {
         return this._content.visible;
     }
 
+    activate() {
+        this._content.activate();
+    }
+
     show() {
         this._content.visible = true;
         this._content.activate();
