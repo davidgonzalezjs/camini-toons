@@ -18,6 +18,10 @@ class PaperJSAnimationDocument extends AnimationDocument {
     return path;
   }
 
+  createCircle(circleSettings) {
+    return new this._paper.Path.Circle(circleSettings);
+  }
+
 }
 
 function extendPathPrototype(paper) {

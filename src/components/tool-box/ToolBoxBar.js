@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Column from '../Column';
 
 import pencilIcon from '../../assets/pencil.svg'
+import eraserIcon from '../../assets/eraser.svg'
 import pointerIcon from '../../assets/pointer.svg'
 
 import ToolBoxIcon from './ToolBoxIcon';
@@ -13,6 +14,7 @@ const StyledToolBoxBar = styled(Column)`
 
 const toolsIcons = {
   pen: pencilIcon,
+  eraser: eraserIcon,
   selectionTool: pointerIcon
 }
 

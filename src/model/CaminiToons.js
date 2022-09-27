@@ -38,6 +38,10 @@ class CaminiToons {
     return this._toolBox.pen.style;
   }
 
+  get eraserStyle() {
+    return this._toolBox.eraser.style;
+  }
+
   get frameRate() {
     return this._clock.frameRate;
   }
@@ -137,6 +141,10 @@ class CaminiToons {
     return this._animationDocument.createPath(aPathStyle);
   }
 
+  createCircle(circleSettings) {
+    return this._animationDocument.createCircle(circleSettings);
+  }
+
   deselectAllDrawings() {
     this._animationDocument.deselectAllDrawings();
   }
@@ -158,6 +166,10 @@ class CaminiToons {
     this.useToolNamed('pen');
   }
 
+  useEraser() {
+    this.useToolNamed('eraser');
+  }
+
   useSelectionTool() {
     this.useToolNamed('selectionTool');
   }
@@ -171,6 +183,11 @@ class CaminiToons {
   changePenStyle(newPenStyle) {
     this._toolBox.pen.changeStyleTo(newPenStyle);
     this._listener.ifPresent(listener => listener.handleToolChanged('pen'));
+  }
+
+  changeEraserStyle(newEraserStyle) {
+    this._toolBox.eraser.changeStyleTo(newEraserStyle);
+    this._listener.ifPresent(listener => listener.handleToolChanged('eraser'));
   }
 
   // Actions - Layers

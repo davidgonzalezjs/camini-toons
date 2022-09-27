@@ -14,6 +14,7 @@ import {PlaybackBar} from './components/playback/PlaybackBar';
 import {OnionSkinBar} from './components/onion-skin/OnionSkinBar';
 import Canvas from './components/Canvas';
 import {PenStylePanel} from './components/contextual-penel/PenStylePanel';
+import {EraserStylePanel} from './components/contextual-penel/EraserStylePanel';
 
 const AppContainer = styled(Column)`
   align-items: stretch;
@@ -55,6 +56,9 @@ function App({createCaminiToons}) {
 
     penStyle,
     handlePenStyleChanged,
+
+    eraserStyle,
+    handleEraserStyleChanged,
 
     handleDeleteFrameClick,
 
@@ -115,6 +119,7 @@ function App({createCaminiToons}) {
 
         <Column style={{backgroundColor: 'lightBlue', flexGrow: 1}}>
           <PenStylePanel penStyle={penStyle} onChange={handlePenStyleChanged}/>
+          <EraserStylePanel eraserStyle={eraserStyle} onChange={handleEraserStyleChanged} />
         </Column>
       </Row>
     </AppContainer>

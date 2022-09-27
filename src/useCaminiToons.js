@@ -12,6 +12,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayingOnALoop, setIsPlayingOnALoop] = useState(false);
   const [penStyle, setPenStyle] = useState({});
+  const [eraserStyle, setEraserStyle] = useState({});
   const [onionSkinSettings, setOnionSkinSettings] = useState({ beforeColor: "red", afterColor: "green", numberOfFramesBefore: 3, numberOfFramesAfter: 3, opacityStep: 0.22 });
 
   useEffect(() => {
@@ -21,6 +22,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
       handleToolChanged() {
         setSelectedToolName(newCaminiToons.selectedTool.name);
         setPenStyle(newCaminiToons.penStyle);
+        setEraserStyle(newCaminiToons.eraserStyle);
       },
       handleFrameChanged() {
         setCurrentFrameNumber(newCaminiToons.currentFrameNumber)
@@ -131,6 +133,10 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.changePenStyle(newStyle);
   };
 
+  const handleEraserStyleChanged = (newStyle) => {
+    caminiToons.changeEraserStyle(newStyle);
+  };
+  
   const handleDeleteFrameClick = ({layerIndex, frameNumber}) => {
     caminiToons.deleteFrame({layerIndex, frameNumber});
   };
@@ -165,6 +171,9 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     
     penStyle,
     handlePenStyleChanged,
+
+    eraserStyle,
+    handleEraserStyleChanged,
 
     handleDeleteFrameClick,
     onionSkinSettings,

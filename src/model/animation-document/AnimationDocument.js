@@ -177,6 +177,10 @@ class AnimationDocument {
     subclassResponsibility();
   }
 
+  createCircle(circleSettings) {
+    subclassResponsibility();
+  }
+
   deselectAllDrawings() {
     this._selectedDrawings.forEach(drawing => drawing.deselect());
     this._selectedDrawings = [];
