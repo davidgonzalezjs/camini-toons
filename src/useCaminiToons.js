@@ -59,7 +59,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop());
     setPenStyle(newCaminiToons.penStyle);
     setOnionSkinSettings(newCaminiToons.onionSkinSettings);
-  }, [createCaminiToons]);
+  }, [createCaminiToons, canvasRef]);
 
   const handleToolIconClicked = aToolName => {
     caminiToons.useToolNamed(aToolName);
