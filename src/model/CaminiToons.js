@@ -18,6 +18,7 @@ class CaminiToons {
       'y': () => this.usePen(),
       'e': () => this.useEraser(),
       '*': () => this.createFrameOnLayer(this._animationDocument._activeLayerIndex), // TODO: se esta rompiendo el encapsulamiento
+      '+': () => this.extendFrameOnLayer({layerIndex: this._animationDocument._activeLayerIndex, frameNumber: this.currentFrameNumber}), // TODO: se esta rompiendo el encapsulamiento
       'l': () => this.createAnimationLayer()
     }
   }
