@@ -119,6 +119,11 @@ class CaminiToons {
     this._listener.ifPresent(listener => listener.handleLayerUpdate());
   }
 
+  extendFrameOnLayer({layerIndex, frameNumber}) {
+    this._animationDocument.extendFrameOnLayer({layerIndex, frameNumber});
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+  }
+
   deleteFrame({layerIndex, frameNumber}) {
     this._animationDocument.deleteFrameOnLayer({layerIndex, frameNumber});
     this.goToFrame(frameNumber);
@@ -156,7 +161,10 @@ class CaminiToons {
 
   // Actions - Drawing
   createPath(aPathStyle) {
-    return this._animationDocument.createPath(aPathStyle);
+    const newPath = this._animationDocument.createPath(aPathStyle);
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+
+    return newPath;
   }
 
   createCircle(circleSettings) {

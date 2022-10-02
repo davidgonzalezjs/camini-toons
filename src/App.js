@@ -60,6 +60,7 @@ function App({createCaminiToons}) {
     eraserStyle,
     handleEraserStyleChanged,
 
+    handleExtendFrameClick,
     handleDeleteFrameClick,
 
     onionSkinSettings,
@@ -86,6 +87,7 @@ function App({createCaminiToons}) {
         onOnionSkinClick={handleOnionSkinClick}
         onFrameClick={handleFrameClick}
         onCreateLayerClick={handleCreateLayerClick}
+        onExtendFrameClick={handleExtendFrameClick}
         onDeleteFrameClick={handleDeleteFrameClick}
       />
 

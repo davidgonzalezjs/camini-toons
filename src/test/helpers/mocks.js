@@ -8,6 +8,7 @@ export const mockLayer = () => ({
     goToFrame: jest.fn(),
     numberOfFrames: jest.fn(),
     activate: jest.fn(),
+    isEmpty: () => true
 });
 
 export const mockFunctionReturning = value => jest.fn(() => value);
@@ -19,5 +20,6 @@ export const createFrameContent = () => ({
     showOnionSkin: jest.fn(),
     remove: jest.fn(),
     activate: jest.fn(),
-    clone: () => createFrameContent()
+    clone: () => createFrameContent(),
+    isEmpty: () => true
 });

@@ -2,10 +2,23 @@ import Optional from './Optional';
 
 class Frame {
 
-    constructor(content) {
+    constructor(content, {isKeyFrame}) {
+        this._isKeyFrame = isKeyFrame;
         this._content = content;
         this._optionalOnionSkin = Optional.empty();
         this.hide();
+    }
+
+    hasSameContentAs(aFrame) {
+        return this._content === aFrame._content;
+    }
+
+    isKeyFrame() {
+        return this._isKeyFrame;
+    }
+
+    isEmpty() {
+        return this._content.isEmpty();
     }
 
     isVisible() {
@@ -45,6 +58,13 @@ class Frame {
     hideOnionSkin() {
         this._optionalOnionSkin.ifPresent(onionSkin => onionSkin.remove());
         this._optionalOnionSkin = Optional.empty();
+    }
+
+    extended() {
+        const extendedFrame = new Frame(this._content, {isKeyFrame: false}); 
+        extendedFrame.show();
+
+        return extendedFrame;
     }
 
 }

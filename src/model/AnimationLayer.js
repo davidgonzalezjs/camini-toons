@@ -25,6 +25,25 @@ class AnimationLayer {
         return this.findFrame(aFrameNumber).map(frame => frame.isVisible()).getOrElse(() => false);
     }
 
+
+    isKeyFrame(aFrameNumber) {
+        return this.findFrame(aFrameNumber).get().isKeyFrame();
+    }
+
+    framesHaveTheSameContent(aFrameNumber, anotherFrameNumber) {
+        const aFrame = this.findFrame(aFrameNumber).get();
+        const anotherFrame = this.findFrame(anotherFrameNumber).get();
+
+        return aFrame.hasSameContentAs(anotherFrame);
+    }
+
+    extendFrame(aFrameNumber) {
+        const frameToExtend = this.findFrame(aFrameNumber).get();
+        const extendedFrame = frameToExtend.extended();
+
+        this._frames.splice(aFrameNumber, 0, extendedFrame);
+    }
+
     existFrameAtFrameNumber(aFrameNumber) {
         return aFrameNumber >= 1 && aFrameNumber <= this.lastFrameNumber;
     }
@@ -51,7 +70,11 @@ class AnimationLayer {
             name: this.name,
             isVisible: this._isVisible,
             hasOnionSkinEnabled: this.hasOnionSkinEnabled(),
-            frames: this._frames.map((_, index) => ({number: index + 1}))
+            frames: this._frames.map((frame, index) => ({
+                number: index + 1,
+                isKeyFrame: frame.isKeyFrame(),
+                isEmpty: frame.isEmpty()
+            }))
         };
     }
 
@@ -61,7 +84,10 @@ class AnimationLayer {
     }
 
     createFrame() {
-        this._frames.push(new Frame(this._createFrameContent()));
+        const newFrame = new Frame(this._createFrameContent(), {isKeyFrame: true});
+        this._frames.push(newFrame);
+
+        return newFrame;
     }
 
     showFrame(aFrameNumber) {

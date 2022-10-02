@@ -285,5 +285,20 @@ describe('AnimationLayer', () => {
         expect(layersDetails[0].frames.length).toBe(2);
         expect(layersDetails[1].frames.length).toBe(1);
     });
+
+    it('puede extender un frame de una capa', () => {
+        const animationDocument = createAnimationDocument();
+        animationDocument.createAnimationLayer();
+        
+        animationDocument.extendFrameOnLayer({layerIndex: 0, frameNumber: 1});
+
+        const layersDetails = animationDocument.layersDetails;
+
+        expect(layersDetails[0].frames.length).toBe(2);
+        expect(layersDetails[0].frames[0].isKeyFrame).toBe(true);
+        expect(layersDetails[0].frames[1].isKeyFrame).toBe(false);
+        
+        expect(layersDetails[1].frames.length).toBe(1);
+    });
     
 });

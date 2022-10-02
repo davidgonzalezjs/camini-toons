@@ -65,7 +65,7 @@ const FrameContextMenuContainer = styled(Column)`
   left: ${props => props.position.x}px;
   top: ${props => props.position.y}px;
   
-  display: ${props => props.show ? 'block' : 'none'};
+  display: ${props => props.show ? 'flex' : 'none'};
 `;
 
 const Button = styled.button`
@@ -73,9 +73,14 @@ const Button = styled.button`
   font-size: 1em;
 `;
 
-const FrameContextMenu = ({onDeleteFrameClick}) => {
+const FrameContextMenu = ({onExtendClick, onDeleteFrameClick}) => {
   const {position, showMenu, contextMenuTarget} = useContextMenu({
     onRightClick: event => event.target.dataset.type === 'FRAME'
+  });
+
+  const handleExtend = () => onExtendClick({
+    layerIndex: parseInt(contextMenuTarget.dataset.layerIndex),
+    frameNumber: parseInt(contextMenuTarget.dataset.frameNumber)
   });
 
   const handleDelete = () => onDeleteFrameClick({
@@ -85,6 +90,7 @@ const FrameContextMenu = ({onDeleteFrameClick}) => {
   
   return (
     <FrameContextMenuContainer show={showMenu} position={position}>
+      <Button onClick={handleExtend}>Extender cuadro</Button>
       <Button onClick={handleDelete}>Borrar cuadro</Button>
     </FrameContextMenuContainer>
   );
@@ -104,13 +110,31 @@ const Layer = ({index, name, isActive, isVisible, hasOnionSkinEnabled, onLayerNa
   </StyledLayer>
 
 
-const Timeline = ({ currentFrameNumber, lastFrameNumber, layersDetails, onLayerClick, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick, onFrameClick, onCreateLayerClick, onDeleteFrameClick }) => {
+const Timeline = ({
+  currentFrameNumber,
+  lastFrameNumber,
+  layersDetails,
+  onLayerClick,
+  onLayerNameChanged,
+  onAddFrameClick,
+  onVisibilityClick,
+  onOnionSkinClick,
+  onFrameClick,
+  onCreateLayerClick,
+  onExtendFrameClick,
+  onDeleteFrameClick
+}) => {
   return (
     <>
-      <FrameContextMenu onDeleteFrameClick={onDeleteFrameClick}/>
+      <FrameContextMenu
+        onExtendClick={onExtendFrameClick}
+        onDeleteFrameClick={onDeleteFrameClick}
+      />
+      
       <div>
         <button onClick={onCreateLayerClick}>Crear capa</button>
       </div>
+      
       <LayersContainer>
         {layersDetails.map((layersDetail, layerIndex) =>
           <Row onClick={() => onLayerClick(layerIndex)}>
@@ -132,6 +156,8 @@ const Timeline = ({ currentFrameNumber, lastFrameNumber, layersDetails, onLayerC
                   data-layer-index={layerIndex}
                   data-frame-number={frame.number}
                   isCurrentFrame={frame.number === currentFrameNumber}
+                  isEmpty={frame.isEmpty}
+                  isKeyFrame={frame.isKeyFrame}
                   onClick={() => onFrameClick({layerIndex, frameNumber: frame.number})}
                 />)}
               
@@ -142,6 +168,7 @@ const Timeline = ({ currentFrameNumber, lastFrameNumber, layersDetails, onLayerC
                   return <Frame
                             isCurrentFrame={frame.number === currentFrameNumber}
                             isEmpty={true}
+                            isNonExistingFrame={true}
                             onClick={() => onFrameClick({layerIndex, frameNumber: frame.number})}
                           />;
                 })}

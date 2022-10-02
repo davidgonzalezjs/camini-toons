@@ -30,7 +30,7 @@ describe('AnimationLayer', () => {
     it(`when it's' hidden all of it's frames are hidden`, () => {
         const animationLayer = createAnimationLayer();
         animationLayer.createFrame();
-
+ 
         animationLayer.hide()
 
         expect(animationLayer.isVisible()).toBe(false);
@@ -83,7 +83,7 @@ describe('AnimationLayer', () => {
     });
 
     it(`when a layer with onion skins is hidden it's onion skins are hidden too`, () => {
-        const animationLayer = createAnimationLayer();
+        const animationLayer = createAnimationLayer({numberOfFrames: 3, currentFrameNumber: 2});
         animationLayer.createFrame();
         animationLayer.createFrame();
         animationLayer.showFrame(2);
@@ -112,8 +112,8 @@ describe('AnimationLayer', () => {
             isVisible: true,
             hasOnionSkinEnabled: false,
             frames: [
-                {number: 1},
-                {number: 2}
+                {number: 1, isKeyFrame: true, isEmpty: true},
+                {number: 2, isKeyFrame: true, isEmpty: true}
             ]
         });
     });
@@ -137,5 +137,46 @@ describe('AnimationLayer', () => {
         animationLayer.deleteFrame(1);
 
         expect(animationLayer.existFrameAtFrameNumber(1)).toBe(false);
-    })
+    });
+
+    it('cuando se crea un frame, este tiene un contenido distinto al resto', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.createFrame();
+
+        expect(animationLayer.lastFrameNumber).toBe(2);
+        expect(animationLayer.framesHaveTheSameContent(1, 2)).toBe(false);
+    });
+
+    it('cuando se extiende la duracion del ultimo frame se crea uno nuevo que tiene el mismo contenido que el frame extendido', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.extendFrame(1);
+        
+        expect(animationLayer.lastFrameNumber).toBe(2);
+        expect(animationLayer.framesHaveTheSameContent(1, 2)).toBe(true);
+    });
+
+    it('cuando se extiende la duracion de un frame previo a otro, el frame resultante se inserta en el medio', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.createFrame();
+        animationLayer.extendFrame(1);
+        
+        expect(animationLayer.lastFrameNumber).toBe(3);
+        expect(animationLayer.framesHaveTheSameContent(1, 2)).toBe(true);
+        expect(animationLayer.framesHaveTheSameContent(2, 3)).toBe(false);
+    });
+
+    it('cuando se crea un frame, este es un keyframe', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.createFrame();
+
+        expect(animationLayer.isKeyFrame(2)).toBe(true);
+    });
+
+    it('cuando se extiende un frame, el frame resultante no es un keyframe', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.extendFrame(1);
+
+        expect(animationLayer.isKeyFrame(2)).toBe(false);
+    });
+
 });

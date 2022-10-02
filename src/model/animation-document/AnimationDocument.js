@@ -177,6 +177,10 @@ class AnimationDocument {
     this.goToFrame(this.activeLayer.lastFrameNumber);
   }
 
+  extendFrameOnLayer({layerIndex, frameNumber}) {
+    this._animationLayers[layerIndex].extendFrame(frameNumber);
+  }
+
   deleteFrameOnLayer({layerIndex, frameNumber}) {
     this._animationLayers[layerIndex].deleteFrame(frameNumber);
   }
