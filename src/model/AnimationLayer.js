@@ -45,7 +45,17 @@ class AnimationLayer {
     }
 
     convertToKeyFrame(aFrameNumber) {
-        this.findFrame(aFrameNumber).get().convertToKeyFrame();
+        const targetFrame = this.findFrame(aFrameNumber).get();
+        targetFrame.convertToKeyFrame();
+
+        let nextFrameNumber = aFrameNumber + 1;
+
+        while (this.findFrame(nextFrameNumber).map(frame => !frame.isKeyFrame()).getOrElse(() => false)) {
+            this.findFrame(nextFrameNumber).get().changeContentFor(targetFrame._content);
+
+            nextFrameNumber += 1;
+        }
+
     }
 
     existFrameAtFrameNumber(aFrameNumber) {
@@ -91,6 +101,15 @@ class AnimationLayer {
         const newFrame = new Frame(this._createFrameContent(), {isKeyFrame: true});
         this._frames.push(newFrame);
 
+        return newFrame;
+    }
+
+    createFrameAt(aTargetFrameNumber) {
+        const newFrame = new Frame(this._createFrameContent(), {isKeyFrame: true});
+        this._frames.splice(aTargetFrameNumber - 1, 0, newFrame);
+
+        this.convertToKeyFrame(aTargetFrameNumber + 1);
+        
         return newFrame;
     }
 

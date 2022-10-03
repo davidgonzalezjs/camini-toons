@@ -191,6 +191,46 @@ describe('AnimationLayer', () => {
         expect(animationLayer.framesHaveTheSameContent(1, 2)).toBe(false);
     });
 
+    // TODO: buscar un nombre de test mas claro
+    it('cuando un frame extendido seguido por un frame extendido es convertido a keyframe, el frame extendido de la derecha pasa a tener el mismo contenido que el nuevo keyframe', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+
+        animationLayer.convertToKeyFrame(3);
+        
+        expect(animationLayer.isKeyFrame(3)).toBe(true);
+        expect(animationLayer.framesHaveTheSameContent(1, 3)).toBe(false);
+        expect(animationLayer.framesHaveTheSameContent(3, 4)).toBe(true);
+    });
+
+    it('cuando un frame extendido seguido por varios frames extendidos es convertido a keyframe, los frames extendidos de la derecha pasan a tener el mismo contenido que el nuevo keyframe', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+
+        animationLayer.convertToKeyFrame(3);
+        
+        expect(animationLayer.isKeyFrame(3)).toBe(true);
+        expect(animationLayer.framesHaveTheSameContent(1, 3)).toBe(false);
+        expect(animationLayer.framesHaveTheSameContent(3, 4)).toBe(true);
+        expect(animationLayer.framesHaveTheSameContent(3, 5)).toBe(true);
+    });
+
+    it('cuando un frame extendido seguido por algun keyframe es convertido a keyframe, el keyframe de la derecha no tienen el mismo contenido que el nuevo keyframe', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.extendFrame(1);
+        animationLayer.createFrame();
+
+        animationLayer.convertToKeyFrame(2);
+        
+        expect(animationLayer.isKeyFrame(2)).toBe(true);
+        expect(animationLayer.framesHaveTheSameContent(2, 3)).toBe(false);
+    });
+
     it('cuando un keyframe que fue extendido es borrado, el frame siguiente se convierte en keyframe', () => {
         const animationLayer = createAnimationLayer();
         animationLayer.extendFrame(1);
@@ -215,5 +255,25 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isKeyFrame(1)).toBe(true);
         expect(animationLayer.isKeyFrame(2)).toBe(false);
         expect(animationLayer.isKeyFrame(3)).toBe(false);
+    });
+
+    // TODO. mejorar el nombre del test
+    it('cuando se crea un keyframe en medio de dos frames extendidos, el frame de la derecha que no sean keyframe se convierte en keyframe', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+
+        animationLayer.createFrameAt(3);
+
+        expect(animationLayer.lastFrameNumber).toBe(6);
+        expect(animationLayer.isKeyFrame(1)).toBe(true);
+        expect(animationLayer.isKeyFrame(2)).toBe(false);
+
+        expect(animationLayer.isKeyFrame(3)).toBe(true);
+        
+        expect(animationLayer.isKeyFrame(4)).toBe(true);
+        expect(animationLayer.isKeyFrame(5)).toBe(false);
     });
 });

@@ -65,6 +65,10 @@ class Frame {
         this._content = this._content.clone();
     }
 
+    changeContentFor(newContent) {
+        this._content = newContent;
+    }
+
     extended() {
         const extendedFrame = new Frame(this._content, {isKeyFrame: false}); 
         extendedFrame.show();
