@@ -73,9 +73,14 @@ const Button = styled.button`
   font-size: 1em;
 `;
 
-const FrameContextMenu = ({onExtendClick, onDeleteFrameClick}) => {
+const FrameContextMenu = ({onConvertToKeyFrame, onExtendClick, onDeleteFrameClick}) => {
   const {position, showMenu, contextMenuTarget} = useContextMenu({
     onRightClick: event => event.target.dataset.type === 'FRAME'
+  });
+
+  const handleConvertToKeyFrame = () => onConvertToKeyFrame({
+    layerIndex: parseInt(contextMenuTarget.dataset.layerIndex),
+    frameNumber: parseInt(contextMenuTarget.dataset.frameNumber)
   });
 
   const handleExtend = () => onExtendClick({
@@ -90,6 +95,7 @@ const FrameContextMenu = ({onExtendClick, onDeleteFrameClick}) => {
   
   return (
     <FrameContextMenuContainer show={showMenu} position={position}>
+      <Button onClick={handleConvertToKeyFrame}>Convertir en cuadro clave</Button>
       <Button onClick={handleExtend}>Extender cuadro</Button>
       <Button onClick={handleDelete}>Borrar cuadro</Button>
     </FrameContextMenuContainer>
@@ -121,12 +127,15 @@ const Timeline = ({
   onOnionSkinClick,
   onFrameClick,
   onCreateLayerClick,
+
+  onConvertFrameToKeyFrame,
   onExtendFrameClick,
   onDeleteFrameClick
 }) => {
   return (
     <>
       <FrameContextMenu
+        onConvertToKeyFrame={onConvertFrameToKeyFrame}
         onExtendClick={onExtendFrameClick}
         onDeleteFrameClick={onDeleteFrameClick}
       />

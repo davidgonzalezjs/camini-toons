@@ -181,6 +181,10 @@ class AnimationDocument {
     this._animationLayers[layerIndex].extendFrame(frameNumber);
   }
 
+  convertToKeyFrame({layerIndex, frameNumber}) {
+    this._animationLayers[layerIndex].convertToKeyFrame(frameNumber);
+  }
+
   deleteFrameOnLayer({layerIndex, frameNumber}) {
     this._animationLayers[layerIndex].deleteFrame(frameNumber);
   }

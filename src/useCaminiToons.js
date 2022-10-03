@@ -137,6 +137,10 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.changeEraserStyle(newStyle);
   };
 
+  const handleConvertFrameToKeyFrame = ({layerIndex, frameNumber}) => {
+    caminiToons.convertToKeyFrame({layerIndex, frameNumber});
+  };
+
   const handleExtendFrameClick = ({layerIndex, frameNumber}) => {
     caminiToons.extendFrameOnLayer({layerIndex, frameNumber});
   };
@@ -179,8 +183,10 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     eraserStyle,
     handleEraserStyleChanged,
 
+    handleConvertFrameToKeyFrame,
     handleExtendFrameClick,
     handleDeleteFrameClick,
+
     onionSkinSettings,
     handleOnionSkinSettingsChange
   }

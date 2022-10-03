@@ -60,6 +60,11 @@ class Frame {
         this._optionalOnionSkin = Optional.empty();
     }
 
+    convertToKeyFrame() {
+        this._isKeyFrame = true;
+        this._content = this._content.clone();
+    }
+
     extended() {
         const extendedFrame = new Frame(this._content, {isKeyFrame: false}); 
         extendedFrame.show();

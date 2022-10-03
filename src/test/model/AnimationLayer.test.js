@@ -179,4 +179,15 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isKeyFrame(2)).toBe(false);
     });
 
+    it('se puede convertir en keyframe un frame que no lo es', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.extendFrame(1);
+
+        animationLayer.convertToKeyFrame(2);
+        
+        expect(animationLayer.lastFrameNumber).toBe(2);
+        
+        expect(animationLayer.isKeyFrame(2)).toBe(true);
+        expect(animationLayer.framesHaveTheSameContent(1, 2)).toBe(false);
+    });
 });

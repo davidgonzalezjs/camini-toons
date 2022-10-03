@@ -44,6 +44,10 @@ class AnimationLayer {
         this._frames.splice(aFrameNumber, 0, extendedFrame);
     }
 
+    convertToKeyFrame(aFrameNumber) {
+        this.findFrame(aFrameNumber).get().convertToKeyFrame();
+    }
+
     existFrameAtFrameNumber(aFrameNumber) {
         return aFrameNumber >= 1 && aFrameNumber <= this.lastFrameNumber;
     }

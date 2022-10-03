@@ -300,5 +300,16 @@ describe('AnimationLayer', () => {
         
         expect(layersDetails[1].frames.length).toBe(1);
     });
+
+    it('puede convertir en keyframe un frame que no lo es en una capa', () => {
+        const animationDocument = createAnimationDocument();
+        animationDocument.extendFrameOnLayer({layerIndex: 0, frameNumber: 1});
+
+        animationDocument.convertToKeyFrame({layerIndex: 0, frameNumber: 2});
+
+        const layersDetails = animationDocument.layersDetails;
+
+        expect(layersDetails[0].frames[1].isKeyFrame).toBe(true);
+    });
     
 });
