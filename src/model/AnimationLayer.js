@@ -107,10 +107,23 @@ class AnimationLayer {
     }
 
     deleteFrame(aFrameNumber) {
-        const frameIndex = aFrameNumber - 1;
-
-        this._frames[frameIndex].deleteContent();
-        this._frames.splice(frameIndex, 1);
+        const frameToDelete = this.findFrame(aFrameNumber).get();
+        
+        if (frameToDelete.isKeyFrame()) {
+            this
+                .findFrame(aFrameNumber + 1)
+                .ifPresent(nextFrame => {
+                    if (nextFrame.isKeyFrame()) {
+                        frameToDelete.deleteContent();
+                    }
+                    else {
+                        nextFrame.convertToKeyFrame();
+                    }
+                });
+        }
+        
+        const frameToDeleteIndex = aFrameNumber - 1;
+        this._frames.splice(frameToDeleteIndex, 1);
     }
 
     hide() {

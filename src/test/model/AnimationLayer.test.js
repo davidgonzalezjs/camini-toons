@@ -190,4 +190,30 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isKeyFrame(2)).toBe(true);
         expect(animationLayer.framesHaveTheSameContent(1, 2)).toBe(false);
     });
+
+    it('cuando un keyframe que fue extendido es borrado, el frame siguiente se convierte en keyframe', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.extendFrame(1);
+        animationLayer.createFrame();
+
+        animationLayer.deleteFrame(1);
+        
+        expect(animationLayer.lastFrameNumber).toBe(2);
+        expect(animationLayer.isKeyFrame(1)).toBe(true);
+        expect(animationLayer.isKeyFrame(2)).toBe(true);
+    });
+
+    it('cuando un frame extendido vecino de otros frames extendidos es borrado, ningun frame extendido se convierte en keyframe', () => {
+        const animationLayer = createAnimationLayer();
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+        animationLayer.extendFrame(1);
+
+        animationLayer.deleteFrame(3);
+        
+        expect(animationLayer.lastFrameNumber).toBe(3);
+        expect(animationLayer.isKeyFrame(1)).toBe(true);
+        expect(animationLayer.isKeyFrame(2)).toBe(false);
+        expect(animationLayer.isKeyFrame(3)).toBe(false);
+    });
 });
