@@ -25,6 +25,8 @@ class AnimationDocument {
 
     this._activeLayerIndex = 0;
     this.createAnimationLayer();
+
+    this._animationClipFrames = [];
   }
 
   createAnimationLayer() {
@@ -56,6 +58,12 @@ class AnimationDocument {
     return this._animationLayers.map((animationLayer, index) => ({
       ...animationLayer.details,
       isActive: index === this._activeLayerIndex
+    }));
+  }
+
+  get animationClipsDetails() {
+    return this._animationClipFrames.map(({name, frames}) => ({
+      name
     }));
   }
 
@@ -183,6 +191,24 @@ class AnimationDocument {
 
   convertToKeyFrame({layerIndex, frameNumber}) {
     this._animationLayers[layerIndex].convertToKeyFrame(frameNumber);
+  }
+
+  extractToAnimationClip({name, layerIndex, startFrameNumber, endFrameNumber}) {
+    const frames = this._animationLayers[layerIndex].extractToAnimationClip({name, startFrameNumber, endFrameNumber});
+    
+    this._animationClipFrames.push({name, frames});
+  }
+
+  // TODO: agregar test
+  insertFrames({layerIndex, position, frames}) {
+    this._animationLayers[layerIndex].insertFrames(frames, {position});
+  }
+
+  // TODO: agregar test
+  insertAnimationClip({name, layerIndex, position}) {
+    const animationClipFramesEntry = this._animationClipFrames.find(each => each.name === name);
+    
+    this._animationLayers[layerIndex].insertFrames(animationClipFramesEntry, {position});
   }
 
   deleteFrameOnLayer({layerIndex, frameNumber}) {

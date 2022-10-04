@@ -1,4 +1,5 @@
 import Frame from './Frame';
+import AnimationClipFrame from './AnimationClipFrame';
 import Optional from './Optional'
 
 class AnimationLayer {
@@ -30,6 +31,10 @@ class AnimationLayer {
         return this.findFrame(aFrameNumber).get().isKeyFrame();
     }
 
+    isAnimationClipFrame(aFrameNumber) {
+        return this.findFrame(aFrameNumber).get().isAnimationClip();
+    }
+
     framesHaveTheSameContent(aFrameNumber, anotherFrameNumber) {
         const aFrame = this.findFrame(aFrameNumber).get();
         const anotherFrame = this.findFrame(anotherFrameNumber).get();
@@ -55,7 +60,6 @@ class AnimationLayer {
 
             nextFrameNumber += 1;
         }
-
     }
 
     existFrameAtFrameNumber(aFrameNumber) {
@@ -87,7 +91,8 @@ class AnimationLayer {
             frames: this._frames.map((frame, index) => ({
                 number: index + 1,
                 isKeyFrame: frame.isKeyFrame(),
-                isEmpty: frame.isEmpty()
+                isEmpty: frame.isEmpty(),
+                isAnimationClip: frame.isAnimationClip()
             }))
         };
     }
@@ -145,6 +150,26 @@ class AnimationLayer {
         this._frames.splice(frameToDeleteIndex, 1);
     }
 
+    extractToAnimationClip({name, startFrameNumber, endFrameNumber}) {
+        // TODO: falta testear lo de clonar el framee
+        const animationClipFrames =
+            this
+                .framesBetween(startFrameNumber, endFrameNumber)
+                .map((frame, index) => new AnimationClipFrame({name, content: frame.clone(), isKeyFrame: index === 0}));
+        
+        this._frames.splice(startFrameNumber - 1, animationClipFrames.length, ...animationClipFrames);
+
+        if (this.existFrameAtFrameNumber(endFrameNumber + 1)) {
+            this.convertToKeyFrame(endFrameNumber + 1);
+        }
+        
+        return animationClipFrames;
+    }
+
+    insertFrames(frames, {position}) {
+        this._frames.splice(position - 1, 0, ...frames);
+    }
+
     hide() {
         this._isVisible = false;
         this.hideVisibleFrame();
@@ -182,6 +207,10 @@ class AnimationLayer {
 
     findFrame(aFrameNumber) {
         return Optional.fromNullable(this._frames[aFrameNumber - 1]);
+    }
+
+    framesBetween(startFrameNumber, endFrameNumber) {
+        return this._frames.slice(startFrameNumber - 1, endFrameNumber);
     }
 
     hideVisibleFrame() {

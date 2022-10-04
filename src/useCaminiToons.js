@@ -6,6 +6,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const [toolsNames, setToolsNames] = useState([]);
   const [selectedToolName, setSelectedToolName] = useState('pen');
   const [layersDetails, setLayersDetails] = useState([]);
+  const [animationClipsDetails, setAnimationClipsDetails] = useState([]);
   const [frameRate, setFrameRate] = useState(6);
   const [currentFrameNumber, setCurrentFrameNumber] = useState(1);
   const [lastFrameNumber, setLastFrameNumber] = useState(1);
@@ -40,6 +41,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
       handleLayerUpdate() {
         setLayersDetails(newCaminiToons.layersDetails);
         setLastFrameNumber(newCaminiToons.lastFrameNumber);
+        setAnimationClipsDetails(newCaminiToons.animationClipsDetails);
       },
       handlePlayBackUpdate() {
         setIsPlaying(newCaminiToons.isPlaying());
@@ -149,6 +151,14 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.deleteFrame({layerIndex, frameNumber});
   };
 
+  const handleExtractToAnimationClipClick = (clipName, layerIndex, startFrameNumber, endFrameNumber) => {
+    caminiToons.extractToAnimationClip({name: clipName, layerIndex, startFrameNumber, endFrameNumber});
+  };
+
+  const handleInsertAnimationClick = (name, layerIndex, startFrameNumber) => {
+    caminiToons.insertAnimationClip({name, layerIndex, startFrameNumber});
+  };
+
   const handleOnionSkinSettingsChange = (newOnionSkinSettings) => {
     caminiToons.changeOnionSkinSettings(newOnionSkinSettings);
   };
@@ -161,6 +171,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     currentFrameNumber,
     lastFrameNumber,
     layersDetails,
+    animationClipsDetails,
     isPlaying,
     isPlayingOnALoop,
 
@@ -186,6 +197,8 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handleConvertFrameToKeyFrame,
     handleExtendFrameClick,
     handleDeleteFrameClick,
+    handleExtractToAnimationClipClick,
+    handleInsertAnimationClick,
 
     onionSkinSettings,
     handleOnionSkinSettingsChange

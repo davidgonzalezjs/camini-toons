@@ -3,6 +3,13 @@ import {createFrameContent} from '../helpers/mocks';
 
 const createAnimationLayer = (props = {}) => new AnimationLayer({name: props.name || 'layer name', createFrameContent});
 
+const createEmptyAnimationLayer = () => {
+    const animationLayer = createAnimationLayer();
+    animationLayer.deleteFrame(1);
+    
+    return animationLayer;
+}
+
 describe('AnimationLayer', () => {
 
     it('starts with one visible frame', () => {
@@ -104,16 +111,22 @@ describe('AnimationLayer', () => {
     });
 
     it('can be ask for details about it', () => {
-        const animationLayer = createAnimationLayer({name: 'layer name'});
+        const animationLayer = createEmptyAnimationLayer();
         animationLayer.createFrame();
+        animationLayer.extendFrame(1);
+        animationLayer.createFrame();
+
+        animationLayer.extractToAnimationClip({name: 'clip', startFrameNumber: 3, endFrameNumber: 3});
+
 
         expect(animationLayer.details).toEqual({
             name: 'layer name',
             isVisible: true,
             hasOnionSkinEnabled: false,
             frames: [
-                {number: 1, isKeyFrame: true, isEmpty: true},
-                {number: 2, isKeyFrame: true, isEmpty: true}
+                {number: 1, isKeyFrame: true, isEmpty: true, isAnimationClip: false},
+                {number: 2, isKeyFrame: false, isEmpty: true, isAnimationClip: false},
+                {number: 3, isKeyFrame: true, isEmpty: true, isAnimationClip: true}
             ]
         });
     });

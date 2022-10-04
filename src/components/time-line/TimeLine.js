@@ -73,7 +73,11 @@ const Button = styled.button`
   font-size: 1em;
 `;
 
-const FrameContextMenu = ({onConvertToKeyFrame, onExtendClick, onDeleteFrameClick}) => {
+const FrameContextMenu = ({
+  onConvertToKeyFrame,
+  onExtendClick,
+  onDeleteFrameClick
+}) => {
   const {position, showMenu, contextMenuTarget} = useContextMenu({
     onRightClick: event => event.target.dataset.type === 'FRAME'
   });
@@ -139,6 +143,7 @@ const Timeline = ({
         onExtendClick={onExtendFrameClick}
         onDeleteFrameClick={onDeleteFrameClick}
       />
+
       
       <div>
         <button onClick={onCreateLayerClick}>Crear capa</button>
@@ -167,6 +172,7 @@ const Timeline = ({
                   isCurrentFrame={frame.number === currentFrameNumber}
                   isEmpty={frame.isEmpty}
                   isKeyFrame={frame.isKeyFrame}
+                  isAnimationClip={frame.isAnimationClip}
                   onClick={() => onFrameClick({layerIndex, frameNumber: frame.number})}
                 />)}
               

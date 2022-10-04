@@ -70,6 +70,10 @@ class CaminiToons {
     return this._animationDocument.layersDetails;
   }
 
+  get animationClipsDetails() {
+    return this._animationDocument.animationClipsDetails;
+  }
+
   get onionSkinSettings() {
     return this._animationDocument.onionSkinSettings;
   }
@@ -128,6 +132,21 @@ class CaminiToons {
 
   extendFrameOnLayer({layerIndex, frameNumber}) {
     this._animationDocument.extendFrameOnLayer({layerIndex, frameNumber});
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+  }
+
+  extractToAnimationClip({name, layerIndex, startFrameNumber, endFrameNumber}) {
+    this._animationDocument.extractToAnimationClip({name, layerIndex, startFrameNumber, endFrameNumber});
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+  }
+
+  insertFrames({layerIndex, position, frames}) {
+    this._animationDocument.insertFrames({layerIndex, position, frames});
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());  
+  }
+
+  insertAnimationClip({name, layerIndex, position}) {
+    this._animationDocument.insertAnimationClip({name, layerIndex, position});
     this._listener.ifPresent(listener => listener.handleLayerUpdate());
   }
 

@@ -16,9 +16,22 @@ export const Frame = styled.div`
   background:
     linear-gradient(
       to right,
-      ${props => props.isNonExistingFrame ? 'lightgreen' : 'greenyellow'} 40%,
-      ${props => props.isCurrentFrame ? 'red' : props.isNonExistingFrame ? 'lightgreen' : 'greenyellow'} 40% 60%,
-      ${props => props.isNonExistingFrame ? 'lightgreen' : 'greenyellow'} 60%
+      
+      ${props =>
+        props.isNonExistingFrame ? 'lightgreen' :
+        props.isAnimationClip ? 'blue' :
+        'greenyellow'} 40%,
+
+      ${props =>
+        props.isCurrentFrame ? 'red' :
+        props.isNonExistingFrame ? 'lightgreen' :
+        props.isAnimationClip ? 'blue' :
+        'greenyellow'} 40% 60%,
+      
+      ${props =>
+        props.isNonExistingFrame ? 'lightgreen' :
+        props.isAnimationClip ? 'blue' :
+        'greenyellow'} 60%
     );
 
   &::before {

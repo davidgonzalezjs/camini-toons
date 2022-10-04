@@ -12,6 +12,8 @@ import {ToolBoxBar} from './components/tool-box/ToolBoxBar';
 import TimeLine from './components/time-line/TimeLine';
 import {PlaybackBar} from './components/playback/PlaybackBar';
 import {OnionSkinBar} from './components/onion-skin/OnionSkinBar';
+import {CreateAnimationClipBar} from './components/create-animation-clip/CreateAnimationClipBar';
+import {InsertAnimationClipBar} from './insert-animation-clip/InsertAnimationClipBar';
 import Canvas from './components/Canvas';
 import {PenStylePanel} from './components/contextual-penel/PenStylePanel';
 import {EraserStylePanel} from './components/contextual-penel/EraserStylePanel';
@@ -38,6 +40,7 @@ function App({createCaminiToons}) {
     currentFrameNumber,
     lastFrameNumber,
     layersDetails,
+    animationClipsDetails,
     isPlaying,
     isPlayingOnALoop,
 
@@ -63,6 +66,8 @@ function App({createCaminiToons}) {
     handleConvertFrameToKeyFrame,
     handleExtendFrameClick,
     handleDeleteFrameClick,
+    handleExtractToAnimationClipClick,
+    handleInsertAnimationClick,
 
     onionSkinSettings,
     handleOnionSkinSettingsChange,
@@ -105,6 +110,8 @@ function App({createCaminiToons}) {
           onRepeat={handleRepeatAnimation}
         />
         <OnionSkinBar onionSkinSettings={onionSkinSettings} onChange={handleOnionSkinSettingsChange}/>
+        <CreateAnimationClipBar onAccept={handleExtractToAnimationClipClick} layersDetails={layersDetails}/>
+        <InsertAnimationClipBar onAccept={handleInsertAnimationClick} animationClipsDetails={animationClipsDetails} layersDetails={layersDetails}/>
       </Row>
 
       <Row>

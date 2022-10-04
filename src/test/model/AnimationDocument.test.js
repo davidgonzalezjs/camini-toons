@@ -4,6 +4,13 @@ import {createFrameContent} from '../helpers/mocks';
 
 const createAnimationDocument = (props = {}) => new AnimationDocument({createFrameContent, hitTest: () => {}});
 
+const createAnimationDocumentWithEmptyLayer = () => {
+    const animationDocument = createAnimationDocument();
+    animationDocument.deleteFrameOnLayer({layerIndex: 0, frameNumber: 1});
+    
+    return animationDocument;
+};
+
 describe('AnimationLayer', () => {
 
     it(`starts with a layer containing one frame`, () => {
@@ -310,6 +317,21 @@ describe('AnimationLayer', () => {
         const layersDetails = animationDocument.layersDetails;
 
         expect(layersDetails[0].frames[1].isKeyFrame).toBe(true);
+    });
+
+    it('puede extraer un animation clip en base a frames de una capa', () => {
+        const animationDocument = createAnimationDocumentWithEmptyLayer();
+        animationDocument.createFrameOnLayer(0);
+        animationDocument.createFrameOnLayer(0);
+        animationDocument.createFrameOnLayer(0);
+
+        animationDocument.extractToAnimationClip({layerIndex: 0, startFrameNumber: 1, endFrameNumber: 2});
+        
+        const layersDetails = animationDocument.layersDetails;
+
+        expect(layersDetails[0].frames[0].isAnimationClip).toBe(true);
+        expect(layersDetails[0].frames[1].isAnimationClip).toBe(true);
+        expect(layersDetails[0].frames[2].isAnimationClip).toBe(false);
     });
     
 });

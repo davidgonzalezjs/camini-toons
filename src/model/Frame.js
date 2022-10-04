@@ -25,6 +25,10 @@ class Frame {
         return this._content.visible;
     }
 
+    isAnimationClip() {
+        return false;
+    }
+
     activate() {
         this._content.activate();
     }
@@ -61,6 +65,8 @@ class Frame {
     }
 
     convertToKeyFrame() {
+        if (this.isKeyFrame()) return; // TODO: si ya es un keyframe se termina clonando el content y queda un content flotando en la nada (sin estar dentro de un Frame)
+
         this._isKeyFrame = true;
         this._content = this._content.clone();
     }
@@ -74,6 +80,10 @@ class Frame {
         extendedFrame.show();
 
         return extendedFrame;
+    }
+
+    clone() {
+        return new Frame(this._content.clone(), {isKeyFrame: this.isKeyFrame()});
     }
 
 }

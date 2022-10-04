@@ -1,5 +1,3 @@
-import {useState} from 'react';
-
 import Row from '../Row';
 import {Label, Input, ColorPicker} from '../input/Input';
 
