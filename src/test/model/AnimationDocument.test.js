@@ -293,6 +293,28 @@ describe('AnimationLayer', () => {
         expect(layersDetails[1].frames.length).toBe(1);
     });
 
+    it('puede crear un nuevo keyframe antes de otro cuadro en una capa', () => {
+        const animationDocument = createAnimationDocument();
+        animationDocument.extendFrameOnLayer({layerIndex: 0, frameNumber: 1});
+
+        animationDocument.createFrameOnLayerAtFrame({layerIndex: 0, frameNumber: 1});
+
+        const layersDetails = animationDocument.layersDetails;
+        expect(layersDetails[0].frames.length).toBe(3);
+        expect(animationDocument.isKeyFrame({layerIndex: 0, frameNumber: 1})).toBe(true);
+        expect(animationDocument.isKeyFrame({layerIndex: 0, frameNumber: 2})).toBe(true);
+        expect(animationDocument.isKeyFrame({layerIndex: 0, frameNumber: 3})).toBe(false);
+    });
+
+    it('cuando crea un nuevo keyframe antes de otro cuadro en una capa, cambia el frame actual a la posicion del nuevo frame', () => {
+        const animationDocument = createAnimationDocument();
+        animationDocument.createFrameOnLayer(0);
+        
+        animationDocument.createFrameOnLayerAtFrame({layerIndex: 0, frameNumber: 1});
+
+        expect(animationDocument.currentFrameNumber).toBe(1);
+    })
+
     it('puede extender un frame de una capa', () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createAnimationLayer();
@@ -333,5 +355,5 @@ describe('AnimationLayer', () => {
         expect(layersDetails[0].frames[1].isAnimationClip).toBe(true);
         expect(layersDetails[0].frames[2].isAnimationClip).toBe(false);
     });
-    
+
 });

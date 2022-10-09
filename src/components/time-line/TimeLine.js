@@ -76,6 +76,7 @@ const Button = styled.button`
 const FrameContextMenu = ({
   onConvertToKeyFrame,
   onExtendClick,
+  onCreateBefore,
   onDeleteFrameClick
 }) => {
   const {position, showMenu, contextMenuTarget} = useContextMenu({
@@ -92,6 +93,11 @@ const FrameContextMenu = ({
     frameNumber: parseInt(contextMenuTarget.dataset.frameNumber)
   });
 
+  const handleCreateBefore = () => onCreateBefore({
+    layerIndex: parseInt(contextMenuTarget.dataset.layerIndex),
+    frameNumber: parseInt(contextMenuTarget.dataset.frameNumber)
+  });
+
   const handleDelete = () => onDeleteFrameClick({
     layerIndex: parseInt(contextMenuTarget.dataset.layerIndex),
     frameNumber: parseInt(contextMenuTarget.dataset.frameNumber)
@@ -101,6 +107,7 @@ const FrameContextMenu = ({
     <FrameContextMenuContainer show={showMenu} position={position}>
       <Button onClick={handleConvertToKeyFrame}>Convertir en cuadro clave</Button>
       <Button onClick={handleExtend}>Extender cuadro</Button>
+      <Button onClick={handleCreateBefore}>Insertar cuadro antes</Button>
       <Button onClick={handleDelete}>Borrar cuadro</Button>
     </FrameContextMenuContainer>
   );
@@ -134,6 +141,7 @@ const Timeline = ({
 
   onConvertFrameToKeyFrame,
   onExtendFrameClick,
+  onCreateBefore,
   onDeleteFrameClick
 }) => {
   return (
@@ -141,6 +149,7 @@ const Timeline = ({
       <FrameContextMenu
         onConvertToKeyFrame={onConvertFrameToKeyFrame}
         onExtendClick={onExtendFrameClick}
+        onCreateBefore={onCreateBefore}
         onDeleteFrameClick={onDeleteFrameClick}
       />
 

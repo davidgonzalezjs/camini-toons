@@ -111,11 +111,18 @@ class AnimationLayer {
 
     createFrameAt(aTargetFrameNumber) {
         const newFrame = new Frame(this._createFrameContent(), {isKeyFrame: true});
-        this._frames.splice(aTargetFrameNumber - 1, 0, newFrame);
+        
+        this.insertFrames([newFrame], {position: aTargetFrameNumber});
 
-        this.convertToKeyFrame(aTargetFrameNumber + 1);
+        if (this.existFrameAtFrameNumber(aTargetFrameNumber + 1)) {
+            this.convertToKeyFrame(aTargetFrameNumber + 1);
+        }
         
         return newFrame;
+    }
+
+    insertFrames(frames, {position}) {
+        this._frames.splice(position - 1, 0, ...frames);
     }
 
     showFrame(aFrameNumber) {
@@ -164,10 +171,6 @@ class AnimationLayer {
         }
         
         return animationClipFrames;
-    }
-
-    insertFrames(frames, {position}) {
-        this._frames.splice(position - 1, 0, ...frames);
     }
 
     hide() {

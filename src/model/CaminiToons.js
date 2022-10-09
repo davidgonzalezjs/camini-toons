@@ -125,6 +125,12 @@ class CaminiToons {
     this._listener.ifPresent(listener => listener.handleLayerUpdate());
   }
 
+  createFrameBefore({layerIndex, frameNumber}) {
+    console.log('frameNumber: ' + frameNumber)
+    this._animationDocument.createFrameBefore({layerIndex, frameNumber});
+    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+  }
+
   convertToKeyFrame({layerIndex, frameNumber}) {
     this._animationDocument.convertToKeyFrame({layerIndex, frameNumber});
     this._listener.ifPresent(listener => listener.handleLayerUpdate());

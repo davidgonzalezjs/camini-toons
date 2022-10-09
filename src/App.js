@@ -65,6 +65,7 @@ function App({createCaminiToons}) {
 
     handleConvertFrameToKeyFrame,
     handleExtendFrameClick,
+    handleCreateBefore,
     handleDeleteFrameClick,
     handleExtractToAnimationClipClick,
     handleInsertAnimationClick,
@@ -95,6 +96,7 @@ function App({createCaminiToons}) {
         onCreateLayerClick={handleCreateLayerClick}
         onConvertFrameToKeyFrame={handleConvertFrameToKeyFrame}
         onExtendFrameClick={handleExtendFrameClick}
+        onCreateBefore={handleCreateBefore}
         onDeleteFrameClick={handleDeleteFrameClick}
       />
 

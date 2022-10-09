@@ -147,6 +147,11 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.extendFrameOnLayer({layerIndex, frameNumber});
   };
 
+  const handleCreateBefore = ({layerIndex, frameNumber}) => {
+    console.log(`layerIndex: ${layerIndex} | frameNumber: ${frameNumber}}]`);
+    caminiToons.createFrameBefore({layerIndex, frameNumber});
+  };
+
   const handleDeleteFrameClick = ({layerIndex, frameNumber}) => {
     caminiToons.deleteFrame({layerIndex, frameNumber});
   };
@@ -196,6 +201,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
 
     handleConvertFrameToKeyFrame,
     handleExtendFrameClick,
+    handleCreateBefore,
     handleDeleteFrameClick,
     handleExtractToAnimationClipClick,
     handleInsertAnimationClick,

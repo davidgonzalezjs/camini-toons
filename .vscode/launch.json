@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "http://layersDetails",
+            "request": "launch",
+            "url": "http://layersDetails"
+        }
+    ]
+}

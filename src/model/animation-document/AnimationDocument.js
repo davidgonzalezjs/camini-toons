@@ -91,6 +91,10 @@ class AnimationDocument {
     return this._animationLayers[aLayerIndex].isVisible();
   }
 
+  isKeyFrame({layerIndex, frameNumber}) {
+    return this._animationLayers[layerIndex].isKeyFrame(frameNumber);
+  }
+
   hasOnionSkinEnabledOnLayer(aLayerIndex) {
     return this._animationLayers[aLayerIndex].hasOnionSkinEnabled();
   }
@@ -178,11 +182,19 @@ class AnimationDocument {
     this._onionSkinSettings = newOnionSkinSettings;
   }
 
-  createFrameOnLayer(aLayerIndex) {
-    this._activeLayerIndex = aLayerIndex; // TODO: agregar test
+  createFrameOnLayer(layerIndex) {
+    this.createFrameOnLayerAtFrame({layerIndex, frameNumber: this.activeLayer.lastFrameNumber + 1})  
+  }
+
+  createFrameBefore({layerIndex, frameNumber}) {
+    this.createFrameOnLayerAtFrame({layerIndex, frameNumber: frameNumber});
+  }
+
+  createFrameOnLayerAtFrame({layerIndex, frameNumber}) {
+    this._activeLayerIndex = layerIndex; // TODO: agregar test
     
-    this.activeLayer.createFrame();
-    this.goToFrame(this.activeLayer.lastFrameNumber);
+    this.activeLayer.createFrameAt(frameNumber);
+    this.goToFrame(frameNumber);
   }
 
   extendFrameOnLayer({layerIndex, frameNumber}) {
