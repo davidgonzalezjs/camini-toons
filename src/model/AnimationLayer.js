@@ -1,6 +1,7 @@
 import Frame from './Frame';
 import AnimationClipFrame from './AnimationClipFrame';
 import Optional from './Optional'
+import { AnimationClip } from './AnimationClip';
 
 class AnimationLayer {
 
@@ -13,22 +14,29 @@ class AnimationLayer {
         this._frames = [];
         this._frameNumbersShowingOnionSkin = [];
         
-        this.createFrame();
+        this.createFrameAt(1);
         this.makeVisibleFrameNumber(1);
     }
 
     // Testing
+    hasOnionSkinEnabled() {
+        return this._hasOnionSkinEnabled;
+    }
+
     isVisible() {
         return this._isVisible;
     }
 
     isVisibleFrame(aFrameNumber) {
-        return this.findFrame(aFrameNumber).map(frame => frame.isVisible()).getOrElse(() => false);
+        return this.findFrame(aFrameNumber).satisfy(frame => frame.isVisible());
     }
-
 
     isKeyFrame(aFrameNumber) {
         return this.findFrame(aFrameNumber).get().isKeyFrame();
+    }
+
+    isExtendedFrame(aFrameNumber) {
+        return this.findFrame(aFrameNumber).satisfy(frame => frame.isExtendedFrame());
     }
 
     isAnimationClipFrame(aFrameNumber) {
@@ -42,32 +50,8 @@ class AnimationLayer {
         return aFrame.hasSameContentAs(anotherFrame);
     }
 
-    extendFrame(aFrameNumber) {
-        const frameToExtend = this.findFrame(aFrameNumber).get();
-        const extendedFrame = frameToExtend.extended();
-
-        this._frames.splice(aFrameNumber, 0, extendedFrame);
-    }
-
-    convertToKeyFrame(aFrameNumber) {
-        const targetFrame = this.findFrame(aFrameNumber).get();
-        targetFrame.convertToKeyFrame();
-
-        let nextFrameNumber = aFrameNumber + 1;
-
-        while (this.findFrame(nextFrameNumber).map(frame => !frame.isKeyFrame()).getOrElse(() => false)) {
-            this.findFrame(nextFrameNumber).get().changeContentFor(targetFrame._content);
-
-            nextFrameNumber += 1;
-        }
-    }
-
-    existFrameAtFrameNumber(aFrameNumber) {
-        return aFrameNumber >= 1 && aFrameNumber <= this.lastFrameNumber;
-    }
-
-    hasOnionSkinEnabled() {
-        return this._hasOnionSkinEnabled;
+    existFrameAt(aFrameNumber) {
+        return this.findFrame(aFrameNumber).isPresent();
     }
 
     // Accessing
@@ -102,27 +86,15 @@ class AnimationLayer {
         this._name = aNewName;
     }
 
-    createFrame() {
-        const newFrame = new Frame(this._createFrameContent(), {isKeyFrame: true});
-        this._frames.push(newFrame);
-
-        return newFrame;
+    hide() {
+        this._isVisible = false;
+        this.hideVisibleFrame();
+        this.deactivateOnionSkin();
     }
 
-    createFrameAt(aTargetFrameNumber) {
-        const newFrame = new Frame(this._createFrameContent(), {isKeyFrame: true});
-        
-        this.insertFrames([newFrame], {position: aTargetFrameNumber});
-
-        if (this.existFrameAtFrameNumber(aTargetFrameNumber + 1)) {
-            this.convertToKeyFrame(aTargetFrameNumber + 1);
-        }
-        
-        return newFrame;
-    }
-
-    insertFrames(frames, {position}) {
-        this._frames.splice(position - 1, 0, ...frames);
+    show() {
+        this._isVisible = true;
+        this.visibleFrame.show();
     }
 
     showFrame(aFrameNumber) {
@@ -135,6 +107,64 @@ class AnimationLayer {
             this.removeCurrentOnionSkins();
             this.showNewOnionSkins();
         };
+    }
+
+    activateFrame() {
+        this.visibleFrame.activate();
+    }
+
+    createFrameAt(aTargetFrameNumber) {
+        const newFrame = new Frame(this._createFrameContent(), {isKeyFrame: true});
+        
+        this.insertOneFrame(newFrame, {position: aTargetFrameNumber});
+        
+        return newFrame;
+    }
+
+    insertOneFrame(frame, {position}) {
+        return this.insertFrames([frame], {position});
+    }
+
+    insertFrames(frames, {position}) {
+        this._frames.splice(position - 1, 0, ...frames);
+        
+        const frameNumberAfterLastInsertedFrame = position + frames.length;
+        
+        // TODO: agregar tests para este metodo. Recordar caso de insertar frame entre frames extendidos
+        if (this.existFrameAt(frameNumberAfterLastInsertedFrame) && !this.framesHaveTheSameContent(position, frameNumberAfterLastInsertedFrame)) {
+            this.convertToKeyFrame(frameNumberAfterLastInsertedFrame);
+        }
+    }
+
+    extendFrame(aFrameNumber) {
+        const frameToExtend = this.findFrame(aFrameNumber).get();
+        
+        this.insertOneFrame(frameToExtend.extended(), {position: aFrameNumber + 1});
+    }
+
+    convertToKeyFrame(aFrameNumber) {
+        const targetFrame = this.findFrame(aFrameNumber).get();
+        targetFrame.convertToKeyFrame();
+        
+        let nextFrameNumber = aFrameNumber + 1;
+        while (this.isExtendedFrame(nextFrameNumber)) {
+            this.findFrame(nextFrameNumber).get().changeContentFor(targetFrame._content);
+
+            nextFrameNumber += 1;
+        }
+    }
+
+    extractToAnimationClip({name, startFrameNumber, endFrameNumber}) {
+        // TODO: falta testear lo de clonar el frame
+        const animationClipFrames =
+            this
+                .framesBetween(startFrameNumber, endFrameNumber)
+                .map((frame, index) => new AnimationClipFrame({name, content: frame.clone(), isKeyFrame: index === 0}));
+
+        this.removeFramesFromTimeLine({fromFrame: startFrameNumber, toFrame: endFrameNumber});
+        this.insertFrames(animationClipFrames, {position: startFrameNumber});
+        
+        return new AnimationClip(name, animationClipFrames);
     }
 
     deleteFrame(aFrameNumber) {
@@ -157,37 +187,6 @@ class AnimationLayer {
         this._frames.splice(frameToDeleteIndex, 1);
     }
 
-    extractToAnimationClip({name, startFrameNumber, endFrameNumber}) {
-        // TODO: falta testear lo de clonar el framee
-        const animationClipFrames =
-            this
-                .framesBetween(startFrameNumber, endFrameNumber)
-                .map((frame, index) => new AnimationClipFrame({name, content: frame.clone(), isKeyFrame: index === 0}));
-        
-        this._frames.splice(startFrameNumber - 1, animationClipFrames.length, ...animationClipFrames);
-
-        if (this.existFrameAtFrameNumber(endFrameNumber + 1)) {
-            this.convertToKeyFrame(endFrameNumber + 1);
-        }
-        
-        return animationClipFrames;
-    }
-
-    hide() {
-        this._isVisible = false;
-        this.hideVisibleFrame();
-        this.deactivateOnionSkin();
-    }
-
-    show() {
-        this._isVisible = true;
-        this.visibleFrame.show();
-    }
-
-    activateFrame() {
-        this.visibleFrame.activate();
-    }
-
     activateOnionSkin(onionSkinSettings) {
         this.removeCurrentOnionSkins(); // TODO: agrega test
         this._onionSkinSettings = onionSkinSettings;
@@ -203,7 +202,7 @@ class AnimationLayer {
         this.removeCurrentOnionSkins();
     }
 
-    // PRIVATE
+    // PRIVATE - Accessing
     get visibleFrame() {
         return this._frames[this._visibleFrameNumber - 1];
     }
@@ -216,6 +215,7 @@ class AnimationLayer {
         return this._frames.slice(startFrameNumber - 1, endFrameNumber);
     }
 
+    // PRIVATE - Actions
     hideVisibleFrame() {
         this.visibleFrame && this.visibleFrame.hide();
     }
@@ -223,6 +223,12 @@ class AnimationLayer {
     makeVisibleFrameNumber(aFrameNumber) {
         this.findFrame(aFrameNumber).ifPresent(frame => frame.show());
         this._visibleFrameNumber = aFrameNumber;
+    }
+
+    removeFramesFromTimeLine({fromFrame, toFrame}) {
+        this.framesBetween(fromFrame, toFrame).forEach((_) => {
+            this.deleteFrame(fromFrame); // TODO: ¡¡¡Ojo!!! se borra un elemento de la coleccion que se esta iterando
+        });
     }
 
     showNewOnionSkins() {
@@ -233,7 +239,7 @@ class AnimationLayer {
                 .fill()
                 .map((_, index) => index + 1)
                 .map(offset => this._visibleFrameNumber - offset)
-                .filter(frameNumber => this.existFrameAtFrameNumber(frameNumber));
+                .filter(frameNumber => this.existFrameAt(frameNumber));
         
         previousFramesShowingOnionSkin
             .reduce((opacity, frameNumber) => {
@@ -246,7 +252,7 @@ class AnimationLayer {
                 .fill()
                 .map((_, index) => index + 1)
                 .map(offset => this._visibleFrameNumber + offset)
-                .filter(frameNumber => this.existFrameAtFrameNumber(frameNumber));
+                .filter(frameNumber => this.existFrameAt(frameNumber));
 
         nextFramesShowingOnionSkin
             .reduce((opacity, frameNumber) => {

@@ -21,7 +21,7 @@ describe('AnimationLayer', () => {
 
     it('when a new frame is created it is not visible', () => {
         const animationLayer = createAnimationLayer();
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(2);
 
         expect(animationLayer.lastFrameNumber).toBe(2);
         expect(animationLayer.isVisibleFrame(1)).toBe(true);
@@ -36,7 +36,7 @@ describe('AnimationLayer', () => {
 
     it(`when it's' hidden all of it's frames are hidden`, () => {
         const animationLayer = createAnimationLayer();
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(2);
  
         animationLayer.hide()
 
@@ -57,7 +57,7 @@ describe('AnimationLayer', () => {
 
     it('when a hidden layer is ask to show a frame different to the previously visible frame that frame stays hidden', () => {
         const animationLayer = createAnimationLayer();
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(2);
         animationLayer.hide()
 
         animationLayer.showFrame(2);
@@ -68,7 +68,7 @@ describe('AnimationLayer', () => {
 
     it('when a hidden layer that was asked to show a frame different to the previous visible frame is shown again then the frame that was asked to show is visible', () => {
         const animationLayer = createAnimationLayer();
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(2);
         animationLayer.hide()
         animationLayer.showFrame(2);
 
@@ -81,7 +81,7 @@ describe('AnimationLayer', () => {
 
     it('when a hidden frame is shown then previous visible frame is hidden', () => {
         const animationLayer = createAnimationLayer();
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(2);
 
         animationLayer.showFrame(2);
 
@@ -90,9 +90,9 @@ describe('AnimationLayer', () => {
     });
 
     it(`when a layer with onion skins is hidden it's onion skins are hidden too`, () => {
-        const animationLayer = createAnimationLayer({numberOfFrames: 3, currentFrameNumber: 2});
-        animationLayer.createFrame();
-        animationLayer.createFrame();
+        const animationLayer = createAnimationLayer();
+        animationLayer.createFrameAt(2);
+        animationLayer.createFrameAt(3);
         animationLayer.showFrame(2);
         animationLayer.activateOnionSkin({beforeColor: 'red', afterColor: 'green', numberOfFramesBefore: 1, numberOfFramesAfter: 1, opacityStep: 0.5});
  
@@ -112,9 +112,9 @@ describe('AnimationLayer', () => {
 
     it('can be ask for details about it', () => {
         const animationLayer = createEmptyAnimationLayer();
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(1);
         animationLayer.extendFrame(1);
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(3);
 
         animationLayer.extractToAnimationClip({name: 'clip', startFrameNumber: 3, endFrameNumber: 3});
 
@@ -149,12 +149,12 @@ describe('AnimationLayer', () => {
         
         animationLayer.deleteFrame(1);
 
-        expect(animationLayer.existFrameAtFrameNumber(1)).toBe(false);
+        expect(animationLayer.existFrameAt(1)).toBe(false);
     });
 
     it('cuando se crea un frame, este tiene un contenido distinto al resto', () => {
         const animationLayer = createAnimationLayer();
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(2);
 
         expect(animationLayer.lastFrameNumber).toBe(2);
         expect(animationLayer.framesHaveTheSameContent(1, 2)).toBe(false);
@@ -170,7 +170,7 @@ describe('AnimationLayer', () => {
 
     it('cuando se extiende la duracion de un frame previo a otro, el frame resultante se inserta en el medio', () => {
         const animationLayer = createAnimationLayer();
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(2);
         animationLayer.extendFrame(1);
         
         expect(animationLayer.lastFrameNumber).toBe(3);
@@ -180,7 +180,7 @@ describe('AnimationLayer', () => {
 
     it('cuando se crea un frame, este es un keyframe', () => {
         const animationLayer = createAnimationLayer();
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(2);
 
         expect(animationLayer.isKeyFrame(2)).toBe(true);
     });
@@ -236,7 +236,7 @@ describe('AnimationLayer', () => {
     it('cuando un frame extendido seguido por algun keyframe es convertido a keyframe, el keyframe de la derecha no tienen el mismo contenido que el nuevo keyframe', () => {
         const animationLayer = createAnimationLayer();
         animationLayer.extendFrame(1);
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(3);;
 
         animationLayer.convertToKeyFrame(2);
         
@@ -247,7 +247,7 @@ describe('AnimationLayer', () => {
     it('cuando un keyframe que fue extendido es borrado, el frame siguiente se convierte en keyframe', () => {
         const animationLayer = createAnimationLayer();
         animationLayer.extendFrame(1);
-        animationLayer.createFrame();
+        animationLayer.createFrameAt(3);
 
         animationLayer.deleteFrame(1);
         
@@ -272,7 +272,8 @@ describe('AnimationLayer', () => {
 
     // TODO. mejorar el nombre del test
     it('cuando se crea un keyframe en medio de dos frames extendidos, el frame de la derecha que no sean keyframe se convierte en keyframe', () => {
-        const animationLayer = createAnimationLayer();
+        const animationLayer = createEmptyAnimationLayer();
+        animationLayer.createFrameAt(1);
         animationLayer.extendFrame(1);
         animationLayer.extendFrame(1);
         animationLayer.extendFrame(1);

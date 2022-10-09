@@ -16,6 +16,14 @@ class Optional {
     return new EmptyOptional();
   }
 
+  satisfy(aPredicate) {
+    subclassResponsibility(); 
+  }
+
+  isPresent() {
+    subclassResponsibility();
+  }
+
   ifPresent(aFunction) {
     subclassResponsibility();
   }
@@ -41,6 +49,14 @@ class NonEmptyOptional extends Optional {
     this._element = element;
   }
 
+  satisfy(aPredicate) {
+    return aPredicate(this._element); 
+  }
+
+  isPresent() {
+    return true;
+  }
+
   ifPresent(aFunction) {
     return aFunction(this._element);
   }
@@ -60,6 +76,14 @@ class NonEmptyOptional extends Optional {
 }
 
 class EmptyOptional extends Optional {
+
+  satisfy(aPredicate) {
+    return false; 
+  }
+
+  isPresent() {
+    return false;
+  }
 
   ifPresent(aFunction) {
     return this;

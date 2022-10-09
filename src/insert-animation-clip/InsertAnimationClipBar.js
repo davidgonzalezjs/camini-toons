@@ -5,27 +5,33 @@ export const InsertAnimationClipBar = ({onAccept, animationClipsDetails, layersD
     const [layerIndex, setLayerIndex] = useState(0); 
     const [position, setPosition] = useState(1);
   
-    const handleAnimationClipNameChange = event => setAnimationClipName(parseInt(event.target.value));
+    const handleAnimationClipNameChange = event => {
+        console.log('handleAnimationClipNameChange: ' + event.taget.value)
+        setAnimationClipName(event.target.value)
+    };
     const handleLayerChange = event => setLayerIndex(parseInt(event.target.value));
     const handleChangePosition = event => setPosition(parseInt(event.target.value));
     
     const handleInsert = () => {
-      onAccept(layerIndex, position, )
+      console.log('handleInsert: ' + animationClipName)
+        
+      onAccept('asd', layerIndex, position)
     };
     
     return (
         <div style={{backgroundColor: 'grey', padding: '10px'}}>
+            <label>Clip</label>
+            <select value={animationClipName} onChange={handleAnimationClipNameChange}>
+                {animationClipsDetails.map(clip =>
+                    <option value={clip.name}>{clip.name}</option>)}
+            </select>
+
+            <label>Capa</label>
             <select value={layerIndex} onChange={handleLayerChange}>
                 {layersDetails.map((layerDetails, index) =>
                     <option value={index}>{layerDetails.name}</option>)}
             </select>
             
-            <label>Clip</label>
-            <select value={animationClipName} onChange={handleAnimationClipNameChange}>
-                {animationClipsDetails.map((clip, index) =>
-                    <option value={index}>{clip.name}</option>)}
-            </select>
-
             <label>Posicion</label>
             <input type="number" value={position} onChange={handleChangePosition}/>
             

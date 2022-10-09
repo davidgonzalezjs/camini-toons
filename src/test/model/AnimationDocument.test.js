@@ -251,7 +251,7 @@ describe('AnimationLayer', () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createAnimationLayer();
         
-        animationDocument.changeActiveLayerTo(0);
+        animationDocument.activateLayer(0);
 
         expect(animationDocument.activeLayerIndex).toBe(0);
     });
@@ -294,7 +294,8 @@ describe('AnimationLayer', () => {
     });
 
     it('puede crear un nuevo keyframe antes de otro cuadro en una capa', () => {
-        const animationDocument = createAnimationDocument();
+        const animationDocument = createAnimationDocumentWithEmptyLayer();
+        animationDocument.createFrameOnLayer(0);
         animationDocument.extendFrameOnLayer({layerIndex: 0, frameNumber: 1});
 
         animationDocument.createFrameOnLayerAtFrame({layerIndex: 0, frameNumber: 1});

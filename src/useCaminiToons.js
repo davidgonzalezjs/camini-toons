@@ -148,7 +148,6 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   };
 
   const handleCreateBefore = ({layerIndex, frameNumber}) => {
-    console.log(`layerIndex: ${layerIndex} | frameNumber: ${frameNumber}}]`);
     caminiToons.createFrameBefore({layerIndex, frameNumber});
   };
 
@@ -160,8 +159,8 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.extractToAnimationClip({name: clipName, layerIndex, startFrameNumber, endFrameNumber});
   };
 
-  const handleInsertAnimationClick = (name, layerIndex, startFrameNumber) => {
-    caminiToons.insertAnimationClip({name, layerIndex, startFrameNumber});
+  const handleInsertAnimationClick = (name, layerIndex, position) => {
+    caminiToons.insertAnimationClip({name, layerIndex, position});
   };
 
   const handleOnionSkinSettingsChange = (newOnionSkinSettings) => {

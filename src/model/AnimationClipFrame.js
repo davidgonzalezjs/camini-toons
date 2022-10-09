@@ -19,6 +19,10 @@ class AnimationClipFrame {
         return this._isKeyFrame;
     }
 
+    isExtendedFrame() {
+        return !this.isKeyFrame();
+    }
+
     isEmpty() {
         return this._content.isEmpty();
     }
