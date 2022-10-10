@@ -12,14 +12,14 @@ const createEmptyAnimationLayer = () => {
 
 describe('AnimationLayer', () => {
 
-    it('starts with one visible frame', () => {
+    it('una capa nueva tiene un frame visible', () => {
         const animationLayer = createAnimationLayer();
 
         expect(animationLayer.lastFrameNumber).toBe(1);
         expect(animationLayer.isVisibleFrame(1)).toBe(true);
     });
 
-    it('when a new frame is created it is not visible', () => {
+    it('cuando crea un nuevo frame, este no es visible', () => {
         const animationLayer = createAnimationLayer();
         animationLayer.createFrameAt(2);
 
@@ -28,13 +28,13 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isVisibleFrame(2)).toBe(false);
     });
 
-    it(`it does not have a visible frame for a frame number larger than it's last frame`, () => {
+    it(`no tiene un frame visible mas alla del ultimo numero de frame`, () => {
         const animationLayer = createAnimationLayer();
         
         expect(animationLayer.isVisibleFrame(animationLayer.lastFrameNumber + 1)).toBe(false);
     });
 
-    it(`when it's' hidden all of it's frames are hidden`, () => {
+    it(`cuando esta escondida, todos sus frames lo estan`, () => {
         const animationLayer = createAnimationLayer();
         animationLayer.createFrameAt(2);
  
@@ -45,7 +45,7 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isVisibleFrame(2)).toBe(false);
     });
 
-    it('when a layer stop being hidden and shows the current frame', () => {
+    it('cuando se muestra una capa escondida, el frame actual vuelve a ser visible', () => {
         const animationLayer = createAnimationLayer();
         animationLayer.hide()
 
@@ -55,7 +55,7 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isVisibleFrame(1)).toBe(true);
     });
 
-    it('when a hidden layer is ask to show a frame different to the previously visible frame that frame stays hidden', () => {
+    it('cuando a una capa oculta se le pide mostrar un frame distinto al actual, dicho frame no se hace visible', () => {
         const animationLayer = createAnimationLayer();
         animationLayer.createFrameAt(2);
         animationLayer.hide()
@@ -66,7 +66,7 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isVisibleFrame(1)).toBe(false);
     });
 
-    it('when a hidden layer that was asked to show a frame different to the previous visible frame is shown again then the frame that was asked to show is visible', () => {
+    it('cuando a una capa oculta a la que se le habia pedido mostrar un frame distinto al actual se hace visible, entonces dicho frame se hace visible', () => {
         const animationLayer = createAnimationLayer();
         animationLayer.createFrameAt(2);
         animationLayer.hide()
@@ -79,7 +79,7 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isVisibleFrame(2)).toBe(true);
     });
 
-    it('when a hidden frame is shown then previous visible frame is hidden', () => {
+    it('cuando esta visible y se le pide mostrar un frame distinto al actual, solo el nuevo frame es visible', () => {
         const animationLayer = createAnimationLayer();
         animationLayer.createFrameAt(2);
 
@@ -89,7 +89,7 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isVisibleFrame(2)).toBe(true);
     });
 
-    it(`when a layer with onion skins is hidden it's onion skins are hidden too`, () => {
+    it(`cuando se oculta una capa que tenia activados, estos tambien se ocultan`, () => {
         const animationLayer = createAnimationLayer();
         animationLayer.createFrameAt(2);
         animationLayer.createFrameAt(3);
@@ -101,7 +101,7 @@ describe('AnimationLayer', () => {
         expect(animationLayer.hasOnionSkinEnabled()).toBe(false);
     });
 
-    it(`onion skins cannot be activated on a hidden layer`, () => {
+    it(`cuando esta oculta y se intenta activar los onion skins, estos no se activan`, () => {
         const animationLayer = createAnimationLayer();
         animationLayer.hide();
 
@@ -110,7 +110,7 @@ describe('AnimationLayer', () => {
         expect(animationLayer.hasOnionSkinEnabled()).toBe(false);
     });
 
-    it('can be ask for details about it', () => {
+    it('se le puede pedir detalles descriptivos', () => {
         const animationLayer = createEmptyAnimationLayer();
         animationLayer.createFrameAt(1);
         animationLayer.extendFrame(1);
@@ -131,20 +131,20 @@ describe('AnimationLayer', () => {
         });
     });
 
-    it('has a name', () => {
+    it('tiene un nombre', () => {
         const animationLayer = createAnimationLayer({name: 'layer name'});
 
         expect(animationLayer.name).toBe('layer name');
     });
 
-    it(`can change it's name`, () => {
+    it(`puede cambiar su nombre`, () => {
         const animationLayer = createAnimationLayer({name: 'original name'});
         animationLayer.changeNameTo('another name')
 
         expect(animationLayer.name).toBe('another name');
     });
 
-    it('can delete a frame', () => {
+    it('puede borrar un frame', () => {
         const animationLayer = createAnimationLayer({});
         
         animationLayer.deleteFrame(1);
