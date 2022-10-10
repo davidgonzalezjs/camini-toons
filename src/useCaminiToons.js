@@ -28,22 +28,22 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
       handleFrameChanged() {
         setCurrentFrameNumber(newCaminiToons.currentFrameNumber)
       },
-      handleLayerNameChanged() {
+      handleChangeLayerName() {
         setLayersDetails(newCaminiToons.layersDetails);
       },
-      handleVisibilityClick() {
+      handleToggleVisibility() {
         setLayersDetails(newCaminiToons.layersDetails);
       },
       handleOnionSkinChanged() {
         setLayersDetails(newCaminiToons.layersDetails);
         setOnionSkinSettings(newCaminiToons.onionSkinSettings);
       },
-      handleLayerUpdate() {
+      handleLayerUpdated() {
         setLayersDetails(newCaminiToons.layersDetails);
         setLastFrameNumber(newCaminiToons.lastFrameNumber);
         setAnimationClipsDetails(newCaminiToons.animationClipsDetails);
       },
-      handlePlayBackUpdate() {
+      handlePlayBackUpdated() {
         setIsPlaying(newCaminiToons.isPlaying());
         setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop());
       }
@@ -63,7 +63,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     setOnionSkinSettings(newCaminiToons.onionSkinSettings);
   }, [createCaminiToons, canvasRef]);
 
-  const handleToolIconClicked = aToolName => {
+  const handleChangeTool = aToolName => {
     caminiToons.useToolNamed(aToolName);
   };
 
@@ -71,7 +71,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.createFrameOnLayer(layerIndex);
   };
 
-  const handleFrameClick = ({layerIndex, frameNumber}) => {
+  const handleGoToFrame = ({layerIndex, frameNumber}) => {
     caminiToons.goToFrame(frameNumber);
   };
 
@@ -92,7 +92,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     }
   };
 
-  const handleVisibilityClick = (layerIndex) => {
+  const handleToggleVisibility = (layerIndex) => {
     if (caminiToons.isVisibleLayer(layerIndex)) {
       caminiToons.hideLayer(layerIndex);
     }
@@ -101,7 +101,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     }
   }
 
-  const handleOnionSkinClick = (layerIndex) => {
+  const handleToggleOnionSkin = (layerIndex) => {
     if (caminiToons.hasOnionSkinEnabledOnLayer(layerIndex)) {
       caminiToons.deactivateOnionSkinOnLayer(layerIndex);
     }
@@ -110,20 +110,18 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     }
   };
   
-  const handleFrameRateChange = (anEvent) => {
-    const newFrameRate = parseInt(anEvent.target.value);
-    
+  const handleChangeFrameRate = (newFrameRate) => {
     if (!isNaN(newFrameRate) && newFrameRate > 0) {
       caminiToons.changeFrameRateTo(newFrameRate);
       setFrameRate(newFrameRate);
     }
   };
 
-  const handleLayerClick = (layerIndex) => {
+  const handleActivateLayer = (layerIndex) => {
     caminiToons.activateLayer(layerIndex);
   }
 
-  const handleLayerNameChanged = (layerIndex, newName) => {
+  const handleChangeLayerName = (layerIndex, newName) => {
     caminiToons.changeNameOfLayer(layerIndex, newName);
   };
 
@@ -131,19 +129,19 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.createAnimationLayer();
   };
 
-  const handlePenStyleChanged = (newStyle) => {
+  const handleChangePenStyle = (newStyle) => {
     caminiToons.changePenStyle(newStyle);
   };
 
-  const handleEraserStyleChanged = (newStyle) => {
+  const handleChangeEraserStyle = (newStyle) => {
     caminiToons.changeEraserStyle(newStyle);
   };
 
-  const handleConvertFrameToKeyFrame = ({layerIndex, frameNumber}) => {
+  const handleConvertToKeyFrame = ({layerIndex, frameNumber}) => {
     caminiToons.convertToKeyFrame({layerIndex, frameNumber});
   };
 
-  const handleExtendFrameClick = ({layerIndex, frameNumber}) => {
+  const handleExtendFrameOnLayer = ({layerIndex, frameNumber}) => {
     caminiToons.extendFrameOnLayer({layerIndex, frameNumber});
   };
 
@@ -151,19 +149,19 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.createFrameBefore({layerIndex, frameNumber});
   };
 
-  const handleDeleteFrameClick = ({layerIndex, frameNumber}) => {
+  const handleDeleteFrame = ({layerIndex, frameNumber}) => {
     caminiToons.deleteFrame({layerIndex, frameNumber});
   };
 
-  const handleExtractToAnimationClipClick = (clipName, layerIndex, startFrameNumber, endFrameNumber) => {
+  const handleExtractToAnimationClip = (clipName, layerIndex, startFrameNumber, endFrameNumber) => {
     caminiToons.extractToAnimationClip({name: clipName, layerIndex, startFrameNumber, endFrameNumber});
   };
 
-  const handleInsertAnimationClick = (name, layerIndex, position) => {
+  const handleInsertAnimation = (name, layerIndex, position) => {
     caminiToons.insertAnimationClip({name, layerIndex, position});
   };
 
-  const handleOnionSkinSettingsChange = (newOnionSkinSettings) => {
+  const handleChangeOnionSkinSettings = (newOnionSkinSettings) => {
     caminiToons.changeOnionSkinSettings(newOnionSkinSettings);
   };
   
@@ -179,33 +177,33 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     isPlaying,
     isPlayingOnALoop,
 
-    handleToolIconClicked,
+    handleChangeTool,
     handleCreateFrame,
-    handleFrameClick,
+    handleGoToFrame,
     handlePlayAnimation,
     handleStopAnimation,
     handleRepeatAnimation,
-    handleVisibilityClick,
-    handleOnionSkinClick,
-    handleLayerClick,
-    handleFrameRateChange,
-    handleLayerNameChanged,
+    handleToggleVisibility,
+    handleToggleOnionSkin,
+    handleActivateLayer,
+    handleChangeFrameRate,
+    handleChangeLayerName,
     handleCreateLayerClick,
     
     penStyle,
-    handlePenStyleChanged,
+    handleChangePenStyle,
 
     eraserStyle,
-    handleEraserStyleChanged,
+    handleChangeEraserStyle,
 
-    handleConvertFrameToKeyFrame,
-    handleExtendFrameClick,
+    handleConvertToKeyFrame,
+    handleExtendFrameOnLayer,
     handleCreateBefore,
-    handleDeleteFrameClick,
-    handleExtractToAnimationClipClick,
-    handleInsertAnimationClick,
+    handleDeleteFrame,
+    handleExtractToAnimationClip,
+    handleInsertAnimation,
 
     onionSkinSettings,
-    handleOnionSkinSettingsChange
+    handleChangeOnionSkinSettings
   }
 }

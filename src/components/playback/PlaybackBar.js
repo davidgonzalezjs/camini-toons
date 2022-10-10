@@ -33,13 +33,13 @@ const PlaybackBarContainer = styled(Row)`
   align-items: center;
 `;
 
-export const PlaybackBar = ({currentFrameNumber, frameRate, isPlaying, isPlayingOnALoop, onFrameRateChage, onPlay, onStop, onRepeat}) =>
+export const PlaybackBar = ({caminiToons}) =>
     <PlaybackBarContainer>
-        <PlayButton active={!isPlaying} onClick={onPlay} />
-        <StopButton active={isPlaying} onClick={onStop} />
-        <RepeatButton active={isPlayingOnALoop} onClick={onRepeat} />
-        <FrameRateDisplay frameRate={frameRate} onFrameRateChage={onFrameRateChage} />
+        <PlayButton active={!caminiToons.isPlaying} onClick={caminiToons.handlePlayAnimation} />
+        <StopButton active={caminiToons.isPlaying} onClick={caminiToons.handleStopAnimation} />
+        <RepeatButton active={caminiToons.isPlayingOnALoop} onClick={caminiToons.handleRepeatAnimation} />
+        <FrameRateDisplay frameRate={caminiToons.frameRate} onFrameRateChage={event => caminiToons.handleChangeFrameRate(parseInt(event.target.value))} />
         <div>
-          <strong>Frame actual: </strong>{currentFrameNumber}
+          <strong>Frame actual: </strong>{caminiToons.currentFrameNumber}
         </div>
     </PlaybackBarContainer>;

@@ -20,20 +20,26 @@ export const InsertAnimationClipBar = ({onAccept, animationClipsDetails, layersD
     
     return (
         <div style={{backgroundColor: 'grey', padding: '10px'}}>
-            <label>Clip</label>
-            <select value={animationClipName} onChange={handleAnimationClipNameChange}>
-                {animationClipsDetails.map(clip =>
-                    <option value={clip.name}>{clip.name}</option>)}
-            </select>
+            <div>
+                <label>Clip</label>
+                <select value={animationClipName} onChange={handleAnimationClipNameChange}>
+                    {animationClipsDetails.map(clip =>
+                        <option value={clip.name}>{clip.name}</option>)}
+                </select>
+            </div>
 
-            <label>Capa</label>
-            <select value={layerIndex} onChange={handleLayerChange}>
-                {layersDetails.map((layerDetails, index) =>
-                    <option value={index}>{layerDetails.name}</option>)}
-            </select>
-            
-            <label>Posicion</label>
-            <input type="number" value={position} onChange={handleChangePosition}/>
+            <div>
+                <label>Capa</label>
+                <select value={layerIndex} onChange={handleLayerChange}>
+                    {layersDetails.map((layerDetails, index) =>
+                        <option value={index}>{layerDetails.name}</option>)}
+                </select>    
+            </div>
+
+            <div>
+                <label>Posicion</label>
+                <input type="number" value={position} onChange={handleChangePosition}/>    
+            </div>
             
             <button onClick={handleInsert}>Insertar</button>
         </div>

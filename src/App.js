@@ -12,11 +12,10 @@ import {ToolBoxBar} from './components/tool-box/ToolBoxBar';
 import TimeLine from './components/time-line/TimeLine';
 import {PlaybackBar} from './components/playback/PlaybackBar';
 import {OnionSkinBar} from './components/onion-skin/OnionSkinBar';
-import {CreateAnimationClipBar} from './components/create-animation-clip/CreateAnimationClipBar';
-import {InsertAnimationClipBar} from './insert-animation-clip/InsertAnimationClipBar';
 import Canvas from './components/Canvas';
 import {PenStylePanel} from './components/contextual-penel/PenStylePanel';
 import {EraserStylePanel} from './components/contextual-penel/EraserStylePanel';
+import {AnimationClipsLibrary} from './components/animation-clips-library/AnimationClipsLibrary';
 
 const AppContainer = styled(Column)`
   align-items: stretch;
@@ -28,51 +27,12 @@ const AppLogo = () =>
     style={{margin: 'auto'}}
     width={'300px'}
     src={caminiToonsLogo}
+    alt='Camini-Toons logo'
   />;
 
 function App({createCaminiToons}) {
   const canvasRef = useRef(null)
-  
-  const {
-    toolsNames,
-    selectedToolName,
-    frameRate,
-    currentFrameNumber,
-    lastFrameNumber,
-    layersDetails,
-    animationClipsDetails,
-    isPlaying,
-    isPlayingOnALoop,
-
-    handleToolIconClicked,
-    handleCreateFrame,
-    handleFrameClick,
-    handlePlayAnimation,
-    handleStopAnimation,
-    handleRepeatAnimation,
-    handleVisibilityClick,
-    handleOnionSkinClick,
-    handleFrameRateChange,
-    handleLayerClick,
-    handleLayerNameChanged,
-    handleCreateLayerClick,
-
-    penStyle,
-    handlePenStyleChanged,
-
-    eraserStyle,
-    handleEraserStyleChanged,
-
-    handleConvertFrameToKeyFrame,
-    handleExtendFrameClick,
-    handleCreateBefore,
-    handleDeleteFrameClick,
-    handleExtractToAnimationClipClick,
-    handleInsertAnimationClick,
-
-    onionSkinSettings,
-    handleOnionSkinSettingsChange,
-  } = useCaminiToons(canvasRef, createCaminiToons);
+  const caminiToons = useCaminiToons(canvasRef, createCaminiToons);
 
   const canvasWidth = 1280;
   const canvasHeight = 720;
@@ -83,56 +43,31 @@ function App({createCaminiToons}) {
         <AppLogo />
       </Row>
       
-      <TimeLine
-        currentFrameNumber={currentFrameNumber}
-        lastFrameNumber={lastFrameNumber}
-        layersDetails={layersDetails}
-        onLayerClick={handleLayerClick}
-        onLayerNameChanged={handleLayerNameChanged}
-        onAddFrameClick={handleCreateFrame}
-        onVisibilityClick={handleVisibilityClick}
-        onOnionSkinClick={handleOnionSkinClick}
-        onFrameClick={handleFrameClick}
-        onCreateLayerClick={handleCreateLayerClick}
-        onConvertFrameToKeyFrame={handleConvertFrameToKeyFrame}
-        onExtendFrameClick={handleExtendFrameClick}
-        onCreateBefore={handleCreateBefore}
-        onDeleteFrameClick={handleDeleteFrameClick}
-      />
+      <TimeLine caminiToons={caminiToons}/>
 
       <Row>
-        <PlaybackBar
-          currentFrameNumber={currentFrameNumber}
-          frameRate={frameRate}
-          isPlaying={isPlaying}
-          isPlayingOnALoop={isPlayingOnALoop}
-          onFrameRateChage={handleFrameRateChange}
-          onPlay={handlePlayAnimation}
-          onStop={handleStopAnimation}
-          onRepeat={handleRepeatAnimation}
-        />
-        <OnionSkinBar onionSkinSettings={onionSkinSettings} onChange={handleOnionSkinSettingsChange}/>
-        <CreateAnimationClipBar onAccept={handleExtractToAnimationClipClick} layersDetails={layersDetails}/>
-        <InsertAnimationClipBar onAccept={handleInsertAnimationClick} animationClipsDetails={animationClipsDetails} layersDetails={layersDetails}/>
+        <PlaybackBar caminiToons={caminiToons}/>
+        <OnionSkinBar onionSkinSettings={caminiToons.onionSkinSettings} onChange={caminiToons.handleChangeOnionSkinSettings}/>
       </Row>
 
       <Row>
         <ToolBoxBar
-          selectedToolName={selectedToolName}
-          toolsNames={toolsNames}
-          onToolIconClicked={handleToolIconClicked}
+          selectedToolName={caminiToons.selectedToolName}
+          toolsNames={caminiToons.toolsNames}
+          onToolIconClicked={caminiToons.handleChangeTool}
         />
 
         <Canvas
           ref={canvasRef}
           width={canvasWidth}
           height={canvasHeight}
-          selectedToolName={selectedToolName}
+          selectedToolName={caminiToons.selectedToolName}
         />
 
         <Column style={{backgroundColor: 'lightBlue', flexGrow: 1}}>
-          <PenStylePanel penStyle={penStyle} onChange={handlePenStyleChanged}/>
-          <EraserStylePanel eraserStyle={eraserStyle} onChange={handleEraserStyleChanged} />
+          <PenStylePanel penStyle={caminiToons.penStyle} onChange={caminiToons.handleChangePenStyle}/>
+          <EraserStylePanel eraserStyle={caminiToons.eraserStyle} onChange={caminiToons.handleChangeEraserStyle} />
+          <AnimationClipsLibrary caminiToons={caminiToons}/>
         </Column>
       </Row>
     </AppContainer>

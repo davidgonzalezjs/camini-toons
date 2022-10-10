@@ -89,22 +89,22 @@ class CaminiToons {
 
   activatePlayOnALoop() {
     this._animationDocument.activatePlayOnALoop();
-    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdated());
   }
 
   deactivatePlayOnALoop() {
     this._animationDocument.deactivatePlayOnALoop();
-    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdated());
   }
 
   playAnimation() {
     this._animationDocument.playAnimation();
-    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdated());
   }
 
   stopAnimation() {
     this._animationDocument.stopAnimation();
-    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdated());
   }
 
   goToFrame(aFrameNumber) {
@@ -122,44 +122,43 @@ class CaminiToons {
 
   createFrameOnLayer(aLayerIndex) {
     this._animationDocument.createFrameOnLayer(aLayerIndex);
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
   createFrameBefore({layerIndex, frameNumber}) {
-    console.log('frameNumber: ' + frameNumber)
     this._animationDocument.createFrameBefore({layerIndex, frameNumber});
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
   convertToKeyFrame({layerIndex, frameNumber}) {
     this._animationDocument.convertToKeyFrame({layerIndex, frameNumber});
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
   extendFrameOnLayer({layerIndex, frameNumber}) {
     this._animationDocument.extendFrameOnLayer({layerIndex, frameNumber});
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
   extractToAnimationClip({name, layerIndex, startFrameNumber, endFrameNumber}) {
     this._animationDocument.extractToAnimationClip({name, layerIndex, startFrameNumber, endFrameNumber});
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
   insertFrames({layerIndex, position, frames}) {
     this._animationDocument.insertFrames({layerIndex, position, frames});
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());  
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());  
   }
 
   insertAnimationClip({name, layerIndex, position}) {
     this._animationDocument.insertAnimationClip({name, layerIndex, position});
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
   deleteFrame({layerIndex, frameNumber}) {
     this._animationDocument.deleteFrameOnLayer({layerIndex, frameNumber});
     this.goToFrame(frameNumber);
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
   activateOnionSkinOnLayer(aLayerIndex) {
@@ -183,18 +182,18 @@ class CaminiToons {
 
   createAnimationLayer() {
     this._animationDocument.createAnimationLayer();
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
   activateLayer(aLayerIndex) {
     this._animationDocument.activateLayer(aLayerIndex);
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
   // Actions - Drawing
   createPath(aPathStyle) {
     const newPath = this._animationDocument.createPath(aPathStyle);
-    this._listener.ifPresent(listener => listener.handleLayerUpdate());
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
 
     return newPath;
   }
@@ -251,17 +250,17 @@ class CaminiToons {
   // Actions - Layers
   changeNameOfLayer(aLayerIndex, newLayerName) {
     this._animationDocument.changeNameOfLayer(aLayerIndex, newLayerName);
-    this._listener.ifPresent(listener => listener.handleLayerNameChanged());
+    this._listener.ifPresent(listener => listener.handleChangeLayerName());
   }
 
   showLayer(aLayerIndex) {
     this._animationDocument.showLayer(aLayerIndex);
-    this._listener.ifPresent(listener => listener.handleVisibilityClick());
+    this._listener.ifPresent(listener => listener.handleToggleVisibility());
   }
 
   hideLayer(aLayerIndex) {
     this._animationDocument.hideLayer(aLayerIndex);
-    this._listener.ifPresent(listener => listener.handleVisibilityClick());
+    this._listener.ifPresent(listener => listener.handleToggleVisibility());
   }
 
   // 

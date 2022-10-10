@@ -17,15 +17,29 @@ export const CreateAnimationClipBar = ({onAccept, layersDetails}) => {
     
     return (
         <div style={{backgroundColor: 'grey', padding: '10px'}}>
-            <input type="text" value={clipName} onChange={handleClipNameChange} />
-            <select value={layerIndex} onChange={handleLayerChange}>
-            {layersDetails.map((layerDetails, index) =>
-                <option value={index}>{layerDetails.name}</option>)}
-            </select>
-            <label>Desde</label>
-            <input type="number" value={startFrameNumber} onChange={handleStartFrameNumberChange}/>
-            <label>Hasta</label>
-            <input type="number" value={endFrameNumber} onChange={handleEndFrameNumberChange}/>
+            <div>
+                <label>Nombre</label>
+                <input type="text" value={clipName} onChange={handleClipNameChange} />
+            </div>
+
+            <div>
+                <label>Capa</label>
+                <select value={layerIndex} onChange={handleLayerChange}>
+                {layersDetails.map((layerDetails, index) =>
+                    <option value={index}>{layerDetails.name}</option>)}
+                </select>
+            </div>
+
+            <div>
+                <label>Desde</label>
+                <input type="number" value={startFrameNumber} onChange={handleStartFrameNumberChange}/>    
+            </div>
+            
+            <div>
+                <label>Hasta</label>
+                <input type="number" value={endFrameNumber} onChange={handleEndFrameNumberChange}/>
+            </div>
+
             <button onClick={handleCreate}>Crear</button>
         </div>
     );

@@ -173,6 +173,7 @@ class AnimationDocument {
   createFrameOnLayerAtFrame({layerIndex, frameNumber}) {
     this._activeLayerIndex = layerIndex; // TODO: agregar test
     
+    //this.activeLayer.hideVisibleFrame();
     this.activeLayer.createFrameAt(frameNumber);
     this.goToFrame(frameNumber);
   }
@@ -277,7 +278,7 @@ class AnimationDocument {
   stopPlaying() {
     this._state = new AnimationIdleState();
     this._animationLayers.forEach(layer => layer.stopPlaying()); // TODO: escribir test verificando esto
-    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdated());
   }
 
   // PRIVATE - actions - listeners
