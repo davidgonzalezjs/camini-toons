@@ -6,7 +6,6 @@ export const InsertAnimationClipBar = ({onAccept, animationClipsDetails, layersD
     const [position, setPosition] = useState(1);
   
     const handleAnimationClipNameChange = event => {
-        console.log('handleAnimationClipNameChange: ' + event.taget.value)
         setAnimationClipName(event.target.value)
     };
     const handleLayerChange = event => setLayerIndex(parseInt(event.target.value));

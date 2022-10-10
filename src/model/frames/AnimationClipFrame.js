@@ -1,32 +1,13 @@
-import Optional from './Optional';
 import Frame from './Frame';
 
-class AnimationClipFrame {
+class AnimationClipFrame extends Frame {
 
     constructor({name, content, isKeyFrame}) {
+        super(content, {isKeyFrame});
         this._name = name;
-        this._isKeyFrame = isKeyFrame;
-        this._content = content;
-        this._optionalOnionSkin = Optional.empty();
-        this.hide();
     }
 
-    hasSameContentAs(aFrame) {
-        return this._content === aFrame._content;
-    }
-
-    isKeyFrame() {
-        return this._isKeyFrame;
-    }
-
-    isExtendedFrame() {
-        return !this.isKeyFrame();
-    }
-
-    isEmpty() {
-        return this._content.isEmpty();
-    }
-
+    // Testing
     isVisible() {
         return this._content.isVisible();
     }
@@ -35,10 +16,7 @@ class AnimationClipFrame {
         return true;
     }
 
-    activate() {
-        this._content.activate();
-    }
-
+    // Actions
     show() {
         this._content.show();
     }
@@ -60,11 +38,7 @@ class AnimationClipFrame {
     }
 
     convertToKeyFrame() {
-        this._isKeyFrame = true;
-    }
-
-    changeContentFor(newContent) {
-        this._content = newContent;
+        this._isKeyFrame = true; // TODO: delegar en content
     }
 
     extended() {

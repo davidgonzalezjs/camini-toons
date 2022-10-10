@@ -1,29 +1,7 @@
-import Optional from './Optional';
+import Optional from '../Optional';
+import Frame from './Frame';
 
-class Frame {
-
-    constructor(content, {isKeyFrame}) {
-        this._isKeyFrame = isKeyFrame;
-        this._content = content;
-        this._optionalOnionSkin = Optional.empty();
-        this.hide();
-    }
-
-    hasSameContentAs(aFrame) {
-        return this._content === aFrame._content;
-    }
-
-    isKeyFrame() {
-        return this._isKeyFrame;
-    }
-
-    isExtendedFrame() {
-        return !this.isKeyFrame();
-    }
-
-    isEmpty() {
-        return this._content.isEmpty();
-    }
+class RegularFrame extends Frame {
 
     isVisible() {
         return this._content.visible;
@@ -31,10 +9,6 @@ class Frame {
 
     isAnimationClip() {
         return false;
-    }
-
-    activate() {
-        this._content.activate();
     }
 
     show() {
@@ -75,21 +49,17 @@ class Frame {
         this._content = this._content.clone();
     }
 
-    changeContentFor(newContent) {
-        this._content = newContent;
-    }
-
     extended() {
-        const extendedFrame = new Frame(this._content, {isKeyFrame: false}); 
+        const extendedFrame = new RegularFrame(this._content, {isKeyFrame: false}); 
         extendedFrame.show();
 
         return extendedFrame;
     }
 
     clone() {
-        return new Frame(this._content.clone(), {isKeyFrame: this.isKeyFrame()});
+        return new RegularFrame(this._content.clone(), {isKeyFrame: this.isKeyFrame()});
     }
 
 }
 
-export default Frame;
+export default RegularFrame;

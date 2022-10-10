@@ -1,5 +1,5 @@
-import Frame from './Frame';
-import AnimationClipFrame from './AnimationClipFrame';
+import RegularFrame from './frames/RegularFrame';
+import AnimationClipFrame from './frames/AnimationClipFrame';
 import Optional from './Optional'
 import { AnimationClip } from './AnimationClip';
 
@@ -114,7 +114,7 @@ class AnimationLayer {
     }
 
     createFrameAt(aTargetFrameNumber) {
-        const newFrame = new Frame(this._createFrameContent(), {isKeyFrame: true});
+        const newFrame = new RegularFrame(this._createFrameContent(), {isKeyFrame: true});
         
         this.insertOneFrame(newFrame, {position: aTargetFrameNumber});
         
