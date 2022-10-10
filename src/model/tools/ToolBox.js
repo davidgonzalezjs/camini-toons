@@ -35,6 +35,7 @@ class ToolBox {
   }
 
   useToolNamed(aToolName) {
+    if (this._selectedTool) { this._selectedTool.clear() };
     this._selectedTool = this.toolNamed(aToolName);
   }
 

@@ -225,11 +225,11 @@ class AnimationDocument {
   }
 
   createPath(aPathStyle) {
-    subclassResponsibility();
+    subclassResponsibility('createPath');
   }
 
   createCircle(circleSettings) {
-    subclassResponsibility();
+    subclassResponsibility('createCircle');
   }
 
   deselectAllDrawings() {

@@ -6,9 +6,9 @@ const Canvas = styled.canvas`
   border: 1px solid grey;
   background-color: white;
    
-  ${({selectedToolName}) => selectedToolName === 'pen' && css`    
+  ${({selectedToolName}) => (selectedToolName === 'pen' || selectedToolName === 'eraser') && css`    
     &:hover {
-      cursor: crosshair;
+      cursor: none;
     }
   `}
 `;

@@ -17,27 +17,27 @@ class Optional {
   }
 
   satisfy(aPredicate) {
-    subclassResponsibility(); 
+    subclassResponsibility('satisfy'); 
   }
 
   isPresent() {
-    subclassResponsibility();
+    subclassResponsibility('isPresent');
   }
 
   ifPresent(aFunction) {
-    subclassResponsibility();
+    subclassResponsibility('ifPresent');
   }
 
   get() {
-    subclassResponsibility();
+    subclassResponsibility('get');
   }
 
   map(aMappingFunction) {
-    subclassResponsibility();
+    subclassResponsibility('map');
   }
 
   getOrElse(elseFunction) {
-    subclassResponsibility();
+    subclassResponsibility('getOrElse');
   }
 
 }

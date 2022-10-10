@@ -17,7 +17,7 @@ export function createCaminiToons(anHTMLCanvas) {
   Paper.view.onFrame = (event) => clock.onTimePass(event.time);
 
   Paper.view.onMouseDown = (event) => caminiToons.handleMouseDown(event);
-  Paper.view.onMouseDrag = (event) => caminiToons.handleMouseMove(event);
+  Paper.view.onMouseMove = (event) => caminiToons.handleMouseMove(event);
   Paper.view.onMouseUp = (event) => caminiToons.handleMouseUp(event);
   Paper.view.onKeyDown = (event) => caminiToons.handleKeyDown(event);
 

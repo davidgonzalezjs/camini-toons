@@ -238,12 +238,12 @@ class CaminiToons {
   }
 
   changePenStyle(newPenStyle) {
-    this._toolBox.pen.changeStyleTo(newPenStyle);
+    this._toolBox.pen.changeStyleTo(newPenStyle, this);
     this._listener.ifPresent(listener => listener.handleToolChanged('pen'));
   }
 
   changeEraserStyle(newEraserStyle) {
-    this._toolBox.eraser.changeStyleTo(newEraserStyle);
+    this._toolBox.eraser.changeStyleTo(newEraserStyle, this);
     this._listener.ifPresent(listener => listener.handleToolChanged('eraser'));
   }
 

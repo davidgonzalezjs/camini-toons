@@ -6,45 +6,25 @@ class Eraser extends Tool {
   constructor() {
     super();
     this._style = {radius: 30};
-    this._area = Optional.empty();
   }
 
   get name() {
     return 'eraser';
   }
 
-  get style() {
-    return this._style;
-  }
-
-  changeStyleTo(newStyle) {
-    this._style = newStyle;
-  }
-
   handleMouseDown(anEvent, aCaminiToons) {
-    const area = aCaminiToons.createCircle({center: anEvent.point, strokeColor: 'grey', ...this.style});
-    this._area = Optional.with(area);
-
+    super.handleMouseDown(anEvent, aCaminiToons);
     this.eraseOn(aCaminiToons);
   }
 
   handleMouseMove(anEvent, aCaminiToons) {
-    this._area.ifPresent(area => {
-        area.position = anEvent.point;
-        this.eraseOn(aCaminiToons);
-    });
-  }
-
-  handleMouseUp(anEvent, aCaminiToons) {
-    this._area.ifPresent(area => area.remove());
-    this._area = Optional.empty();
-  }
-
-  handleKeyDown(anEvent) {
-    
+    super.handleMouseMove(anEvent, aCaminiToons);
+    this.eraseOn(aCaminiToons);
   }
 
   eraseOn(aCaminiToons) {
+    if (!this._isActive) return;
+
     const area = this._area.get();
     
     // TODO: corregir. Estoy rompiendo el encapsulamiento como un campeon por todos lados
@@ -69,6 +49,11 @@ class Eraser extends Tool {
             aDrawing.remove()
         }
     })
+  }
+  
+  createArea(aPosition, aCaminiToons) {
+    const area = aCaminiToons.createCircle({center: aPosition, strokeColor: 'grey', ...this.style})
+    this._area = Optional.fromNullable(area);
   }
 
   isCollidingWith(aDrawing) {

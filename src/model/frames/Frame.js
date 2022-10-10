@@ -28,11 +28,11 @@ export class Frame {
     }
 
     isVisible() {
-        subclassResponsibility();
+        subclassResponsibility('isVisible');
     }
 
     isAnimationClip() {
-        subclassResponsibility();
+        subclassResponsibility('isAnimationClip');
     }
 
     // Actions
@@ -41,23 +41,23 @@ export class Frame {
     }
 
     show() {
-        subclassResponsibility();
+        subclassResponsibility('shown');
     }
 
     hide() {
-        subclassResponsibility();
+        subclassResponsibility('hide');
     }
 
     deleteContent() {
-        subclassResponsibility();
+        subclassResponsibility('deleteContent');
     }
 
     showOnionSkin(aStokeColor, opacity) {
-        subclassResponsibility();
+        subclassResponsibility('showOnionSkin');
     }
 
     hideOnionSkin() {
-        subclassResponsibility();
+        subclassResponsibility('hideOnionSkin');
     }
 
     convertToKeyFrame() {
@@ -72,11 +72,11 @@ export class Frame {
     }
 
     extended() {
-        subclassResponsibility();
+        subclassResponsibility('extended');
     }
 
     clone() {
-        subclassResponsibility();
+        subclassResponsibility('clone');
     }
 
 }

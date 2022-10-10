@@ -13,6 +13,7 @@ class LessMokedAnimationDocument extends AnimationDocument {
     
     this.hitTest = jest.fn(() => Optional.empty());
     this.createPath = jest.fn(() => mockPath());
+    this.createCircle = jest.fn(() => mockPath());
   }
 
 }
