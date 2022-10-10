@@ -290,4 +290,19 @@ describe('AnimationLayer', () => {
         expect(animationLayer.isKeyFrame(4)).toBe(true);
         expect(animationLayer.isKeyFrame(5)).toBe(false);
     });
+        
+    it('cuando se crea un nuevo frame en donde se encuentra el frame actual, solo el nuevo frame es visible', () => {
+        const animationLayer = createEmptyAnimationLayer();
+        const aFrame = animationLayer.createFrameAt(1);
+
+        const anotherFrame = animationLayer.createFrameAt(1);
+
+        expect(animationLayer.lastFrameNumber).toBe(2);
+
+        expect(aFrame.isVisible()).toBe(false);
+        expect(anotherFrame.isVisible()).toBe(true);
+        
+        expect(animationLayer.isVisibleFrame(1)).toBe(true);
+        expect(animationLayer.isVisibleFrame(2)).toBe(false);
+    });
 });

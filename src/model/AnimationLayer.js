@@ -126,8 +126,10 @@ class AnimationLayer {
     }
 
     insertFrames(frames, {position}) {
+        this.hideVisibleFrame();
         this._frames.splice(position - 1, 0, ...frames);
-        
+        this.showFrame(this._visibleFrameNumber);
+
         const frameNumberAfterLastInsertedFrame = position + frames.length;
         
         // TODO: agregar tests para este metodo. Recordar caso de insertar frame entre frames extendidos
@@ -223,6 +225,7 @@ class AnimationLayer {
     makeVisibleFrameNumber(aFrameNumber) {
         this.findFrame(aFrameNumber).ifPresent(frame => frame.show());
         this._visibleFrameNumber = aFrameNumber;
+        this._visibleFrame = this.findFrame(aFrameNumber);
     }
 
     removeFramesFromTimeLine({fromFrame, toFrame}) {
