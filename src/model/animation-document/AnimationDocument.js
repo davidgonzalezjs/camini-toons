@@ -196,7 +196,7 @@ class AnimationDocument {
 
   insertFrames({layerIndex, position, frames}) {
     this._animationLayers[layerIndex].insertFrames(frames, {position});
-  }
+  } 
 
   insertAnimationClip({name, layerIndex, position}) {
     console.log(`name: ${name} - layerIndex: ${layerIndex} - position: ${position}`)
@@ -278,7 +278,7 @@ class AnimationDocument {
   stopPlaying() {
     this._state = new AnimationIdleState();
     this._animationLayers.forEach(layer => layer.stopPlaying()); // TODO: escribir test verificando esto
-    this._listener.ifPresent(listener => listener.handlePlayBackUpdated());
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
   }
 
   // PRIVATE - actions - listeners
