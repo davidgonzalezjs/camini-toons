@@ -1,5 +1,4 @@
 import AnimationDocument from '../../model/animation-document/AnimationDocument';
-import AnimationLayer from '../../model/AnimationLayer';
 import {createFrameContent} from '../helpers/mocks';
 
 const createAnimationDocument = (props = {}) => new AnimationDocument({createFrameContent, hitTest: () => {}});
@@ -13,7 +12,7 @@ const createAnimationDocumentWithEmptyLayer = () => {
 
 describe('AnimationLayer', () => {
 
-    it(`starts with a layer containing one frame`, () => {
+    it(`inicialmente cuenta con una capa con un frame`, () => {
         const animationDocument = createAnimationDocument();
 
         expect(animationDocument.layersDetails).toHaveLength(1);
@@ -21,7 +20,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.layersDetails[0].frames).toHaveLength(1);
     });
 
-    it(`can change the name of a layer`, () => {
+    it(`puede cambiar el nombre de una capa`, () => {
         const animationDocument = createAnimationDocument();
 
         animationDocument.changeNameOfLayer(0, 'another name');
@@ -53,7 +52,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.hasVisibleFrameAt({layerIndex: 1, frameNumber: 2})).toBe(false);
     });
 
-    it(`can go to a specific frame`, () => {
+    it(`puede ir a un frame especifico`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
 
@@ -62,7 +61,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(1);
     });
 
-    it(`when tries to go to a frame after the last frame it goes to the last frame`, () => {
+    it(`cuando se intenta ir a un frame posterior al ultimo, va hasta el ultimo`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
 
@@ -71,7 +70,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(2);
     });
 
-    it(`when tries to go to a frame before the first frame it goes to the first frame`, () => {
+    it(`cuando se intenta ir a un frame previo al primero, va al primero`, () => {
         const animationDocument = createAnimationDocument();
         
         animationDocument.goToFrame(0);
@@ -79,7 +78,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(1);
     });
 
-    it(`when there is some next frame can go to the next frame`, () => {
+    it(`puede avanzar al siguiente frame`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
         animationDocument.goToFrame(1);
@@ -89,7 +88,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(2);
     });
 
-    it(`can go to the previous frame`, () => {
+    it(`puede volver al frame previo`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
         animationDocument.goToFrame(2);
@@ -99,7 +98,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(1);
     });
 
-    it(`when it's iddle it does not change frame during a tick`, () => {
+    it(`cuando esta en modo "idle" y sucede un "tick", no cambia de frame actual`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
         animationDocument.createFrameOnLayer(0);
@@ -110,7 +109,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(1);
     });
 
-    it(`when it's playing and have only one layer it advance one frame per tick on that layer `, () => {
+    it(`cuando esta en modo "reproduccion" y tiene una sola capa, avanza un frame por tick en dicha capa`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
         animationDocument.createFrameOnLayer(0);
@@ -124,7 +123,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(2);
     });
 
-    it(`when it's playing and haves many layers with many frames it advance one frame per tick on all layers `, () => {
+    it(`cuando esta en modo "reproduccion" y tiene varias capas, avanza un frame por tick en todas las capas`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createAnimationLayer();
         animationDocument.createFrameOnLayer(0);
@@ -141,7 +140,7 @@ describe('AnimationLayer', () => {
         //expect(animatinoDocument._)
     });
 
-    it(`when it's playing it stops at the last frame`, () => {
+    it(`cuando esta en modo "reproduccion" y llega al ultimo frame, se detiene`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
         animationDocument.createFrameOnLayer(0);
@@ -157,7 +156,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(3);
     });
 
-    it(`when it's playing on a loop and reaches the last frame on the next tick starts again`, () => {
+    it(`cuando esta reproduciendo una animacion en modo "loop" y llega al ultimo frame, en el proximo "tick" comienza desde el principio`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
         animationDocument.createFrameOnLayer(0);
@@ -174,7 +173,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(1);
     });
 
-    it(`playing on a loop can be deactivated`, () => {
+    it(`la reproduccion en modo "loop" puede ser desactivada`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
         animationDocument.createFrameOnLayer(0);
@@ -192,7 +191,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(3);
     });
 
-    it(`an animation can be stopped in the middle`, () => {
+    it(`una animacion puede ser detenida`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createFrameOnLayer(0);
         animationDocument.createFrameOnLayer(0);
@@ -209,7 +208,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.currentFrameNumber).toBe(1);
     });
 
-    it(`can create a new layer`, () => {
+    it(`puede crear una nueva capa`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createAnimationLayer();
 
@@ -220,7 +219,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.layersDetails[1].isActive).toBe(false);
     });
 
-    it(`can create many layers`, () => {
+    it(`puede crear varias capas`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createAnimationLayer();
 
@@ -229,7 +228,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.layersDetails[1].name).toBe("Capa 2");
     });
 
-    it(`can create a frame on a layer`, () => {
+    it(`puede crear un frame en una capa`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createAnimationLayer();
 
@@ -241,13 +240,13 @@ describe('AnimationLayer', () => {
         expect(animationDocument.layersDetails[1].frames.length).toBe(3);
     });
 
-    it(`when it has one layer that is the active layer`, () => {
+    it(`cuando tiene una sola capa, dicha capa es la capa activa`, () => {
         const animationDocument = createAnimationDocument();
         
         expect(animationDocument.activeLayerIndex).toBe(0);
     });
 
-    it(`the active layer can be changed`, () => {
+    it(`la capa activa puede ser cambiada`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createAnimationLayer();
         
@@ -256,13 +255,13 @@ describe('AnimationLayer', () => {
         expect(animationDocument.activeLayerIndex).toBe(0);
     });
 
-    it(`starts with a visible layer`, () => {
+    it(`comienza con una capa visible`, () => {
         const animationDocument = createAnimationDocument();
 
         expect(animationDocument.isVisibleLayer(0)).toBe(true);
     });
 
-    it(`can hide a layer`, () => {
+    it(`puede ocultar una capa`, () => {
         const animationDocument = createAnimationDocument();
 
         animationDocument.hideLayer(0);
@@ -270,7 +269,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.isVisibleLayer(0)).toBe(false);
     });
 
-    it(`can show a hidden layer`, () => {
+    it(`puede mostrar una capa oculta`, () => {
         const animationDocument = createAnimationDocument();
         animationDocument.hideLayer(0);
 
@@ -279,7 +278,7 @@ describe('AnimationLayer', () => {
         expect(animationDocument.isVisibleLayer(0)).toBe(true);
     });
 
-    it('can delete a frame from a layer', () => {
+    it('puede borrar un frame de una capa', () => {
         const animationDocument = createAnimationDocument();
         animationDocument.createAnimationLayer();
         animationDocument.createFrameOnLayer(0);

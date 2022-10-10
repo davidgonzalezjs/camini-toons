@@ -63,7 +63,7 @@ describe('Onion skin', () => {
 
   it(`GIVEN it is enabled WHEN it's deactivated and change the current frame THEN there are no frames showing an onion skin`, () => {
     const animationLayer = createAnimationLayer();
-    animationLayer.createFrameAt(2);
+    animationLayer.createFrameAt();
     animationLayer.activateOnionSkin(onionSkinSettingsWithOneFrameAfterAndBefore);
     animationLayer.deactivateOnionSkin();
 
