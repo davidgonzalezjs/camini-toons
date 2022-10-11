@@ -1,32 +1,56 @@
-import Row from '../Row';
-import {Label, Input, ColorPicker} from '../input/Input';
+import {InputContainer, InputGroup, InputCell, Label, Input, ColorPicker} from '../input/Input';
 
 export const OnionSkinBar = ({onionSkinSettings, onChange}) => {
   return (
-    <Row>
-        <Row>
-            <Label>Color anterior</Label>
-            <ColorPicker color={onionSkinSettings.beforeColor} onChange={color => onChange({...onionSkinSettings, beforeColor: color})}/>
-        </Row>
-        <Row>
-            <Label>Color siguiente</Label>
-            <ColorPicker color={onionSkinSettings.afterColor} onChange={color => onChange({...onionSkinSettings, afterColor: color})}/>
-        </Row>
+    <InputContainer>
+        <InputGroup>
+            <InputCell>
+                <Label>Color anterior</Label>
+            </InputCell>
 
-        <Row>
-            <Label>Cuadros previos</Label>
-            <Input type="number" min="0" value={onionSkinSettings.numberOfFramesBefore} onChange={event => onChange({...onionSkinSettings, numberOfFramesBefore: parseInt(event.target.value)})}/>
-        </Row>
+            <InputCell>
+                <ColorPicker color={onionSkinSettings.beforeColor} onChange={color => onChange({...onionSkinSettings, beforeColor: color})}/>
+            </InputCell>
+        </InputGroup>
 
-        <Row>
-            <Label>Color siguiente</Label>
-            <Input type="number" min="0" value={onionSkinSettings.numberOfFramesAfter} onChange={event => onChange({...onionSkinSettings, numberOfFramesAfter: parseInt(event.target.value)})}/>
-        </Row>
+        <InputGroup>
+            <InputCell>
+                <Label>Color siguiente</Label>
+            </InputCell>
 
-        <Row>
-            <Label>Opacidad</Label>
-            <Input type="number" min="0" value={onionSkinSettings.opacityStep} onChange={event => onChange({...onionSkinSettings, opacityStep: parseFloat(event.target.value)})}/>
-        </Row>
-    </Row>
+            <InputCell>
+                <ColorPicker color={onionSkinSettings.afterColor} onChange={color => onChange({...onionSkinSettings, afterColor: color})}/>
+            </InputCell>
+        </InputGroup>
+
+        <InputGroup>
+            <InputCell>
+                <Label>Cuadros previos</Label>
+            </InputCell>
+
+            <InputCell>
+                <Input type="number" min="0" value={onionSkinSettings.numberOfFramesBefore} onChange={event => onChange({...onionSkinSettings, numberOfFramesBefore: parseInt(event.target.value)})}/>
+            </InputCell>    
+        </InputGroup>
+
+        <InputGroup>
+            <InputCell>
+                <Label>Color siguiente</Label>
+            </InputCell>
+
+            <InputCell>
+                <Input type="number" min="0" value={onionSkinSettings.numberOfFramesAfter} onChange={event => onChange({...onionSkinSettings, numberOfFramesAfter: parseInt(event.target.value)})}/>
+            </InputCell>
+        </InputGroup>
+
+        <InputGroup>
+            <InputCell>
+                <Label>Opacidad</Label>
+            </InputCell>
+            <InputCell>
+                <Input type="number" min="0" value={onionSkinSettings.opacityStep} onChange={event => onChange({...onionSkinSettings, opacityStep: parseFloat(event.target.value)})}/>
+            </InputCell>
+        </InputGroup>
+    </InputContainer>
   );
 }

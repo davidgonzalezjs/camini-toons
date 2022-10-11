@@ -1,25 +1,34 @@
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
-import Column from '../Column'
+import {Card} from '../Card'
 
 import {useContextMenu} from '../context-menu/useContextMenu';
 
-const FrameContextMenuContainer = styled(Column)`
-  padding: 10px;
-  border: 2px solid grey;
-  border-radius: 10px;
-  background-color: darkgrey;
-
+const FrameContextMenuContainer = styled(Card)`
   position: absolute;
   left: ${props => props.position.x}px;
   top: ${props => props.position.y}px;
   
   display: ${props => props.show ? 'flex' : 'none'};
+
+  padding: 2px;
+
+  background-color: darkgrey;
+
+  & > * {
+    width: 100%;
+
+    &:hover {
+      background-color: burlywood;
+    }
+  }
 `;
 
 const Button = styled.button`
   padding: 5px;
   font-size: 1em;
+  text-align: left;
+  ${props => props.noBorder && css`border: none`}
 `;
 
 export const FrameContextMenu = ({caminiToons}) => {
@@ -49,10 +58,10 @@ export const FrameContextMenu = ({caminiToons}) => {
     
     return (
       <FrameContextMenuContainer show={showMenu} position={position}>
-        <Button onClick={handleConvertToKeyFrame}>Convertir en cuadro clave</Button>
-        <Button onClick={handleExtend}>Extender cuadro</Button>
-        <Button onClick={handleCreateBefore}>Insertar cuadro antes</Button>
-        <Button onClick={handleDelete}>Borrar cuadro</Button>
+        <Button noBorder onClick={handleConvertToKeyFrame}>Convertir en cuadro clave</Button>
+        <Button noBorder onClick={handleExtend}>Extender cuadro</Button>
+        <Button noBorder onClick={handleCreateBefore}>Insertar cuadro antes</Button>
+        <Button noBorder onClick={handleDelete}>Borrar cuadro</Button>
       </FrameContextMenuContainer>
     );
   };

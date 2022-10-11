@@ -1,5 +1,8 @@
 import {useState} from 'react';
 
+import {InputContainer, InputGroup, InputCell, Label, Input} from '../input/Input';
+
+
 export const InsertAnimationClipBar = ({onAccept, animationClipsDetails, layersDetails}) => {
     const [animationClipName, setAnimationClipName] = useState('');
     const [layerIndex, setLayerIndex] = useState(0); 
@@ -18,29 +21,46 @@ export const InsertAnimationClipBar = ({onAccept, animationClipsDetails, layersD
     };
     
     return (
-        <div style={{backgroundColor: 'grey', padding: '10px'}}>
-            <div>
-                <label>Clip</label>
-                <select value={animationClipName} onChange={handleAnimationClipNameChange}>
-                    {animationClipsDetails.map(clip =>
-                        <option value={clip.name}>{clip.name}</option>)}
-                </select>
-            </div>
+        <div>
+            <h2>Insertar</h2>
+            <InputContainer withBorders>
+                <InputGroup>
+                    <InputCell>
+                        <label>Clip</label>
+                    </InputCell>
+                    <InputCell>
+                        <select value={animationClipName} onChange={handleAnimationClipNameChange}>
+                            {animationClipsDetails.map(clip =>
+                                <option value={clip.name}>{clip.name}</option>)}
+                        </select>
+                    </InputCell>
+                </InputGroup>
 
-            <div>
-                <label>Capa</label>
-                <select value={layerIndex} onChange={handleLayerChange}>
-                    {layersDetails.map((layerDetails, index) =>
-                        <option value={index}>{layerDetails.name}</option>)}
-                </select>    
-            </div>
+                <InputGroup>
+                    <InputCell>
+                        <label>Capa</label>
+                    </InputCell>
 
-            <div>
-                <label>Posicion</label>
-                <input type="number" value={position} onChange={handleChangePosition}/>    
-            </div>
-            
-            <button onClick={handleInsert}>Insertar</button>
+                    <InputCell>
+                        <select value={layerIndex} onChange={handleLayerChange}>
+                            {layersDetails.map((layerDetails, index) =>
+                                <option value={index}>{layerDetails.name}</option>)}
+                        </select>
+                    </InputCell>    
+                </InputGroup>
+
+                <InputGroup>
+                    <InputCell>
+                        <label>Cuadro</label>
+                    </InputCell>
+
+                    <InputCell>
+                        <input type="number" value={position} onChange={handleChangePosition}/>    
+                    </InputCell>
+                </InputGroup>
+                
+                <button onClick={handleInsert}>Insertar</button>
+            </InputContainer>
         </div>
     );
   }

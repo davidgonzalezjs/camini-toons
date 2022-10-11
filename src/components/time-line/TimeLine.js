@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
-import Column from '../Column'
-import Row from '../Row'
+import {Card} from '../Card';
+import Column from '../Column';
+import Row from '../Row';
 import {Layer} from './Layer'
 import {Frame} from './Frame'
 import {FrameContextMenu} from './FrameContextMenu'
 
-const LayersContainer = styled(Column)`
+const LayersContainer = styled(Card)`
   align-items: stretch;
 `;
 

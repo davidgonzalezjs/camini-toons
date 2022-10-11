@@ -11,15 +11,14 @@ import Row from './components/Row';
 import {ToolBoxBar} from './components/tool-box/ToolBoxBar';
 import TimeLine from './components/time-line/TimeLine';
 import {PlaybackBar} from './components/playback/PlaybackBar';
-import {OnionSkinBar} from './components/onion-skin/OnionSkinBar';
+import {SidePanel} from './components/side-panel/SidePanel';
+
 import Canvas from './components/Canvas';
-import {PenStylePanel} from './components/contextual-penel/PenStylePanel';
-import {EraserStylePanel} from './components/contextual-penel/EraserStylePanel';
-import {AnimationClipsLibrary} from './components/animation-clips-library/AnimationClipsLibrary';
 
 const AppContainer = styled(Column)`
   align-items: stretch;
   background-color: mediumpurple;
+  height: 100vh;
 `;
 
 const AppLogo = () =>
@@ -47,7 +46,6 @@ function App({createCaminiToons}) {
 
       <Row>
         <PlaybackBar caminiToons={caminiToons}/>
-        <OnionSkinBar onionSkinSettings={caminiToons.onionSkinSettings} onChange={caminiToons.handleChangeOnionSkinSettings}/>
       </Row>
 
       <Row>
@@ -64,11 +62,7 @@ function App({createCaminiToons}) {
           selectedToolName={caminiToons.selectedToolName}
         />
 
-        <Column style={{backgroundColor: 'lightBlue', flexGrow: 1}}>
-          <PenStylePanel penStyle={caminiToons.penStyle} onChange={caminiToons.handleChangePenStyle}/>
-          <EraserStylePanel eraserStyle={caminiToons.eraserStyle} onChange={caminiToons.handleChangeEraserStyle} />
-          <AnimationClipsLibrary caminiToons={caminiToons}/>
-        </Column>
+        <SidePanel caminiToons={caminiToons}/>
       </Row>
     </AppContainer>
   );

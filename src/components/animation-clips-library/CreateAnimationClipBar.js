@@ -1,5 +1,8 @@
 import {useState} from 'react';
 
+import {InputContainer, InputGroup, InputCell, Label} from '../input/Input';
+
+
 export const CreateAnimationClipBar = ({onAccept, layersDetails}) => {
     const [clipName, setClipName] = useState('');
     const [layerIndex, setLayerIndex] = useState(0); 
@@ -16,31 +19,52 @@ export const CreateAnimationClipBar = ({onAccept, layersDetails}) => {
     };
     
     return (
-        <div style={{backgroundColor: 'grey', padding: '10px'}}>
-            <div>
-                <label>Nombre</label>
-                <input type="text" value={clipName} onChange={handleClipNameChange} />
-            </div>
+        <div>
+            <h2>Crear</h2>
+            <InputContainer withBorders>
+                <InputGroup>
+                    <InputCell>
+                        <Label>Nombre</Label>
+                    </InputCell>
 
-            <div>
-                <label>Capa</label>
-                <select value={layerIndex} onChange={handleLayerChange}>
-                {layersDetails.map((layerDetails, index) =>
-                    <option value={index}>{layerDetails.name}</option>)}
-                </select>
-            </div>
+                    <input type="text" value={clipName} onChange={handleClipNameChange} />
+                </InputGroup>
 
-            <div>
-                <label>Desde</label>
-                <input type="number" value={startFrameNumber} onChange={handleStartFrameNumberChange}/>    
-            </div>
-            
-            <div>
-                <label>Hasta</label>
-                <input type="number" value={endFrameNumber} onChange={handleEndFrameNumberChange}/>
-            </div>
+                <InputGroup>
+                    <InputCell>
+                        <Label>Capa</Label>
+                    </InputCell>
+                    
+                    <InputCell>
+                        <select value={layerIndex} onChange={handleLayerChange}>
+                        {layersDetails.map((layerDetails, index) =>
+                            <option value={index}>{layerDetails.name}</option>)}
+                        </select>
+                    </InputCell>
+                </InputGroup>
 
-            <button onClick={handleCreate}>Crear</button>
+                <InputGroup>
+                    <InputCell>
+                        <Label>Cuadro inicial</Label>
+                    </InputCell>
+
+                    <InputCell>
+                        <input type="number" value={startFrameNumber} onChange={handleStartFrameNumberChange}/>    
+                    </InputCell>
+                </InputGroup>
+                
+                <InputGroup>
+                    <InputCell>
+                        <Label>Ultimo cuadro</Label>
+                    </InputCell>
+
+                    <InputCell>
+                        <input type="number" value={endFrameNumber} onChange={handleEndFrameNumberChange}/>
+                    </InputCell>
+                </InputGroup>
+
+                <button onClick={handleCreate}>Crear</button>
+            </InputContainer>
         </div>
     );
   }

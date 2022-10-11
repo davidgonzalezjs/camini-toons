@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import Row from '../Row';
+import {CardRow} from '../Card';
 import {Icon} from '../Icon';
 
 import playIcon from '../../assets/timeline/play.svg';
@@ -27,14 +27,13 @@ const FrameRateDisplay = ({frameRate, onFrameRateChage}) =>
     <strong>Frame rate:</strong><FrameRateInput value={frameRate} onChange={onFrameRateChage} /> fps
   </div>;
 
-const PlaybackBarContainer = styled(Row)`
+const PlaybackBarContainer = styled(CardRow)`
   padding: 5px;
   background-color: gold;
-  align-items: center;
 `;
 
 export const PlaybackBar = ({caminiToons}) =>
-    <PlaybackBarContainer>
+    <PlaybackBarContainer row>
         <PlayButton active={!caminiToons.isPlaying} onClick={caminiToons.handlePlayAnimation} />
         <StopButton active={caminiToons.isPlaying} onClick={caminiToons.handleStopAnimation} />
         <RepeatButton active={caminiToons.isPlayingOnALoop} onClick={caminiToons.handleRepeatAnimation} />

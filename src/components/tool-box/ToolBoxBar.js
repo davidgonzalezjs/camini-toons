@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import Column from '../Column';
+import {Card} from '../Card';
 
 import pencilIcon from '../../assets/pencil.svg'
 import eraserIcon from '../../assets/eraser.svg'
@@ -8,7 +8,7 @@ import pointerIcon from '../../assets/pointer.svg'
 
 import ToolBoxIcon from './ToolBoxIcon';
 
-const StyledToolBoxBar = styled(Column)`
+const StyledToolBoxBar = styled(Card)`
   background-color: lightblue;
 `;
 
