@@ -199,7 +199,6 @@ class AnimationDocument {
   } 
 
   insertAnimationClip({name, layerIndex, position}) {
-    console.log(`name: ${name} - layerIndex: ${layerIndex} - position: ${position}`)
     const animationClip = this._animationClips.find(animationClip => animationClip.isNamed(name));
 
     this.insertFrames({layerIndex, position, frames: animationClip.frames});
