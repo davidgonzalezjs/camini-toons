@@ -3,6 +3,18 @@ import Frame from './Frame';
 
 class RegularFrame extends Frame {
 
+    constructor(content, {isKeyFrame}) {
+        super();
+        this._isKeyFrame = isKeyFrame;
+        this._content = content;
+        this._optionalOnionSkin = Optional.empty();
+        this.hide();
+    }
+
+    hasSameContentAs(aFrame) {
+        return this._content === aFrame._content;
+    }
+
     isVisible() {
         return this._content.visible;
     }
@@ -58,6 +70,13 @@ class RegularFrame extends Frame {
 
     clone() {
         return new RegularFrame(this._content.clone(), {isKeyFrame: this.isKeyFrame()});
+    }
+
+    // PUBLIC - Serializacion
+    static from(serialized, contentDeserializer) {
+        const content = contentDeserializer(serialized._content);
+        
+        return new this(content, {isKeyFrame: serialized._isKeyFrame});
     }
 
 }

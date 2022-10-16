@@ -2,12 +2,24 @@ import Frame from './Frame';
 
 class AnimationClipFrame extends Frame {
 
-    constructor({name, content, isKeyFrame}) {
-        super(content, {isKeyFrame});
+    constructor({name, frameNumber, frames, isKeyFrame}) {
+        super();
         this._name = name;
+        this._isKeyFrame = isKeyFrame;
+        this._frameNumber = frameNumber;
+        this._frames = frames;
+    }
+
+    // Accessing
+    get _content() {
+        return this._frames[this._frameNumber - 1];
     }
 
     // Testing
+    hasSameContentAs(aFrame) {
+        return aFrame.isAnimationClip() && aFrame._frameNumber === this._frameNumber && aFrame._name === this._name;
+    }
+
     isVisible() {
         return this._content.isVisible();
     }
@@ -26,7 +38,7 @@ class AnimationClipFrame extends Frame {
     }
 
     deleteContent() {
-        this._content.deleteContent();
+        //this._content.deleteContent(); // TODO: analizar si hay que hacer algo acá
     }
 
     showOnionSkin(aStokeColor, opacity) {
@@ -46,6 +58,15 @@ class AnimationClipFrame extends Frame {
         extendedFrame.show();
 
         return extendedFrame;
+    }
+
+    serialize() {
+        return {
+            name: this._name,
+            _isKeyFrame: this.isKeyFrame(),
+            _frameNumber: this._frameNumber,
+            _isAnimationClip: true
+        }
     }
 
 }

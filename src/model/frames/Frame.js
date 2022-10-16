@@ -1,18 +1,10 @@
 import { subclassResponsibility } from '../errors';
-import Optional from '../Optional';
 
 export class Frame {
-    
-    constructor(content, {isKeyFrame}) {
-        this._isKeyFrame = isKeyFrame;
-        this._content = content;
-        this._optionalOnionSkin = Optional.empty();
-        this.hide();
-    }
 
     // Testing
     hasSameContentAs(aFrame) {
-        return this._content === aFrame._content;
+        subclassResponsibility('hasSameContentAs');
     }
 
     isKeyFrame() {
@@ -77,6 +69,14 @@ export class Frame {
 
     clone() {
         subclassResponsibility('clone');
+    }
+
+    serialize() {
+        return {
+            _content: this._content.serialize(),
+            _isKeyFrame: this.isKeyFrame(),
+            _isAnimationClip: this.isAnimationClip()
+        }
     }
 
 }

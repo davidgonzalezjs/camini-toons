@@ -1,6 +1,8 @@
 import Optional from './Optional';
 import ToolBox from './tools/ToolBox';
 
+import AnimationDocument from './animation-document/AnimationDocument';
+
 class CaminiToons {
 
   constructor(anAnimationDocument, aClock) {
@@ -290,6 +292,30 @@ class CaminiToons {
 
   tick() {
     this._animationDocument.tick();
+  }
+
+
+  // PUBLIC - Serializacion
+  serializeAnimationDocument() {
+    return this._animationDocument.serialize(); 
+  }
+ 
+  deserializeAnimationDocument(aSerializedAnimationDocument) {
+    const animationDocument = AnimationDocument.from(
+      aSerializedAnimationDocument,
+      {
+        createFrameContent: this._animationDocument._createFrameContent,
+        createPath: this._animationDocument._createPath,
+        createCircle: this._animationDocument._createCircle,
+        frameContentDeserializer: this._animationDocument._frameContentDeserializer,
+        hitTest: this._animationDocument._hitTest
+      }
+    );
+    
+    this._animationDocument = animationDocument;
+    
+    this.goToFrame(1);
+    this._listener.ifPresent(listener => listener.handleLayerUpdated()); // TODO: cambiar por animationDocumentUpdated
   }
 
 }

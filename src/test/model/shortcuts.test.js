@@ -1,6 +1,8 @@
-import LessMokedAnimationDocument from "../../model/animation-document/LessMokedAnimationDocument";
+import AnimationDocument from "../../model/animation-document/AnimationDocument";
 import Clock from "../../model/Clock";
 import CaminiToons from "../../model/CaminiToons";
+
+import { createAnimationDocumentMockedProps } from "../helpers/mocks";
 
 import { } from '../helpers/mouse-event-factory'
 
@@ -9,7 +11,7 @@ describe('Linea de tiempo', () => {
   let caminiToons;
 
   beforeEach(() => {
-    animationDocument = new LessMokedAnimationDocument();
+    animationDocument = new AnimationDocument(createAnimationDocumentMockedProps());
     caminiToons = new CaminiToons(animationDocument, new Clock({frameRate: 6}));
   });
 

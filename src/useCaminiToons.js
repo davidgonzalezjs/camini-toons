@@ -19,6 +19,14 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   useEffect(() => {
     const newCaminiToons = createCaminiToons(canvasRef.current);
 
+    const animationDocumentJSON = window.localStorage.getItem('animationDocument');
+    
+    if (animationDocumentJSON !== null) {
+      const parserAnimationDocumentData = JSON.parse(animationDocumentJSON);
+      
+      newCaminiToons.deserializeAnimationDocument(parserAnimationDocumentData);
+    }
+
     newCaminiToons.registerListener({
       handleToolChanged() {
         setSelectedToolName(newCaminiToons.selectedTool.name);
@@ -57,6 +65,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     setToolsNames(newCaminiToons.toolsNames);
     setFrameRate(newCaminiToons.frameRate);
     setCurrentFrameNumber(newCaminiToons.currentFrameNumber);
+    setLastFrameNumber(newCaminiToons.lastFrameNumber);
     setLayersDetails(newCaminiToons.layersDetails);
     setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop());
     setPenStyle(newCaminiToons.penStyle);
@@ -164,6 +173,17 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const handleChangeOnionSkinSettings = (newOnionSkinSettings) => {
     caminiToons.changeOnionSkinSettings(newOnionSkinSettings);
   };
+
+  const saveAnimationOnLocalStorage = () => {
+    const serializedAnimationDocument = caminiToons.serializeAnimationDocument();
+    console.log(serializedAnimationDocument);
+
+    window.localStorage.setItem('animationDocument', JSON.stringify(serializedAnimationDocument));
+  };
+
+  const deleteAnimationFromLocalStorage = () => {
+    window.localStorage.removeItem('animationDocument');
+  };
   
 
   return {
@@ -204,6 +224,9 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handleInsertAnimation,
 
     onionSkinSettings,
-    handleChangeOnionSkinSettings
+    handleChangeOnionSkinSettings,
+
+    saveAnimationOnLocalStorage,
+    deleteAnimationFromLocalStorage
   }
 }

@@ -158,15 +158,14 @@ class AnimationLayer {
 
     extractToAnimationClip({name, startFrameNumber, endFrameNumber}) {
         // TODO: falta testear lo de clonar el frame
-        const animationClipFrames =
-            this
-                .framesBetween(startFrameNumber, endFrameNumber)
-                .map((frame, index) => new AnimationClipFrame({name, content: frame.clone(), isKeyFrame: index === 0}));
+        const frames = this.framesBetween(startFrameNumber, endFrameNumber).map(frame => frame.clone());
+
+        const animationClip = new AnimationClip(name, frames);
 
         this.removeFramesFromTimeLine({fromFrame: startFrameNumber, toFrame: endFrameNumber});
-        this.insertFrames(animationClipFrames, {position: startFrameNumber});
+        this.insertFrames(animationClip.frames, {position: startFrameNumber});
         
-        return new AnimationClip(name, animationClipFrames);
+        return animationClip;
     }
 
     deleteFrame(aFrameNumber) {
@@ -282,6 +281,44 @@ class AnimationLayer {
         if (this.hasOnionSkinEnabled()) {
             this.showNewOnionSkins();
         }
+    }
+
+    // PUBLIC - Serializacion
+    serialize() {
+        return {
+            _name: this.name,
+            _frames: this._frames.map(frame => frame.serialize()),
+            _isVisible: this.isVisible()
+        }
+    }
+
+    static from(aSerializedAnimationLayer, createFrameContent, frameContentDeserializer) {
+        const {_name, _frames, _isVisible} = aSerializedAnimationLayer;
+
+        window._frames = _frames;
+
+        const animationLayer = new this({ name: _name, createFrameContent });
+        animationLayer._frames = _frames.map(_frame => new RegularFrame(frameContentDeserializer(_frame._content), {isKeyFrame: _frame._isKeyFrame}));
+
+        animationLayer._frames = _frames.reduce(
+            (deserializedFrames, serializedFrame) => {
+                const isKeyFrame = serializedFrame._isKeyFrame;
+                const frameContent = isKeyFrame ? frameContentDeserializer(serializedFrame._content) : deserializedFrames.slice(-1)[0]._content;
+                
+                const frame = new RegularFrame(frameContent, {isKeyFrame});
+
+                deserializedFrames.push(frame);
+
+                return deserializedFrames;
+            },
+            []
+        );
+
+        // animationLayer._frames = _frames.map(_frame => RegularFrame.from(_frame, frameContentDeserializer));
+        // animationLayer._frames = _frames.map(_frame => new RegularFrame(createFrameContent, {isKeyFrame: true}));
+        animationLayer._isVisible = _isVisible;
+        
+        return animationLayer;
     }
 }
 
