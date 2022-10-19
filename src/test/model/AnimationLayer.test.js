@@ -1,3 +1,4 @@
+import {Point} from '../../model/Point';
 import AnimationLayer from '../../model/AnimationLayer';
 import {createFrameContent} from '../helpers/mocks';
 
@@ -304,5 +305,30 @@ describe('AnimationLayer', () => {
         
         expect(animationLayer.isVisibleFrame(1)).toBe(true);
         expect(animationLayer.isVisibleFrame(2)).toBe(false);
+    });
+
+    it('initialmente esta ubicada en el punto (0,0)', () => {
+        const animationLayer = createEmptyAnimationLayer();
+        
+        expect(animationLayer.position).toEqual(Point.at(0, 0));
+    });
+
+    it('puede ser movida', () => {
+        const animationLayer = createEmptyAnimationLayer();
+        
+        animationLayer.moveBy(Point.at(1, 2));
+        animationLayer.moveBy(Point.at(1, 2));
+
+        expect(animationLayer.position.x).toBe(2);
+        expect(animationLayer.position.y).toBe(4);
+    });
+
+    xit('cuando una capa con un frame de dibujo es desplazada, dicho frame es desplazado la misma distancia', () => {
+        const animationLayer = createEmptyAnimationLayer();
+        const drawingFrame = animationLayer.createFrameAt(1);
+
+        animationLayer.moveBy(Point.at(1, 2));
+
+        expect(drawingFrame.position).toEqual(animationLayer.position);
     });
 });

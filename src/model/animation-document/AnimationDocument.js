@@ -1,17 +1,27 @@
-import {subclassResponsibility} from '../errors'
-
 import Optional from '../Optional';
 
 import AnimationLayer from '../AnimationLayer';
+import {AnimationClip} from '../AnimationClip';
+import RegularFrame from '../frames/RegularFrame';
 
 import AnimationIdleState from './state/AnimationIdleState';
 import AnimationPlayingState from './state/AnimationPlayingState';
 
 class AnimationDocument {
 
-  constructor({createFrameContent, hitTest}) {
+  constructor({
+    createFrameContent,
+    createPath,
+    createCircle,
+    frameContentDeserializer,
+    hitTest
+  }) {
     this._createFrameContent = createFrameContent;
+    this._createPath = createPath;
+    this._createCircle = createCircle;
     this._hitTestFunction = hitTest;
+
+    this._frameContentDeserializer = frameContentDeserializer;
 
     this._selectedDrawings = [];
     this._animationLayers = [];
@@ -118,6 +128,10 @@ class AnimationDocument {
   }
 
   // Actions - layers
+  moveAnimationLayersBy(aDeltaPoint) {
+    this._animationLayers.forEach(animationLayer => animationLayer.moveBy(aDeltaPoint));
+  }
+
   createAnimationLayer() {
     const newLayer = new AnimationLayer({
       name: `Capa ${this._animationLayers.length + 1}`,
@@ -223,12 +237,14 @@ class AnimationDocument {
       : Optional.with(hitResult.item);
   }
 
-  createPath(aPathStyle) {
-    subclassResponsibility('createPath');
+  createPath(style) {
+    const path = this._createPath();
+    path.style = {...path.style, ...style};
+    return path;
   }
 
   createCircle(circleSettings) {
-    subclassResponsibility('createCircle');
+    return this._createCircle(circleSettings);
   }
 
   deselectAllDrawings() {
@@ -277,7 +293,7 @@ class AnimationDocument {
   stopPlaying() {
     this._state = new AnimationIdleState();
     this._animationLayers.forEach(layer => layer.stopPlaying()); // TODO: escribir test verificando esto
-    this._listener.ifPresent(listener => listener.handlePlayBackUpdate());
+    this._listener.ifPresent(listener => listener.handlePlayBackUpdated());
   }
 
   // PRIVATE - actions - listeners
@@ -287,6 +303,41 @@ class AnimationDocument {
 
   registerListener(aListener) {
     this._listener = Optional.with(aListener);
+  }
+
+  // PUBLIC - Serializacion
+  serialize() {
+    return {
+      _currentFrameNumber: this.currentFrameNumber,
+      _isPlayingOnALoop: this._isPlayingOnALoop,
+      animationClips: this._animationClips.map(animationClip => animationClip.serialize()),
+      layers: this._animationLayers.map(animationLayer => animationLayer.serialize())
+    };
+  }
+
+  static from(aSerializedAnimationDocument, animationDocumentMockedProps) {
+    const {_currentFrameNumber, _isPlayingOnALoop, layers, animationClips} = aSerializedAnimationDocument;
+
+    const animationDocument = new this(animationDocumentMockedProps);
+    
+    animationDocument._animationClips = animationClips.map(({name, frames}) =>
+      new AnimationClip(
+        name,
+        frames.map(_frame => new RegularFrame(animationDocumentMockedProps.frameContentDeserializer(_frame._content), {isKeyFrame: _frame._isKeyFrame})))
+    );
+
+    animationDocument._animationLayers = layers.map(aSerializedAnimationLayer =>
+      AnimationLayer.from(
+        aSerializedAnimationLayer,
+        animationDocumentMockedProps.createFrameContent,
+        animationDocumentMockedProps.frameContentDeserializer
+      )
+    );
+    
+    animationDocument._currentFrameNumber = _currentFrameNumber;
+    animationDocument._isPlayingOnALoop = _isPlayingOnALoop;
+    
+    return animationDocument;
   }
 
 }

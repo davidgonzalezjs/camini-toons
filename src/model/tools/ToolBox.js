@@ -1,4 +1,5 @@
 import Eraser from "./Eraser";
+import Hand from "./Hand";
 import Pen from "./Pen";
 import SelectionTool from "./SelectionTool";
 
@@ -8,7 +9,8 @@ class ToolBox {
     this._tools = [
       new Pen(),
       new Eraser(),
-      new SelectionTool()
+      new SelectionTool(),
+      new Hand()
     ];
     
     this.usePen();
@@ -49,6 +51,10 @@ class ToolBox {
 
   useSelectionTool() {
     this.useToolNamed('selectionTool');
+  }
+
+  useHandTool() {
+    this.useToolNamed('hand');
   }
 
 }

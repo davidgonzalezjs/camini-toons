@@ -1,7 +1,21 @@
 import Optional from '../Optional';
 import Frame from './Frame';
+import {Point} from '../Point';
 
 class RegularFrame extends Frame {
+
+    constructor(content, {isKeyFrame}) {
+        super();
+        this._isKeyFrame = isKeyFrame;
+        this._content = content;
+        this._optionalOnionSkin = Optional.empty();
+        this._position = Point.at(0, 0);
+        this.hide();
+    }
+
+    hasSameContentAs(aFrame) {
+        return this._content === aFrame._content;
+    }
 
     isVisible() {
         return this._content.visible;
@@ -56,8 +70,26 @@ class RegularFrame extends Frame {
         return extendedFrame;
     }
 
+    moveBy(aDeltaPosition) {
+        this._position = this._position.plus(aDeltaPosition);
+        
+        const drawingNewPosition = this._content.position.add({x: this._position.x, y: this._position.y});
+        //const drawingNewPosition = this._content.moveBy({x: this._position.x, y: this._position.y});
+
+
+        this._content.position = drawingNewPosition;
+        this._optionalOnionSkin.ifPresent(onionSkin => onionSkin.position = drawingNewPosition);
+    }
+
     clone() {
         return new RegularFrame(this._content.clone(), {isKeyFrame: this.isKeyFrame()});
+    }
+
+    // PUBLIC - Serializacion
+    static from(serialized, contentDeserializer) {
+        const content = contentDeserializer(serialized._content);
+        
+        return new this(content, {isKeyFrame: serialized._isKeyFrame});
     }
 
 }

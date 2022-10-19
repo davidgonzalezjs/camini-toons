@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
-import styled, {css} from 'styled-components';
 
-import {InputContainer, InputGroup, InputCell, Label, Input} from '../input/Input';
+import {InputContainer, InputGroup, InputCell, Label} from '../input/Input';
 
 export const InsertAnimationClipBar = ({onAccept, animationClipsDetails, layersDetails}) => {
     const [animationClipName, setAnimationClipName] = useState('aaaqqqq');

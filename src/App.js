@@ -49,6 +49,11 @@ function App({createCaminiToons}) {
       </Row>
 
       <Row>
+        <button onClick={caminiToons.saveAnimationOnLocalStorage}>Guardar</button>
+        <button onClick={caminiToons.deleteAnimationFromLocalStorage}>Borrar</button>
+      </Row>
+
+      <Row>
         <ToolBoxBar
           selectedToolName={caminiToons.selectedToolName}
           toolsNames={caminiToons.toolsNames}
