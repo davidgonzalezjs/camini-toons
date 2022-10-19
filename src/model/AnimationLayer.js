@@ -2,6 +2,7 @@ import RegularFrame from './frames/RegularFrame';
 import AnimationClipFrame from './frames/AnimationClipFrame';
 import Optional from './Optional'
 import { AnimationClip } from './AnimationClip';
+import { Point } from './Point';
 
 class AnimationLayer {
 
@@ -16,6 +17,8 @@ class AnimationLayer {
         
         this.createFrameAt(1);
         this.makeVisibleFrameNumber(1);
+
+        this._position = Point.at(0, 0);
     }
 
     // Testing
@@ -65,6 +68,10 @@ class AnimationLayer {
 
     get frameNumbersShowingOnionSkin() {
         return this._frameNumbersShowingOnionSkin;
+    }
+
+    get position() {
+        return this._position;
     }
 
     get details() {
@@ -201,6 +208,11 @@ class AnimationLayer {
     deactivateOnionSkin() {
         this._hasOnionSkinEnabled = false;
         this.removeCurrentOnionSkins();
+    }
+
+    moveBy(aDeltaPosition) {
+        this._position = this._position.plus(aDeltaPosition);
+        this._frames.forEach(frame => frame.moveBy(aDeltaPosition));
     }
 
     // PRIVATE - Accessing

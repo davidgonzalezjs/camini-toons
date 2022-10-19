@@ -19,6 +19,7 @@ class CaminiToons {
       'v': () => this.useSelectionTool(),
       'y': () => this.usePen(),
       'e': () => this.useEraser(),
+      'h': () => this.useHand(),
       '*': () => this.createFrameOnLayer(this._animationDocument._activeLayerIndex), // TODO: se esta rompiendo el encapsulamiento
       '+': () => this.extendFrameOnLayer({layerIndex: this._animationDocument._activeLayerIndex, frameNumber: this.currentFrameNumber}), // TODO: se esta rompiendo el encapsulamiento
       '/': () => this.convertToKeyFrame({layerIndex: this._animationDocument._activeLayerIndex, frameNumber: this.currentFrameNumber}), // TODO: se esta rompiendo el encapsulamiento
@@ -233,6 +234,10 @@ class CaminiToons {
     this.useToolNamed('selectionTool');
   }
 
+  useHand() {
+    this.useToolNamed('hand');
+  }
+
   useToolNamed(aToolName) {
     this.deselectAllDrawings();
     this._toolBox.useToolNamed(aToolName);
@@ -250,6 +255,10 @@ class CaminiToons {
   }
 
   // Actions - Layers
+  moveAnimationLayersBy(aDeltaPoint) {
+    this._animationDocument.moveAnimationLayersBy(aDeltaPoint);
+  }
+
   changeNameOfLayer(aLayerIndex, newLayerName) {
     this._animationDocument.changeNameOfLayer(aLayerIndex, newLayerName);
     this._listener.ifPresent(listener => listener.handleChangeLayerName());
@@ -308,7 +317,7 @@ class CaminiToons {
         createPath: this._animationDocument._createPath,
         createCircle: this._animationDocument._createCircle,
         frameContentDeserializer: this._animationDocument._frameContentDeserializer,
-        hitTest: this._animationDocument._hitTest
+        hitTest: this._animationDocument._hitTestFunction
       }
     );
     

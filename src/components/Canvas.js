@@ -12,6 +12,12 @@ const Canvas = styled.canvas`
       cursor: none;
     }
   `}
+
+  ${({selectedToolName}) => selectedToolName === 'hand' && css`    
+    &:hover {
+      cursor: grab;
+    }
+  `}
 `;
 
 export default Canvas;

@@ -128,6 +128,10 @@ class AnimationDocument {
   }
 
   // Actions - layers
+  moveAnimationLayersBy(aDeltaPoint) {
+    this._animationLayers.forEach(animationLayer => animationLayer.moveBy(aDeltaPoint));
+  }
+
   createAnimationLayer() {
     const newLayer = new AnimationLayer({
       name: `Capa ${this._animationLayers.length + 1}`,

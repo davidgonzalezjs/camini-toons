@@ -13,6 +13,7 @@ export const createFrameContent = () => ({
     activateOnionSkin: jest.fn(),
     showOnionSkin: jest.fn(),
     remove: jest.fn(),
+    moveBy: jest.fn(),
     activate: jest.fn(),
     clone: () => createFrameContent(),
     

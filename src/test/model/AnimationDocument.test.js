@@ -1,5 +1,6 @@
 import AnimationDocument from '../../model/animation-document/AnimationDocument';
 import {createFrameContent} from '../helpers/mocks';
+import {Point} from '../../model/Point';
 
 const createAnimationDocument = (props = {}) => new AnimationDocument({createFrameContent, hitTest: () => {}});
 
@@ -354,6 +355,16 @@ describe('AnimationLayer', () => {
         expect(layersDetails[0].frames[0].isAnimationClip).toBe(true);
         expect(layersDetails[0].frames[1].isAnimationClip).toBe(true);
         expect(layersDetails[0].frames[2].isAnimationClip).toBe(false);
+    });
+
+    it('puede mover todas sus capas juntas', () => {
+        const animationDocument = createAnimationDocumentWithEmptyLayer();
+        animationDocument.createAnimationLayer();
+
+        animationDocument.moveAnimationLayersBy(Point.at(1, 2));
+        
+        expect(animationDocument._animationLayers[0].position).toEqual(Point.at(1, 2));
+        expect(animationDocument._animationLayers[1].position).toEqual(Point.at(1, 2));
     });
 
 });

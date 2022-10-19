@@ -5,6 +5,7 @@ import {Card} from '../Card';
 import pencilIcon from '../../assets/pencil.svg'
 import eraserIcon from '../../assets/eraser.svg'
 import pointerIcon from '../../assets/pointer.svg'
+import handIcon from '../../assets/hand.svg'
 
 import ToolBoxIcon from './ToolBoxIcon';
 
@@ -15,7 +16,8 @@ const StyledToolBoxBar = styled(Card)`
 const toolsIcons = {
   pen: pencilIcon,
   eraser: eraserIcon,
-  selectionTool: pointerIcon
+  selectionTool: pointerIcon,
+  hand: handIcon
 }
 
 export const ToolBoxBar = ({ selectedToolName, toolsNames, onToolIconClicked}) => {  

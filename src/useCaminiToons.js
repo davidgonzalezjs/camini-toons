@@ -176,7 +176,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
 
   const saveAnimationOnLocalStorage = () => {
     const serializedAnimationDocument = caminiToons.serializeAnimationDocument();
-    console.log(serializedAnimationDocument);
+    // console.log(serializedAnimationDocument);
 
     window.localStorage.setItem('animationDocument', JSON.stringify(serializedAnimationDocument));
   };
