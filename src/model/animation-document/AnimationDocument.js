@@ -1,6 +1,7 @@
 import Optional from '../Optional';
 
 import AnimationLayer from '../AnimationLayer';
+import {TransformationLayer} from '../TransformationLayer'
 import {AnimationClip} from '../AnimationClip';
 import RegularFrame from '../frames/RegularFrame';
 
@@ -90,6 +91,10 @@ class AnimationDocument {
   }
 
   // Testing - layers
+  hasChild(aLayer) {
+    return this._animationLayers.includes(aLayer);
+  }
+
   isVisibleLayer(aLayerIndex) {
     return this._animationLayers[aLayerIndex].isVisible();
   }
@@ -128,19 +133,52 @@ class AnimationDocument {
   }
 
   // Actions - layers
+  createTransformationLayerContaining(layerName) {
+    const targetLayerIndex = this._animationLayers.findIndex(layer => layer.isNamed(layerName));
+    const targetLayer = this._animationLayers[targetLayerIndex];
+
+    const transformationLayer = new TransformationLayer();
+    transformationLayer.addChild(targetLayer);
+    
+    this._animationLayers.splice(targetLayerIndex, 1, transformationLayer);
+
+    return transformationLayer;
+  }
+
+  // TODO: escribir test
+  createKeyFrameForXAtFrame(layerName, frameNumber) {
+    this._animationLayers.find(layer => layer.isNamed(layerName)).createKeyFrameForXAtFrame(frameNumber);
+  }
+
+  // TODO: escribir test
+  changeKeyFrameValueForX({layerName, frameNumber, value}) {
+    this._animationLayers.find(layer => layer.isNamed(layerName)).changeKeyFrameValueForX({frameNumber, value});
+  }
+
   moveAnimationLayersBy(aDeltaPoint) {
     this._animationLayers.forEach(animationLayer => animationLayer.moveBy(aDeltaPoint));
   }
 
-  createAnimationLayer() {
+  // TODO: testear
+  // createTransformationLayer() {
+  //   const newLayer = new TransformationLayer(`Capa ${this._animationLayers.length + 1}`);
+
+  //   this._animationLayers.push(newLayer);
+
+  //   this.goToFrame(this.currentFrameNumber);
+  // }
+
+  createAnimationLayer(props = {}) {
     const newLayer = new AnimationLayer({
-      name: `Capa ${this._animationLayers.length + 1}`,
+      name: props.name || `Capa ${this._animationLayers.length + 1}`,
       createFrameContent: () => this._createFrameContent()
     });
 
     this._animationLayers.push(newLayer);
     
     this.goToFrame(this.currentFrameNumber);
+
+    return newLayer;
   }
 
   activateLayer(aLayerIndex) {

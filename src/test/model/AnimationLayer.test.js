@@ -331,4 +331,62 @@ describe('AnimationLayer', () => {
 
         expect(drawingFrame.position).toEqual(animationLayer.position);
     });
+
+    describe('transfomaciones', () => {
+        it('comienza con un valor por defecto', () => {
+            const animationLayer = createEmptyAnimationLayer();
+    
+            expect(animationLayer.transformation).toEqual({x: 0, y: 0});
+        });
+    
+        it('se puede cambiar sus valores de transformacion', () => {
+            const animationLayer = createEmptyAnimationLayer();
+            animationLayer.changeTransformation({x: 1, y: 2});
+    
+            expect(animationLayer.transformation).toEqual({x: 1, y: 2});
+        });
+    
+        it('cuando se cambian los valores de transformacion, estos impactan en el frame', () => {
+            const transformation = {x: 1, y: 2};
+
+            const animationLayer = createEmptyAnimationLayer();
+            const frame = animationLayer.createFrameAt(1);
+            animationLayer.makeVisibleFrameNumber(1);
+    
+            animationLayer.changeTransformation(transformation);
+    
+            expect(frame.position.x).toEqual(transformation.x);
+            expect(frame.position.y).toEqual(transformation.y);
+        });
+    
+        it('cuando se cambian los valores de transformacion, estos no impactan los frames distintos al actual', () => {
+            const transformation = {x: 1, y: 2};
+            const animationLayer = createEmptyAnimationLayer();
+            
+            const firstFrame = animationLayer.createFrameAt(1);
+            const secondFrame = animationLayer.createFrameAt(2);
+            
+            animationLayer.makeVisibleFrameNumber(1);
+    
+            animationLayer.changeTransformation(transformation);
+    
+            expect(secondFrame.position.x).toEqual(0);
+            expect(secondFrame.position.y).toEqual(0);
+        });
+    
+        it('cuando se cambian los valores de transformacion y luego se hace visible otro frame, la transformacion impacta en el nuevo frame actual', () => {
+            const transformation = {x: 1, y: 2};
+            const animationLayer = createEmptyAnimationLayer();
+    
+            const firstFrame = animationLayer.createFrameAt(1);
+            const secondFrame = animationLayer.createFrameAt(2);
+    
+            animationLayer.changeTransformation(transformation);
+    
+            animationLayer.makeVisibleFrameNumber(2);
+            
+            expect(secondFrame.position.x).toEqual(transformation.x);
+            expect(secondFrame.position.y).toEqual(transformation.y);
+        });
+    })
 });

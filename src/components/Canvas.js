@@ -9,7 +9,7 @@ const Canvas = styled.canvas`
      
   ${({selectedToolName}) => (selectedToolName === 'pen' || selectedToolName === 'eraser') && css`    
     &:hover {
-      cursor: none;
+      cursor: crosshair;
     }
   `}
 

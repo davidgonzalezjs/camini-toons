@@ -123,6 +123,21 @@ class CaminiToons {
     this.goToFrame(this.currentFrameNumber - 1);
   }
 
+  createTransformationLayerContaining(layerName) {
+    this._animationDocument.createTransformationLayerContaining(layerName);
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
+  }
+
+  createKeyFrameForXAtFrame(layerName, frameNumber) {
+    this._animationDocument.createKeyFrameForXAtFrame(layerName, frameNumber);
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
+  }
+
+  changeKeyFrameValueForX({layerName, frameNumber, value}) {
+    this._animationDocument.changeKeyFrameValueForX({layerName, frameNumber, value});
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
+  }
+
   createFrameOnLayer(aLayerIndex) {
     this._animationDocument.createFrameOnLayer(aLayerIndex);
     this._listener.ifPresent(listener => listener.handleLayerUpdated());

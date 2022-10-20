@@ -357,7 +357,7 @@ describe('AnimationLayer', () => {
         expect(layersDetails[0].frames[2].isAnimationClip).toBe(false);
     });
 
-    it('puede mover todas sus capas juntas', () => {
+    xit('puede mover todas sus capas juntas', () => {
         const animationDocument = createAnimationDocumentWithEmptyLayer();
         animationDocument.createAnimationLayer();
 
@@ -365,6 +365,28 @@ describe('AnimationLayer', () => {
         
         expect(animationDocument._animationLayers[0].position).toEqual(Point.at(1, 2));
         expect(animationDocument._animationLayers[1].position).toEqual(Point.at(1, 2));
+    });
+
+    it('cuando se agrega como hija de una capa de transformacion a una capa, esta deja de ser hija directa del documento de animacion', () => {
+        const animationDocument = createAnimationDocumentWithEmptyLayer();
+        const anAnimationLayer = animationDocument.createAnimationLayer();
+
+        const transformationLayer = animationDocument.createTransformationLayerContaining(anAnimationLayer.name);
+
+        expect(transformationLayer.numberOfChildren).toBe(1);
+        expect(transformationLayer.hasChild(anAnimationLayer)).toBe(true);
+        expect(animationDocument.hasChild(anAnimationLayer)).toBe(false);
+    });
+
+    it('asdasdasd', () => {
+        const animationDocument = createAnimationDocumentWithEmptyLayer();
+        const anAnimationLayer = animationDocument.createAnimationLayer();
+        animationDocument.createFrameOnLayer(0);
+        animationDocument.createFrameOnLayer(0);
+
+        animationDocument.createTransformationLayerContaining(anAnimationLayer.name);
+
+        expect(animationDocument.lastFrameNumber).toBe(2);
     });
 
 });

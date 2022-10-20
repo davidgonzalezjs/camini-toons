@@ -64,6 +64,10 @@ class AnimationClipFrame extends Frame {
         this._content.moveBy(aDeltaPosition);
     }
 
+    transform(transformationData) {
+        this._content.transform(transformationData);
+    }
+
     serialize() {
         return {
             name: this._name,

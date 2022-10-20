@@ -16,6 +16,10 @@ export const createFrameContent = () => ({
     moveBy: jest.fn(),
     activate: jest.fn(),
     clone: () => createFrameContent(),
+    position: {
+        x: 0,
+        y: 0
+    },
     
     isEmpty: () => true,
     visible: true,
@@ -29,6 +33,7 @@ export const mockLayer = () => ({
     activate: jest.fn(),
     isEmpty: () => true
 });
+
 
 export const paper = {
     Path: {

@@ -8,9 +8,18 @@ class RegularFrame extends Frame {
         super();
         this._isKeyFrame = isKeyFrame;
         this._content = content;
+        this._content.pivot = {x: 0, y: 0};
         this._optionalOnionSkin = Optional.empty();
         this._position = Point.at(0, 0);
+        this._originalPosition = this._content.position;
         this.hide();
+    }
+
+    get position() {
+        return {
+            x: this._originalPosition.x + this._position.x,
+            y: this._originalPosition.y + this._position.y
+        };
     }
 
     hasSameContentAs(aFrame) {
@@ -79,6 +88,13 @@ class RegularFrame extends Frame {
 
         this._content.position = drawingNewPosition;
         this._optionalOnionSkin.ifPresent(onionSkin => onionSkin.position = drawingNewPosition);
+    }
+
+    transform({x, y}) {
+        this._content.position.x = this._originalPosition.x + x;
+        this._content.position.y = this._originalPosition.y + y;
+        
+        this._optionalOnionSkin.ifPresent(onionSkin => onionSkin.position = this._content.position);
     }
 
     clone() {

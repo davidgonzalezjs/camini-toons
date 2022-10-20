@@ -9,21 +9,33 @@ class AnimationLayer {
     constructor({ name, createFrameContent }) {
         this._name = name;
         this._createFrameContent = createFrameContent;
+        this._transformation = {
+            x: 0,
+            y: 0
+        }
 
         this._isVisible = true;
         this._hasOnionSkinEnabled = false;
         this._frames = [];
         this._frameNumbersShowingOnionSkin = [];
         
+        this._position = Point.at(0, 0); // TODO: revisar. Esto es por lo de la mano. Meter otro tipo de transformacion y limpiear esto
+
         this.createFrameAt(1);
         this.makeVisibleFrameNumber(1);
-
-        this._position = Point.at(0, 0);
     }
 
     // Testing
+    isTransformationLayer() {
+        return false;
+    }
+
     hasOnionSkinEnabled() {
         return this._hasOnionSkinEnabled;
+    }
+
+    isNamed(aName) {
+        return this.name === aName;
     }
 
     isVisible() {
@@ -88,7 +100,17 @@ class AnimationLayer {
         };
     }
 
+    get transformation() {
+        return this._transformation;
+    }
+
     // Actions
+    changeTransformation(transformationData) {
+        this._transformation = transformationData;
+
+        this.propagateTransformation();
+    }
+
     changeNameTo(aNewName) {
         this._name = aNewName;
     }
@@ -212,7 +234,7 @@ class AnimationLayer {
 
     moveBy(aDeltaPosition) {
         this._position = this._position.plus(aDeltaPosition);
-        this._frames.forEach(frame => frame.moveBy(aDeltaPosition));
+        this.propagateTransformation();
     }
 
     // PRIVATE - Accessing
@@ -229,6 +251,16 @@ class AnimationLayer {
     }
 
     // PRIVATE - Actions
+    propagateTransformation() {
+        if (this.visibleFrame) {
+            //this.visibleFrame.transform(this._transformation);
+            this.visibleFrame.transform({
+                x: this._transformation.x + this._position.x,
+                y: this._transformation.y + this._position.y,
+            });
+        }
+    }
+    
     hideVisibleFrame() {
         this.visibleFrame && this.visibleFrame.hide();
     }
@@ -237,6 +269,8 @@ class AnimationLayer {
         this.findFrame(aFrameNumber).ifPresent(frame => frame.show());
         this._visibleFrameNumber = aFrameNumber;
         this._visibleFrame = this.findFrame(aFrameNumber);
+
+        this.propagateTransformation();
     }
 
     removeFramesFromTimeLine({fromFrame, toFrame}) {
