@@ -38,7 +38,7 @@ export const ColorPicker = ({color, onChange}) => {
           <SketchPicker color={color} onChange={handleChange} />
         </ModalArea>
 
-        <div style={{padding: '20px', backgroundColor: color, borderRadius: '100%', width: '8px', height: '8px'}} onClick={openColorPicker}></div>
+        <div style={{padding: '20px', backgroundColor: color, borderRadius: '100%', border: '1px solid black', width: '8px', height: '8px'}} onClick={openColorPicker}></div>
       </div>
     );
   }

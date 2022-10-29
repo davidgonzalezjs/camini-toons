@@ -18,6 +18,30 @@ export function PenStylePanel({penStyle, onChange}) {
 
                 <InputGroup>
                     <InputCell>
+                        <Label>Color de relleno</Label>
+                    </InputCell>
+
+                    <InputCell>
+                        <ColorPicker color={penStyle.fillColor} onChange={color => onChange({fillColor: color})} />
+                    </InputCell>
+                </InputGroup>
+
+                <InputGroup>
+                    <InputCell>
+                        <Label>Pintar relleno</Label>
+                    </InputCell>
+                    
+                    <InputCell>
+                      <input
+                        type="checkbox"
+                        checked={penStyle.shouldFill}
+                        onChange={() => onChange({shouldFill: !penStyle.shouldFill})}
+                        />
+                    </InputCell>
+                </InputGroup>
+
+                <InputGroup>
+                    <InputCell>
                         <Label>Grosor</Label>
                     </InputCell>
 

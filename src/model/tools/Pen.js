@@ -9,8 +9,11 @@ class Pen extends Tool {
     this._style = {
       strokeCap: 'round',
       strokeColor: "black",
+      fillColor: 'crimson',
       strokeWidth: 3,
-      smoothing: 3
+      smoothing: 3,
+
+      shouldFill: false,
     };
     
     this._currentPath = Optional.empty();
@@ -44,6 +47,8 @@ class Pen extends Tool {
     const newPath = aCaminiToons.createPath(this._style);
     newPath.add(aPoint);
 
+    newPath.fillColor.alpha = this.style.shouldFill ? 1 : 0;
+
     this._currentPath = Optional.with(newPath);
   }
 
@@ -55,6 +60,7 @@ class Pen extends Tool {
     this._currentPath.ifPresent(path => path.simplify(this.style.smoothing));
     this._currentPath = Optional.empty();
   }
+
 }
 
 export default Pen;
