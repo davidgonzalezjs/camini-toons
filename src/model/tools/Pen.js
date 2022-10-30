@@ -47,7 +47,7 @@ class Pen extends Tool {
     const newPath = aCaminiToons.createPath(this._style);
     newPath.add(aPoint);
 
-    newPath.fillColor.alpha = this.style.shouldFill ? 1 : 0;
+    newPath.fillColor.alpha = this.style.shouldFill ? 1 : 0;    
 
     this._currentPath = Optional.with(newPath);
   }

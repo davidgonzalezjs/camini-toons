@@ -3,17 +3,24 @@ import { useState, useEffect } from 'react';
 
 export function useCaminiToons(canvasRef, createCaminiToons) {
   const [caminiToons, setCaminiToons] = useState(null);
-  const [toolsNames, setToolsNames] = useState([]);
-  const [selectedToolName, setSelectedToolName] = useState('pen');
+  
   const [layersDetails, setLayersDetails] = useState([]);
   const [animationClipsDetails, setAnimationClipsDetails] = useState([]);
+  
   const [frameRate, setFrameRate] = useState(6);
   const [currentFrameNumber, setCurrentFrameNumber] = useState(1);
   const [lastFrameNumber, setLastFrameNumber] = useState(1);
+  
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayingOnALoop, setIsPlayingOnALoop] = useState(false);
+  
+  const [toolsNames, setToolsNames] = useState([]);
+  const [selectedToolName, setSelectedToolName] = useState('pen');
+  
   const [penStyle, setPenStyle] = useState({});
   const [eraserStyle, setEraserStyle] = useState({});
+  const [paintBucketStyle, setPaintBucketStyle] = useState({});
+
   const [onionSkinSettings, setOnionSkinSettings] = useState({ beforeColor: "red", afterColor: "green", numberOfFramesBefore: 3, numberOfFramesAfter: 3, opacityStep: 0.22 });
 
   useEffect(() => {
@@ -22,9 +29,9 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     const animationDocumentJSON = window.localStorage.getItem('animationDocument');
     
     if (animationDocumentJSON !== null) {
-      const parserAnimationDocumentData = JSON.parse(animationDocumentJSON);
+      const serializedAnimationDocument = JSON.parse(animationDocumentJSON);
       
-      newCaminiToons.deserializeAnimationDocument(parserAnimationDocumentData);
+      newCaminiToons.deserializeAnimationDocument(serializedAnimationDocument);
     }
 
     newCaminiToons.registerListener({
@@ -32,6 +39,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
         setSelectedToolName(newCaminiToons.selectedTool.name);
         setPenStyle(newCaminiToons.penStyle);
         setEraserStyle(newCaminiToons.eraserStyle);
+        setPaintBucketStyle(newCaminiToons.paintBucketStyle);
       },
       handleFrameChanged() {
         setCurrentFrameNumber(newCaminiToons.currentFrameNumber)
@@ -146,6 +154,10 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.changeEraserStyle(newStyle);
   };
 
+  const handleChangePaintBucketStyle = (newStyle) => {
+    caminiToons.changePaintBucketStyle(newStyle);
+  };
+
   const handleConvertToKeyFrame = ({layerIndex, frameNumber}) => {
     caminiToons.convertToKeyFrame({layerIndex, frameNumber});
   };
@@ -176,7 +188,6 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
 
   const saveAnimationOnLocalStorage = () => {
     const serializedAnimationDocument = caminiToons.serializeAnimationDocument();
-    // console.log(serializedAnimationDocument);
 
     window.localStorage.setItem('animationDocument', JSON.stringify(serializedAnimationDocument));
   };
@@ -184,7 +195,26 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const deleteAnimationFromLocalStorage = () => {
     window.localStorage.removeItem('animationDocument');
   };
-  
+
+  const saveToFile = () => {
+    const animationDocumentJSON = JSON.stringify(caminiToons.serializeAnimationDocument());
+    
+    const data = `data:text/json;chatset=utf-8,${encodeURIComponent(
+      JSON.stringify(animationDocumentJSON)
+    )}`;
+    
+    const link=document.createElement('a');
+    link.href = data;
+    link.download = 'CaminiToons-animacion.animationDocument';
+    
+    link.click();
+    link.remove();
+  };
+
+  const loadFromFile = async file => {
+    const text = await file.text();
+    caminiToons.deserializeAnimationDocument(JSON.parse(JSON.parse(text)));
+  };  
 
   return {
     toolsNames,
@@ -216,6 +246,9 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     eraserStyle,
     handleChangeEraserStyle,
 
+    paintBucketStyle,
+    handleChangePaintBucketStyle,
+
     handleConvertToKeyFrame,
     handleExtendFrameOnLayer,
     handleCreateBefore,
@@ -227,6 +260,9 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handleChangeOnionSkinSettings,
 
     saveAnimationOnLocalStorage,
-    deleteAnimationFromLocalStorage
+    deleteAnimationFromLocalStorage,
+
+    saveToFile,
+    loadFromFile
   }
 }

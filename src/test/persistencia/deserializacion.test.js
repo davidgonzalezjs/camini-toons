@@ -184,8 +184,6 @@ describe('Deserializacion', () => {
             
             const deserialized = AnimationDocument.from(serialized, animationDocumentMockedProps);
 
-            // console.log(deserialized._animationLayers[0])
-
             expect(deserialized._animationLayers).toHaveLength(1);
             expect(deserialized.isKeyFrame({layerIndex: 0, frameNumber: 1})).toBe(true);
             expect(deserialized.isKeyFrame({layerIndex: 0, frameNumber: 2})).toBe(true);

@@ -5,8 +5,11 @@ import Row from '../Row';
 import {Card} from '../Card';
 
 import {OnionSkinBar} from '../onion-skin/OnionSkinBar';
+
 import {PenStylePanel} from '../contextual-penel/PenStylePanel';
 import {EraserStylePanel} from '../contextual-penel/EraserStylePanel';
+import {PaintBucketStylePanel} from '../contextual-penel/PaintBucketStylePanel';
+
 import {AnimationClipsLibrary} from '../animation-clips-library/AnimationClipsLibrary';
 
 
@@ -34,7 +37,8 @@ const Tab = styled.button`
 const ToolsSettings = ({caminiToons}) =>
     <>
         {caminiToons.selectedToolName === 'pen' && <PenStylePanel penStyle={caminiToons.penStyle} onChange={caminiToons.handleChangePenStyle}/>}
-        {caminiToons.selectedToolName === 'eraser' && <EraserStylePanel eraserStyle={caminiToons.eraserStyle} onChange={caminiToons.handleChangeEraserStyle} />}  
+        {caminiToons.selectedToolName === 'eraser' && <EraserStylePanel eraserStyle={caminiToons.eraserStyle} onChange={caminiToons.handleChangeEraserStyle} />}
+        {caminiToons.selectedToolName === 'paintBucket' && <PaintBucketStylePanel paintBucketStyle={caminiToons.paintBucketStyle} onChange={caminiToons.handleChangePaintBucketStyle} />}  
     </>;
 
 export const SidePanel = ({caminiToons}) => {

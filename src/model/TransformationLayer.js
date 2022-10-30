@@ -20,7 +20,6 @@ export class TransformationLayer {
 
     // Accessing
     get details() {
-        console.log(this._children)
         return {
             frames: this._frames,
             children: this._children.map(child => child.details),

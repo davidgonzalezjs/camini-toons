@@ -33,6 +33,7 @@ function App({createCaminiToons}) {
   const canvasRef = useRef(null)
   const caminiToons = useCaminiToons(canvasRef, createCaminiToons);
 
+
   const canvasWidth = 1280;
   const canvasHeight = 720;
 
@@ -51,6 +52,12 @@ function App({createCaminiToons}) {
       <Row>
         <button onClick={caminiToons.saveAnimationOnLocalStorage}>Guardar</button>
         <button onClick={caminiToons.deleteAnimationFromLocalStorage}>Borrar</button>
+        <button onClick={caminiToons.saveToFile}>Guardar en archivo</button>
+
+        <label>
+          Abrir animación
+          <input style={{display: 'none'}} type="file" accept=".animationDocument" onChange={(e) => caminiToons.loadFromFile(e.target.files[0])}/>
+        </label>
       </Row>
 
       <Row>

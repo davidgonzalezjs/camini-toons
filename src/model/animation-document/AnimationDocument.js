@@ -65,6 +65,10 @@ class AnimationDocument {
     return this._animationLayers.reduce((lastFrameNumber, layer) => Math.max(lastFrameNumber, layer.lastFrameNumber), 0);
   }
 
+  get currentFrameContent() {
+    return this.activeLayer.visibleFrame._content;
+  }
+
   // Accessing - animation clips
   get animationClipsDetails() {
     return this._animationClips.map(animationClip => ({

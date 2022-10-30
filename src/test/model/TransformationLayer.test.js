@@ -85,8 +85,6 @@ describe('TransformationLayer', () => {
         transformationLayer.createKeyFrameForXAtFrame(2);
         transformationLayer.createKeyFrameForXAtFrame(4);
 
-        //console.log(transformationLayer._frames.x.map(each => each.isKeyFrame))
-
         expect(transformationLayer.lastFrameNumberForX).toEqual(4);
         expect(transformationLayer.frameForXAt(1)).toEqual(keyFrameWidthValue(0));
         

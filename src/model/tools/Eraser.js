@@ -27,8 +27,7 @@ class Eraser extends Tool {
 
     const area = this._area.get();
     
-    // TODO: corregir. Estoy rompiendo el encapsulamiento como un campeon por todos lados
-    const container = aCaminiToons._animationDocument.activeLayer.visibleFrame._content;
+    const container = aCaminiToons.currentFrameContent;
 
     container.children
         .filter(item => this.isCollidingWith(item))

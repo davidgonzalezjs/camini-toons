@@ -20,6 +20,7 @@ class CaminiToons {
       'y': () => this.usePen(),
       'e': () => this.useEraser(),
       'h': () => this.useHand(),
+      'p': () => this.usePaintBucket(),
       '*': () => this.createFrameOnLayer(this._animationDocument._activeLayerIndex), // TODO: se esta rompiendo el encapsulamiento
       '+': () => this.extendFrameOnLayer({layerIndex: this._animationDocument._activeLayerIndex, frameNumber: this.currentFrameNumber}), // TODO: se esta rompiendo el encapsulamiento
       '/': () => this.convertToKeyFrame({layerIndex: this._animationDocument._activeLayerIndex, frameNumber: this.currentFrameNumber}), // TODO: se esta rompiendo el encapsulamiento
@@ -57,6 +58,10 @@ class CaminiToons {
     return this._toolBox.eraser.style;
   }
 
+  get paintBucketStyle() {
+    return this._toolBox.paintBucket.style;
+  }
+
   get frameRate() {
     return this._clock.frameRate;
   }
@@ -79,6 +84,10 @@ class CaminiToons {
 
   get onionSkinSettings() {
     return this._animationDocument.onionSkinSettings;
+  }
+
+  get currentFrameContent() {
+    return this._animationDocument.currentFrameContent;
   }
 
   hitTest(aPointToCheck) {
@@ -253,6 +262,10 @@ class CaminiToons {
     this.useToolNamed('hand');
   }
 
+  usePaintBucket() {
+    this.useToolNamed('paintBucket'); 
+  }
+
   useToolNamed(aToolName) {
     this.deselectAllDrawings();
     this._toolBox.useToolNamed(aToolName);
@@ -267,6 +280,11 @@ class CaminiToons {
   changeEraserStyle(newEraserStyle) {
     this._toolBox.eraser.changeStyleTo(newEraserStyle, this);
     this._listener.ifPresent(listener => listener.handleToolChanged('eraser'));
+  }
+
+  changePaintBucketStyle(newPaintBucketStyle) {
+    this._toolBox.paintBucket.changeStyleTo(newPaintBucketStyle);
+    this._listener.ifPresent(listener => listener.handleToolChanged('paintBucket'));
   }
 
   // Actions - Layers

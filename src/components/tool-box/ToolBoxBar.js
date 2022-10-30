@@ -6,6 +6,7 @@ import pencilIcon from '../../assets/pencil.svg'
 import eraserIcon from '../../assets/eraser.svg'
 import pointerIcon from '../../assets/pointer.svg'
 import handIcon from '../../assets/hand.svg'
+import paintBucketIcon from '../../assets/paintBucket.svg'
 
 import ToolBoxIcon from './ToolBoxIcon';
 
@@ -17,7 +18,8 @@ const toolsIcons = {
   pen: pencilIcon,
   eraser: eraserIcon,
   selectionTool: pointerIcon,
-  hand: handIcon
+  hand: handIcon,
+  paintBucket: paintBucketIcon 
 }
 
 export const ToolBoxBar = ({ selectedToolName, toolsNames, onToolIconClicked}) => {  
