@@ -114,6 +114,8 @@ describe('Dibujo con lapiz', () => {
 
     it('se puede consultar el estilo del lapiz', () => {
         expect(caminiToons.penStyle).toEqual({
+            fillColor: 'crimson',
+            shouldFill: false,
             strokeCap: 'round',
             strokeColor: "black",
             strokeWidth: 3,
@@ -127,6 +129,8 @@ describe('Dibujo con lapiz', () => {
         caminiToons.changePenStyle({strokeColor: newStokeColor});
 
         expect(caminiToons.penStyle).toEqual({
+            fillColor: initialStyle.fillColor,
+            shouldFill: initialStyle.shouldFill,
             strokeCap: initialStyle.strokeCap,
             strokeColor: newStokeColor,
             strokeWidth: initialStyle.strokeWidth,
@@ -140,6 +144,8 @@ describe('Dibujo con lapiz', () => {
         caminiToons.changePenStyle({strokeWidth: newStrokeWidth});
 
         expect(caminiToons.penStyle).toEqual({
+            fillColor: initialStyle.fillColor,
+            shouldFill: initialStyle.shouldFill,
             strokeCap: initialStyle.strokeCap,
             strokeColor: initialStyle.strokeColor,
             strokeWidth: newStrokeWidth,
@@ -153,6 +159,8 @@ describe('Dibujo con lapiz', () => {
         caminiToons.changePenStyle({smoothing: newSmoothing});
 
         expect(caminiToons.penStyle).toEqual({
+            fillColor: initialStyle.fillColor,
+            shouldFill: initialStyle.shouldFill,
             strokeCap: initialStyle.strokeCap,
             strokeColor: initialStyle.strokeColor,
             strokeWidth: initialStyle.strokeWidth,

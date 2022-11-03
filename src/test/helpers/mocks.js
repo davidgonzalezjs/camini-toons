@@ -2,7 +2,8 @@ import RegularFrame from "../../model/frames/RegularFrame";
 
 export const mockPath = () => ({
     add: jest.fn(),
-    simplify: jest.fn()
+    simplify: jest.fn(),
+    fillColor: { red: 1, green: 1, blue: 1 }
 });
 
 export const mockFunctionReturning = value => jest.fn(() => value);
