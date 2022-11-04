@@ -190,4 +190,13 @@ export class TransformationLayer {
         }
     }
 
+    //
+    startPlaying() {
+        this._children.forEach(child => child.startPlaying());
+    }
+
+    stopPlaying() {
+        this._children.forEach(child => child.stopPlaying());
+    }
+
 }

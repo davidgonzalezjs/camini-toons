@@ -61,6 +61,11 @@ function TransformationLayerRow({layerIndex, layersDetail, caminiToons, onClick}
           onClick={() => caminiToons.handleGoToFrame({layerIndex, frameNumber: 1})}
         />
       </FramesContainer>
+      
+      {/* {
+        <AnimationLayerRow layerIndex={layerIndex} layersDetail={layersDetail} caminiToons={caminiToons} onClick={() => caminiToons.handleActivateLayer(layerIndex)}/>
+      } */}
+
     {/* {layersDetail.children.map((child, childIndex) => <AnimationLayerRow layerIndex={childIndex} layersDetail={child} caminiToons={caminiToons}/>)} */}
     {/* <div>
       <div>Capa de transformacion</div>
