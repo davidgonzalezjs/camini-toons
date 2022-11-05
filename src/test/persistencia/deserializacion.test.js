@@ -173,9 +173,10 @@ describe('Deserializacion', () => {
 
             expect(deserialized._animationLayers).toHaveLength(1);
             expect(deserialized.isKeyFrame({layerIndex: 0, frameNumber: 1})).toBe(true);
+            expect(deserialized._animationLayers[0]._frames[0].isAnimationClip()).toBe(true);
         });
 
-        xit('con un frame de animacion insertado en varias capas', () => {
+        it('con un frame de animacion insertado en varias capas', () => {
             const animationDocument = createAnimationDocument();
             animationDocument.extractToAnimationClip({name: 'clip name', layerIndex: 0, startFrameNumber: 1, endFrameNumber: 1});
             animationDocument.insertAnimationClip({name: 'clip name', layerIndex: 0, position: 2});

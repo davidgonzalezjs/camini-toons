@@ -3,7 +3,7 @@ import Optional from '../Optional';
 import AnimationLayer from '../AnimationLayer';
 import {TransformationLayer} from '../TransformationLayer'
 import {AnimationClip} from '../AnimationClip';
-import RegularFrame from '../frames/RegularFrame';
+import RegularFrame from "../frames/RegularFrame";
 
 import AnimationIdleState from './state/AnimationIdleState';
 import AnimationPlayingState from './state/AnimationPlayingState';
@@ -357,22 +357,23 @@ class AnimationDocument {
     };
   }
 
-  static from(aSerializedAnimationDocument, animationDocumentMockedProps) {
+  static from(aSerializedAnimationDocument, animationDocumentProps) {
     const {_currentFrameNumber, _isPlayingOnALoop, layers, animationClips} = aSerializedAnimationDocument;
 
-    const animationDocument = new this(animationDocumentMockedProps);
+    const animationDocument = new this(animationDocumentProps);
     
     animationDocument._animationClips = animationClips.map(({name, frames}) =>
       new AnimationClip(
         name,
-        frames.map(_frame => new RegularFrame(animationDocumentMockedProps.frameContentDeserializer(_frame._content), {isKeyFrame: _frame._isKeyFrame})))
+        frames.map(_frame => new RegularFrame(animationDocumentProps.frameContentDeserializer(_frame._content), {isKeyFrame: _frame._isKeyFrame})))
     );
 
     animationDocument._animationLayers = layers.map(aSerializedAnimationLayer =>
       AnimationLayer.from(
         aSerializedAnimationLayer,
-        animationDocumentMockedProps.createFrameContent,
-        animationDocumentMockedProps.frameContentDeserializer
+        animationDocumentProps.createFrameContent,
+        animationDocumentProps.frameContentDeserializer,
+        animationDocument._animationClips
       )
     );
     

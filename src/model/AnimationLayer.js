@@ -1,5 +1,5 @@
-import RegularFrame from './frames/RegularFrame';
-import AnimationClipFrame from './frames/AnimationClipFrame';
+import RegularFrame from "./frames/RegularFrame";
+import AnimationClipFrame from "./frames/AnimationClipFrame";
 import Optional from './Optional'
 import { AnimationClip } from './AnimationClip';
 import { Point } from './Point';
@@ -338,20 +338,49 @@ class AnimationLayer {
         }
     }
 
-    static from(aSerializedAnimationLayer, createFrameContent, frameContentDeserializer) {
+    static from(aSerializedAnimationLayer, createFrameContent, frameContentDeserializer, animationClips) {
         const {_name, _frames, _isVisible} = aSerializedAnimationLayer;
 
         window._frames = _frames;
 
         const animationLayer = new this({ name: _name, createFrameContent });
-        animationLayer._frames = _frames.map(_frame => new RegularFrame(frameContentDeserializer(_frame._content), {isKeyFrame: _frame._isKeyFrame}));
+        /*
+        animationLayer._frames = _frames.map(_frame =>
+            _frame.isAnimationClip
+                ? new AnimationClipFrame({
+                    name: _frame.name,
+                    frameNumber: _frame.frameNumber,
+                    frames: animationClips.find(clip => clip.name === _frame.name).frames,
+                    isKeyFrame
+                })
+                : new RegularFrame(
+                    frameContentDeserializer(_frame._content),
+                    {isKeyFrame: _frame._isKeyFrame}
+                )
+        );
+        */
 
         animationLayer._frames = _frames.reduce(
             (deserializedFrames, serializedFrame) => {
-                const isKeyFrame = serializedFrame._isKeyFrame;
-                const frameContent = isKeyFrame ? frameContentDeserializer(serializedFrame._content) : deserializedFrames.slice(-1)[0]._content;
-                
-                const frame = new RegularFrame(frameContent, {isKeyFrame});
+                let frame;
+                if (serializedFrame._isAnimationClip) {
+                    frame = new AnimationClipFrame({
+                        name: serializedFrame.name,
+                        frameNumber: serializedFrame._frameNumber,
+                        frames: animationClips.find(clip => clip.name === serializedFrame.name).frames,
+                        isKeyFrame: serializedFrame._isKeyFrame
+                    })
+                }
+                else {
+                    const frameContent = serializedFrame._isKeyFrame
+                        ? frameContentDeserializer(serializedFrame._content)
+                        : deserializedFrames.slice(-1)[0]._content;
+
+                    frame = new RegularFrame(
+                        frameContent,
+                        {isKeyFrame: serializedFrame._isKeyFrame}
+                    );
+                }
 
                 deserializedFrames.push(frame);
 
