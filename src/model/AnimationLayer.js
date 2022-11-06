@@ -104,6 +104,10 @@ class AnimationLayer {
         return this._transformation;
     }
 
+    get layersFlattened() {
+        return [this];
+    }
+
     // Actions
     changeTransformation(transformationData) {
         this._transformation = transformationData;

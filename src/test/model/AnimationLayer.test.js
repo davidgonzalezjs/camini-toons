@@ -389,4 +389,10 @@ describe('AnimationLayer', () => {
             expect(secondFrame.position.y).toEqual(transformation.y);
         });
     })
+
+    it('cuando se le pide las "capas aplanadas", retorna una lista conteniendose a si misma', () => {
+        const animationLayer = createEmptyAnimationLayer();
+        
+        expect(animationLayer.layersFlattened).toEqual([animationLayer]);
+    });
 });

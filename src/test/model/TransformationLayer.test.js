@@ -256,5 +256,30 @@ describe('TransformationLayer', () => {
         expect(animationLayer.transformation.x).toEqual(999);
     });
 
-    //showFrame(targetFrame)
+    it('cuando no tiene capas hijas y se le pide las "capas aplanadas", retorna una lista conteniendo solo dicha capa', () => {
+        const transformationLayer = new TransformationLayer();
+        
+        expect(transformationLayer.layersFlattened).toEqual([transformationLayer]);
+    });
+
+    it('cuando tiene alguna capa de dibujo hija y se le pide las "capas aplanadas", retorna una lista conteniendose como primer elemento seguida de las capas de dibujo hijas', () => {
+        const animationLayer = createAnimationLayer();
+
+        const transformationLayer = new TransformationLayer();
+        transformationLayer.addChild(animationLayer);
+
+        expect(transformationLayer.layersFlattened).toEqual([transformationLayer, animationLayer]);
+    })
+
+    it('cuando tiene alguna capa de transformacion hija que tenga alguna capa hija y se le pide las "capas aplanadas", retorna una lista conteniendose como primer elemento seguida de las capas de transformacion hijas con sus respectivas capas hijas', () => {
+        const animationLayer = createAnimationLayer();
+        
+        const childTransformationLayer = new TransformationLayer();
+        childTransformationLayer.addChild(animationLayer);
+
+        const transformationLayer = new TransformationLayer();
+        transformationLayer.addChild(childTransformationLayer);
+
+        expect(transformationLayer.layersFlattened).toEqual([transformationLayer, childTransformationLayer, animationLayer]);
+    })
 });

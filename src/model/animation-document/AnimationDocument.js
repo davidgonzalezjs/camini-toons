@@ -59,6 +59,12 @@ class AnimationDocument {
     }));
   }
 
+  get flattenLayersDetails() {
+    return this._layers
+      .flatMap(layer => layer.layersFlattened)
+      .map(layer => layer.details)
+  }
+
   // Accessing - frames
   get currentFrameNumber() {
     return this._currentFrameNumber;

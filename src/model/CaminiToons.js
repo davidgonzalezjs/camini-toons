@@ -78,6 +78,10 @@ class CaminiToons {
     return this._animationDocument.layersDetails;
   }
 
+  get flattenLayersDetails() {
+    return this._animationDocument.flattenLayersDetails;
+  }
+
   get animationClipsDetails() {
     return this._animationDocument.animationClipsDetails;
   }

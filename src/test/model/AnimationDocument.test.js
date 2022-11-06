@@ -389,4 +389,16 @@ describe('AnimationLayer', () => {
         expect(animationDocument.lastFrameNumber).toBe(2);
     });
 
+    describe('detalles de capas aplanados', () => {
+        const animationDocument = createAnimationDocumentWithEmptyLayer(); // Comienza con una capa
+        
+        const firstAnimationLayer = animationDocument.activeLayer;
+        const secondAnimationLayer = animationDocument.createAnimationLayer();
+        const transformationLayer = animationDocument.createTransformationLayerContaining(firstAnimationLayer.name);
+
+        expect(animationDocument.flattenLayersDetails).toHaveLength(3);
+        expect(animationDocument.flattenLayersDetails[0]).toEqual(transformationLayer.details);
+        expect(animationDocument.flattenLayersDetails[1]).toEqual(firstAnimationLayer.details);
+        expect(animationDocument.flattenLayersDetails[2]).toEqual(secondAnimationLayer.details);
+    })
 });

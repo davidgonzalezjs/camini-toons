@@ -42,6 +42,9 @@ export class TransformationLayer {
     get numberOfChildren() {
         return this._children.length;
     }
+    get layersFlattened() {
+        return [this].concat(this._children.flatMap(child => child.layersFlattened)); 
+    }
 
     frameForXAt(frameNumber) {
         return this._frames.x[Math.min(frameNumber, this.lastFrameNumberForX) - 1];
