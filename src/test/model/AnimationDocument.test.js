@@ -363,8 +363,8 @@ describe('AnimationLayer', () => {
 
         animationDocument.moveAnimationLayersBy(Point.at(1, 2));
         
-        expect(animationDocument._animationLayers[0].position).toEqual(Point.at(1, 2));
-        expect(animationDocument._animationLayers[1].position).toEqual(Point.at(1, 2));
+        expect(animationDocument._layers[0].position).toEqual(Point.at(1, 2));
+        expect(animationDocument._layers[1].position).toEqual(Point.at(1, 2));
     });
 
     it('cuando se agrega como hija de una capa de transformacion a una capa, esta deja de ser hija directa del documento de animacion', () => {

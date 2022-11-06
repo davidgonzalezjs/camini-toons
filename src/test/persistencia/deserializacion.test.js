@@ -121,9 +121,9 @@ describe('Deserializacion', () => {
 
             expect(deserialized.lastFrameNumber).toEqual(1);
 
-            expect(deserialized._animationLayers).toHaveLength(1);
-            expect(deserialized._animationLayers[0].name).toEqual('Capa 1');
-            expect(deserialized._animationLayers[0].isVisible()).toEqual(true);
+            expect(deserialized._layers).toHaveLength(1);
+            expect(deserialized._layers[0].name).toEqual('Capa 1');
+            expect(deserialized._layers[0].isVisible()).toEqual(true);
             
             expect(deserialized._animationClips).toHaveLength(0);
         });
@@ -135,13 +135,13 @@ describe('Deserializacion', () => {
 
             const deserialized = AnimationDocument.from(serialized, animationDocumentMockedProps);
 
-            expect(deserialized._animationLayers).toHaveLength(2);
+            expect(deserialized._layers).toHaveLength(2);
             
-            expect(deserialized._animationLayers[0].name).toEqual('Capa 1');
-            expect(deserialized._animationLayers[0].isVisible()).toEqual(true);
+            expect(deserialized._layers[0].name).toEqual('Capa 1');
+            expect(deserialized._layers[0].isVisible()).toEqual(true);
             
-            expect(deserialized._animationLayers[1].name).toEqual('Capa 2');
-            expect(deserialized._animationLayers[1].isVisible()).toEqual(true);
+            expect(deserialized._layers[1].name).toEqual('Capa 2');
+            expect(deserialized._layers[1].isVisible()).toEqual(true);
         });
 
         it('con un frame de animacion no insertado en ninguna capa', () => {
@@ -153,7 +153,7 @@ describe('Deserializacion', () => {
             
             const deserialized = AnimationDocument.from(serialized, animationDocumentMockedProps);
 
-            expect(deserialized._animationLayers).toHaveLength(1);
+            expect(deserialized._layers).toHaveLength(1);
             
             expect(deserialized._animationClips).toHaveLength(1);
             expect(deserialized._animationClips[0].name).toEqual('clip name');
@@ -171,9 +171,9 @@ describe('Deserializacion', () => {
             
             const deserialized = AnimationDocument.from(serialized, animationDocumentMockedProps);
 
-            expect(deserialized._animationLayers).toHaveLength(1);
+            expect(deserialized._layers).toHaveLength(1);
             expect(deserialized.isKeyFrame({layerIndex: 0, frameNumber: 1})).toBe(true);
-            expect(deserialized._animationLayers[0]._frames[0].isAnimationClip()).toBe(true);
+            expect(deserialized._layers[0]._frames[0].isAnimationClip()).toBe(true);
         });
 
         it('con un frame de animacion insertado en varias capas', () => {
@@ -185,10 +185,10 @@ describe('Deserializacion', () => {
             
             const deserialized = AnimationDocument.from(serialized, animationDocumentMockedProps);
 
-            expect(deserialized._animationLayers).toHaveLength(1);
+            expect(deserialized._layers).toHaveLength(1);
             expect(deserialized.isKeyFrame({layerIndex: 0, frameNumber: 1})).toBe(true);
             expect(deserialized.isKeyFrame({layerIndex: 0, frameNumber: 2})).toBe(true);
-            expect(deserialized._animationLayers[0].framesHaveTheSameContent(1, 2)).toBe(true);
+            expect(deserialized._layers[0].framesHaveTheSameContent(1, 2)).toBe(true);
         });
     });
 

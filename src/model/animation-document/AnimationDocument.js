@@ -25,8 +25,7 @@ class AnimationDocument {
     this._frameContentDeserializer = frameContentDeserializer;
 
     this._selectedDrawings = [];
-    this._animationLayers = [];
-    this._currentFrameNumber = 1;
+    
     this._isPlayingOnALoop = false;
     this._state = new AnimationIdleState();
 
@@ -34,7 +33,10 @@ class AnimationDocument {
 
     this._listener = Optional.empty();
 
+    this._currentFrameNumber = 1;
+    
     this._activeLayerIndex = 0;
+    this._layers = [];
     this.createAnimationLayer();
 
     this._animationClips = [];
@@ -46,11 +48,11 @@ class AnimationDocument {
   }
 
   get activeLayer() {
-    return this._animationLayers[this._activeLayerIndex];
+    return this._layers[this._activeLayerIndex];
   }
 
   get layersDetails() {
-    return this._animationLayers.map((animationLayer, index) => ({
+    return this._layers.map((animationLayer, index) => ({
       ...animationLayer.details,
       isActive: index === this._activeLayerIndex
     }));
@@ -62,7 +64,7 @@ class AnimationDocument {
   }
 
   get lastFrameNumber() {
-    return this._animationLayers.reduce((lastFrameNumber, layer) => Math.max(lastFrameNumber, layer.lastFrameNumber), 0);
+    return this._layers.reduce((lastFrameNumber, layer) => Math.max(lastFrameNumber, layer.lastFrameNumber), 0);
   }
 
   get currentFrameContent() {
@@ -96,25 +98,25 @@ class AnimationDocument {
 
   // Testing - layers
   hasChild(aLayer) {
-    return this._animationLayers.includes(aLayer);
+    return this._layers.includes(aLayer);
   }
 
   isVisibleLayer(aLayerIndex) {
-    return this._animationLayers[aLayerIndex].isVisible();
+    return this._layers[aLayerIndex].isVisible();
   }
 
   // Testing - frames
   hasVisibleFrameAt({layerIndex, frameNumber}) {
-    return this._animationLayers[layerIndex].isVisibleFrame(frameNumber);
+    return this._layers[layerIndex].isVisibleFrame(frameNumber);
   }
 
   isKeyFrame({layerIndex, frameNumber}) {
-    return this._animationLayers[layerIndex].isKeyFrame(frameNumber);
+    return this._layers[layerIndex].isKeyFrame(frameNumber);
   }
 
   // Testing - onion skins
   hasOnionSkinEnabledOnLayer(aLayerIndex) {
-    return this._animationLayers[aLayerIndex].hasOnionSkinEnabled();
+    return this._layers[aLayerIndex].hasOnionSkinEnabled();
   }
 
   // Actions - animation
@@ -138,47 +140,47 @@ class AnimationDocument {
 
   // Actions - layers
   createTransformationLayerContaining(layerName) {
-    const targetLayerIndex = this._animationLayers.findIndex(layer => layer.isNamed(layerName));
-    const targetLayer = this._animationLayers[targetLayerIndex];
+    const targetLayerIndex = this._layers.findIndex(layer => layer.isNamed(layerName));
+    const targetLayer = this._layers[targetLayerIndex];
 
     const transformationLayer = new TransformationLayer();
     transformationLayer.addChild(targetLayer);
     
-    this._animationLayers.splice(targetLayerIndex, 1, transformationLayer);
+    this._layers.splice(targetLayerIndex, 1, transformationLayer);
 
     return transformationLayer;
   }
 
   // TODO: escribir test
   createKeyFrameForXAtFrame(layerName, frameNumber) {
-    this._animationLayers.find(layer => layer.isNamed(layerName)).createKeyFrameForXAtFrame(frameNumber);
+    this._layers.find(layer => layer.isNamed(layerName)).createKeyFrameForXAtFrame(frameNumber);
   }
 
   // TODO: escribir test
   changeKeyFrameValueForX({layerName, frameNumber, value}) {
-    this._animationLayers.find(layer => layer.isNamed(layerName)).changeKeyFrameValueForX({frameNumber, value});
+    this._layers.find(layer => layer.isNamed(layerName)).changeKeyFrameValueForX({frameNumber, value});
   }
 
   moveAnimationLayersBy(aDeltaPoint) {
-    this._animationLayers.forEach(animationLayer => animationLayer.moveBy(aDeltaPoint));
+    this._layers.forEach(animationLayer => animationLayer.moveBy(aDeltaPoint));
   }
 
   // TODO: testear
   // createTransformationLayer() {
-  //   const newLayer = new TransformationLayer(`Capa ${this._animationLayers.length + 1}`);
+  //   const newLayer = new TransformationLayer(`Capa ${this._layers.length + 1}`);
 
-  //   this._animationLayers.push(newLayer);
+  //   this._layers.push(newLayer);
 
   //   this.goToFrame(this.currentFrameNumber);
   // }
 
   createAnimationLayer(props = {}) {
     const newLayer = new AnimationLayer({
-      name: props.name || `Capa ${this._animationLayers.length + 1}`,
+      name: props.name || `Capa ${this._layers.length + 1}`,
       createFrameContent: () => this._createFrameContent()
     });
 
-    this._animationLayers.push(newLayer);
+    this._layers.push(newLayer);
     
     this.goToFrame(this.currentFrameNumber);
 
@@ -187,19 +189,19 @@ class AnimationDocument {
 
   activateLayer(aLayerIndex) {
     this._activeLayerIndex = aLayerIndex; // TODO: agregar test
-    this._animationLayers[aLayerIndex].activateFrame();
+    this._layers[aLayerIndex].activateFrame();
   }
 
   changeNameOfLayer(aLayerIndex, newLayerName) {
-    this._animationLayers[aLayerIndex].changeNameTo(newLayerName);
+    this._layers[aLayerIndex].changeNameTo(newLayerName);
   }
 
   showLayer(aLayerIndex) {
-    this._animationLayers[aLayerIndex].show();
+    this._layers[aLayerIndex].show();
   }
 
   hideLayer(aLayerIndex) {
-    this._animationLayers[aLayerIndex].hide();
+    this._layers[aLayerIndex].hide();
   }
 
   goToFrame(aFrameNumber) {
@@ -213,7 +215,7 @@ class AnimationDocument {
     this.deselectAllDrawings();
 
     this._currentFrameNumber = targetFrame;
-    this._animationLayers.forEach(layer => layer.showFrame(targetFrame));
+    this._layers.forEach(layer => layer.showFrame(targetFrame));
     
     this._listener.ifPresent(listener => listener.handleFrameChanged(targetFrame));
   }
@@ -243,15 +245,15 @@ class AnimationDocument {
   }
 
   extendFrameOnLayer({layerIndex, frameNumber}) {
-    this._animationLayers[layerIndex].extendFrame(frameNumber);
+    this._layers[layerIndex].extendFrame(frameNumber);
   }
 
   convertToKeyFrame({layerIndex, frameNumber}) {
-    this._animationLayers[layerIndex].convertToKeyFrame(frameNumber);
+    this._layers[layerIndex].convertToKeyFrame(frameNumber);
   }
 
   insertFrames({layerIndex, position, frames}) {
-    this._animationLayers[layerIndex].insertFrames(frames, {position});
+    this._layers[layerIndex].insertFrames(frames, {position});
   } 
 
   insertAnimationClip({name, layerIndex, position}) {
@@ -261,13 +263,13 @@ class AnimationDocument {
   }
   
   extractToAnimationClip({name, layerIndex, startFrameNumber, endFrameNumber}) {
-    const animationClip = this._animationLayers[layerIndex].extractToAnimationClip({name, startFrameNumber, endFrameNumber});
+    const animationClip = this._layers[layerIndex].extractToAnimationClip({name, startFrameNumber, endFrameNumber});
     
     this._animationClips.push(animationClip);
   }
 
   deleteFrameOnLayer({layerIndex, frameNumber}) {
-    this._animationLayers[layerIndex].deleteFrame(frameNumber);
+    this._layers[layerIndex].deleteFrame(frameNumber);
   }
 
   // Actions - drawings
@@ -310,15 +312,15 @@ class AnimationDocument {
 
   // Actions - onion skins
   activateOnionSkinOnLayer(layerIndex) {
-    this._animationLayers[layerIndex].activateOnionSkin(this.onionSkinSettings);
+    this._layers[layerIndex].activateOnionSkin(this.onionSkinSettings);
   }
 
   deactivateOnionSkinOnLayer(layerIndex) {
-    this._animationLayers[layerIndex].deactivateOnionSkin();
+    this._layers[layerIndex].deactivateOnionSkin();
   }
 
   changeOnionSkinSettings(newOnionSkinSettings) { // TODO: agregar test
-    this._animationLayers
+    this._layers
       .filter(layer => layer.hasOnionSkinEnabled())
       .forEach(layer => layer.activateOnionSkin(newOnionSkinSettings));
     
@@ -329,12 +331,12 @@ class AnimationDocument {
   startPlaying() {
     this._currentFrameNumber = 0; // Aclaracion: se setea en 0 que para que arranque a reproducir el frame numero 1
     this._state = new AnimationPlayingState();
-    this._animationLayers.forEach(layer => layer.startPlaying());  // TODO: escribir test verificando esto
+    this._layers.forEach(layer => layer.startPlaying());  // TODO: escribir test verificando esto
   }
 
   stopPlaying() {
     this._state = new AnimationIdleState();
-    this._animationLayers.forEach(layer => layer.stopPlaying()); // TODO: escribir test verificando esto
+    this._layers.forEach(layer => layer.stopPlaying()); // TODO: escribir test verificando esto
     this._listener.ifPresent(listener => listener.handlePlayBackUpdated());
   }
 
@@ -353,7 +355,7 @@ class AnimationDocument {
       _currentFrameNumber: this.currentFrameNumber,
       _isPlayingOnALoop: this._isPlayingOnALoop,
       animationClips: this._animationClips.map(animationClip => animationClip.serialize()),
-      layers: this._animationLayers.map(animationLayer => animationLayer.serialize())
+      layers: this._layers.map(animationLayer => animationLayer.serialize())
     };
   }
 
@@ -368,7 +370,7 @@ class AnimationDocument {
         frames.map(_frame => new RegularFrame(animationDocumentProps.frameContentDeserializer(_frame._content), {isKeyFrame: _frame._isKeyFrame})))
     );
 
-    animationDocument._animationLayers = layers.map(aSerializedAnimationLayer =>
+    animationDocument._layers = layers.map(aSerializedAnimationLayer =>
       AnimationLayer.from(
         aSerializedAnimationLayer,
         animationDocumentProps.createFrameContent,
