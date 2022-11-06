@@ -344,21 +344,6 @@ class AnimationLayer {
         window._frames = _frames;
 
         const animationLayer = new this({ name: _name, createFrameContent });
-        /*
-        animationLayer._frames = _frames.map(_frame =>
-            _frame.isAnimationClip
-                ? new AnimationClipFrame({
-                    name: _frame.name,
-                    frameNumber: _frame.frameNumber,
-                    frames: animationClips.find(clip => clip.name === _frame.name).frames,
-                    isKeyFrame
-                })
-                : new RegularFrame(
-                    frameContentDeserializer(_frame._content),
-                    {isKeyFrame: _frame._isKeyFrame}
-                )
-        );
-        */
 
         animationLayer._frames = _frames.reduce(
             (deserializedFrames, serializedFrame) => {
@@ -389,8 +374,6 @@ class AnimationLayer {
             []
         );
 
-        // animationLayer._frames = _frames.map(_frame => RegularFrame.from(_frame, frameContentDeserializer));
-        // animationLayer._frames = _frames.map(_frame => new RegularFrame(createFrameContent, {isKeyFrame: true}));
         animationLayer._isVisible = _isVisible;
         
         return animationLayer;

@@ -20,26 +20,27 @@ class AnimationDocument {
     this._createFrameContent = createFrameContent;
     this._createPath = createPath;
     this._createCircle = createCircle;
+    
     this._hitTestFunction = hitTest;
 
     this._frameContentDeserializer = frameContentDeserializer;
 
-    this._selectedDrawings = [];
-    
-    this._isPlayingOnALoop = false;
-    this._state = new AnimationIdleState();
-
-    this._onionSkinSettings = {beforeColor: 'red', afterColor: 'green', numberOfFramesBefore: 3, numberOfFramesAfter: 3, opacityStep: 0.22};
-
     this._listener = Optional.empty();
 
-    this._currentFrameNumber = 1;
+    this._selectedDrawings = [];
     
-    this._activeLayerIndex = 0;
-    this._layers = [];
-    this.createAnimationLayer();
+    this._onionSkinSettings = {beforeColor: 'red', afterColor: 'green', numberOfFramesBefore: 3, numberOfFramesAfter: 3, opacityStep: 0.22};
 
+    this._state = new AnimationIdleState();
+    this._isPlayingOnALoop = false;
+
+    this._currentFrameNumber = 1;
+    this._activeLayerIndex = 0;
+
+    this._layers = [];
     this._animationClips = [];
+
+    this.createAnimationLayer();
   }
 
   // Accessing - layers
@@ -48,7 +49,7 @@ class AnimationDocument {
   }
 
   get activeLayer() {
-    return this._layers[this._activeLayerIndex];
+    return this.findLayerByIndex(this._activeLayerIndex);
   }
 
   get layersDetails() {
@@ -64,7 +65,10 @@ class AnimationDocument {
   }
 
   get lastFrameNumber() {
-    return this._layers.reduce((lastFrameNumber, layer) => Math.max(lastFrameNumber, layer.lastFrameNumber), 0);
+    return this._layers.reduce(
+      (lastFrameNumber, layer) => Math.max(lastFrameNumber, layer.lastFrameNumber),
+      0
+    );
   }
 
   get currentFrameContent() {
@@ -102,21 +106,21 @@ class AnimationDocument {
   }
 
   isVisibleLayer(aLayerIndex) {
-    return this._layers[aLayerIndex].isVisible();
+    return this.findLayerByIndex(aLayerIndex).isVisible();
   }
 
   // Testing - frames
   hasVisibleFrameAt({layerIndex, frameNumber}) {
-    return this._layers[layerIndex].isVisibleFrame(frameNumber);
+    return this.findLayerByIndex(layerIndex).isVisibleFrame(frameNumber);
   }
 
   isKeyFrame({layerIndex, frameNumber}) {
-    return this._layers[layerIndex].isKeyFrame(frameNumber);
+    return this.findLayerByIndex(layerIndex).isKeyFrame(frameNumber);
   }
 
   // Testing - onion skins
   hasOnionSkinEnabledOnLayer(aLayerIndex) {
-    return this._layers[aLayerIndex].hasOnionSkinEnabled();
+    return this.findLayerByIndex(aLayerIndex).hasOnionSkinEnabled();
   }
 
   // Actions - animation
@@ -140,39 +144,29 @@ class AnimationDocument {
 
   // Actions - layers
   createTransformationLayerContaining(layerName) {
-    const targetLayerIndex = this._layers.findIndex(layer => layer.isNamed(layerName));
-    const targetLayer = this._layers[targetLayerIndex];
+    const targetLayer = this.findLayerByName(layerName);
 
     const transformationLayer = new TransformationLayer();
     transformationLayer.addChild(targetLayer);
     
-    this._layers.splice(targetLayerIndex, 1, transformationLayer);
+    this.replaceLayerWithIndex(targetLayer, transformationLayer);
 
     return transformationLayer;
   }
 
   // TODO: escribir test
   createKeyFrameForXAtFrame(layerName, frameNumber) {
-    this._layers.find(layer => layer.isNamed(layerName)).createKeyFrameForXAtFrame(frameNumber);
+    this.findLayerByName(layerName).createKeyFrameForXAtFrame(frameNumber);
   }
 
   // TODO: escribir test
   changeKeyFrameValueForX({layerName, frameNumber, value}) {
-    this._layers.find(layer => layer.isNamed(layerName)).changeKeyFrameValueForX({frameNumber, value});
+    this.findLayerByName(layerName).changeKeyFrameValueForX({frameNumber, value});
   }
 
   moveAnimationLayersBy(aDeltaPoint) {
-    this._layers.forEach(animationLayer => animationLayer.moveBy(aDeltaPoint));
+    this._layers.forEach(layer => layer.moveBy(aDeltaPoint));
   }
-
-  // TODO: testear
-  // createTransformationLayer() {
-  //   const newLayer = new TransformationLayer(`Capa ${this._layers.length + 1}`);
-
-  //   this._layers.push(newLayer);
-
-  //   this.goToFrame(this.currentFrameNumber);
-  // }
 
   createAnimationLayer(props = {}) {
     const newLayer = new AnimationLayer({
@@ -189,19 +183,19 @@ class AnimationDocument {
 
   activateLayer(aLayerIndex) {
     this._activeLayerIndex = aLayerIndex; // TODO: agregar test
-    this._layers[aLayerIndex].activateFrame();
+    this.findLayerByIndex(aLayerIndex).activateFrame();
   }
 
   changeNameOfLayer(aLayerIndex, newLayerName) {
-    this._layers[aLayerIndex].changeNameTo(newLayerName);
+    this.findLayerByIndex(aLayerIndex).changeNameTo(newLayerName);
   }
 
   showLayer(aLayerIndex) {
-    this._layers[aLayerIndex].show();
+    this.findLayerByIndex(aLayerIndex).show();
   }
 
   hideLayer(aLayerIndex) {
-    this._layers[aLayerIndex].hide();
+    this.findLayerByIndex(aLayerIndex).hide();
   }
 
   goToFrame(aFrameNumber) {
@@ -245,15 +239,15 @@ class AnimationDocument {
   }
 
   extendFrameOnLayer({layerIndex, frameNumber}) {
-    this._layers[layerIndex].extendFrame(frameNumber);
+    this.findLayerByIndex(layerIndex).extendFrame(frameNumber);
   }
 
   convertToKeyFrame({layerIndex, frameNumber}) {
-    this._layers[layerIndex].convertToKeyFrame(frameNumber);
+    this.findLayerByIndex(layerIndex).convertToKeyFrame(frameNumber);
   }
 
   insertFrames({layerIndex, position, frames}) {
-    this._layers[layerIndex].insertFrames(frames, {position});
+    this.findLayerByIndex(layerIndex).insertFrames(frames, {position});
   } 
 
   insertAnimationClip({name, layerIndex, position}) {
@@ -263,13 +257,13 @@ class AnimationDocument {
   }
   
   extractToAnimationClip({name, layerIndex, startFrameNumber, endFrameNumber}) {
-    const animationClip = this._layers[layerIndex].extractToAnimationClip({name, startFrameNumber, endFrameNumber});
+    const animationClip = this.findLayerByIndex(layerIndex).extractToAnimationClip({name, startFrameNumber, endFrameNumber});
     
     this._animationClips.push(animationClip);
   }
 
   deleteFrameOnLayer({layerIndex, frameNumber}) {
-    this._layers[layerIndex].deleteFrame(frameNumber);
+    this.findLayerByIndex(layerIndex).deleteFrame(frameNumber);
   }
 
   // Actions - drawings
@@ -312,11 +306,11 @@ class AnimationDocument {
 
   // Actions - onion skins
   activateOnionSkinOnLayer(layerIndex) {
-    this._layers[layerIndex].activateOnionSkin(this.onionSkinSettings);
+    this.findLayerByIndex(layerIndex).activateOnionSkin(this.onionSkinSettings);
   }
 
   deactivateOnionSkinOnLayer(layerIndex) {
-    this._layers[layerIndex].deactivateOnionSkin();
+    this.findLayerByIndex(layerIndex).deactivateOnionSkin();
   }
 
   changeOnionSkinSettings(newOnionSkinSettings) { // TODO: agregar test
@@ -325,6 +319,26 @@ class AnimationDocument {
       .forEach(layer => layer.activateOnionSkin(newOnionSkinSettings));
     
     this._onionSkinSettings = newOnionSkinSettings;
+  }
+
+  // PRIVATE - accessing - layers
+  findLayerByName(layerName) {
+    return this._layers.find(layer => layer.isNamed(layerName))
+  }
+
+  findLayerByIndex(aLayerIndex) {
+    return this._layers[aLayerIndex];
+  }
+
+  findLayerIndexFor(aLayer) {
+    return this._layers.findIndex(layer => layer === aLayer);
+  }
+
+  // PRIVATE - actions - layers
+  replaceLayerWithIndex(targetLayer, newLayer) {
+    const targetLayerIndex = this.findLayerIndexFor(targetLayer);
+    
+    this._layers.splice(targetLayerIndex, 1, newLayer);
   }
 
   // PRIVATE - actions - animation
