@@ -1,4 +1,4 @@
-import AnimationLayer from '../../model/AnimationLayer'
+import AnimationLayer from '../../model/layers/AnimationLayer'
 
 import {createFrameContent} from '../helpers/mocks';
 

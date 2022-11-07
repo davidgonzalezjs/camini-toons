@@ -152,7 +152,7 @@ class AnimationDocument {
   createTransformationLayerContaining(layerName) {
     const targetLayer = this.findLayerByName(layerName);
 
-    const transformationLayer = new TransformationLayer(this.generateLayerNamej());
+    const transformationLayer = new TransformationLayer(this.generateLayerName());
     transformationLayer.addChild(targetLayer);
     
     this.replaceLayerWithIndex(targetLayer, transformationLayer);

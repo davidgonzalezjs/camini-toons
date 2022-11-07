@@ -1,5 +1,5 @@
 import {Point} from '../../model/Point';
-import AnimationLayer from '../../model/AnimationLayer';
+import AnimationLayer from '../../model/layers/AnimationLayer';
 import {createFrameContent} from '../helpers/mocks';
 
 const createAnimationLayer = (props = {}) => new AnimationLayer({name: props.name || 'layer name', createFrameContent});
