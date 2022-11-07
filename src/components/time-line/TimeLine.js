@@ -53,25 +53,40 @@ function TransformationLayerRow({layerIndex, layersDetail, caminiToons, onClick}
         onVisibilityClick={caminiToons.handleToggleVisibility}
         onOnionSkinClick={caminiToons.handleToggleOnionSkin}
       />
-      <FramesContainer>
+      
+      {/* <FramesContainer>
+        {layersDetail.frames.map(frame =>
+          <Frame
+            data-type={'FRAME'}
+            data-layer-index={layerIndex}
+            data-frame-number={frame.number}
+            isCurrentFrame={frame.number === caminiToons.currentFrameNumber}
+            isEmpty={frame.isEmpty}
+            isKeyFrame={frame.isKeyFrame}
+            isAnimationClip={frame.isAnimationClip}
+            onClick={() => caminiToons.handleGoToFrame({layerIndex, frameNumber: frame.number})}
+          />)}
+        
+        {new Array(caminiToons.lastFrameNumber - layersDetail.frames.length)
+          .fill()
+          .map((_, index) => {
+            const frame = {number: layersDetail.frames.length + index + 1};
+            return <Frame
+                      isCurrentFrame={frame.number === caminiToons.currentFrameNumber}
+                      isEmpty={true}
+                      isNonExistingFrame={true}
+                      onClick={() => caminiToons.handleGoToFrame({layerIndex, frameNumber: frame.number})}
+                    />;
+          })}
+      </FramesContainer> */}
+      {/* <FramesContainer>
         <Frame
           isCurrentFrame={false}
           isEmpty={true}
           isNonExistingFrame={true}
           onClick={() => caminiToons.handleGoToFrame({layerIndex, frameNumber: 1})}
         />
-      </FramesContainer>
-      
-      {/* {
-        <AnimationLayerRow layerIndex={layerIndex} layersDetail={layersDetail} caminiToons={caminiToons} onClick={() => caminiToons.handleActivateLayer(layerIndex)}/>
-      } */}
-
-    {/* {layersDetail.children.map((child, childIndex) => <AnimationLayerRow layerIndex={childIndex} layersDetail={child} caminiToons={caminiToons}/>)} */}
-    {/* <div>
-      <div>Capa de transformacion</div>
-      <div>{JSON.stringify(layersDetail)}</div>
-      {layersDetail.children.map((child, childIndex) => <AnimationLayerRow layerIndex={childIndex} layersDetail={child} caminiToons={caminiToons}/>)}
-    </div> */}
+      </FramesContainer> */}
     </Row>
   );
 }

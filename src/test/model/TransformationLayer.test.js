@@ -1,6 +1,5 @@
-import {Point} from '../../model/Point';
-import AnimationLayer from '../../model/AnimationLayer';
-import {TransformationLayer} from '../../model/TransformationLayer';
+import AnimationLayer from '../../model/layers/AnimationLayer';
+import {TransformationLayer} from '../../model/layers/TransformationLayer';
 import {createFrameContent} from '../helpers/mocks';
 
 const createAnimationLayer = (props = {}) => new AnimationLayer({name: props.name || 'layer name', createFrameContent});
@@ -201,9 +200,10 @@ describe('TransformationLayer', () => {
     });
 
     it('details - cuando solo tiene un keyframe', () => {
-        const transformationLayer = new TransformationLayer();
+        const transformationLayer = new TransformationLayer('capa');
         
         expect(transformationLayer.details).toEqual({
+            name: 'capa',
             frames: {
                 x: [{ value: 0, isKeyFrame: true }]
             },
@@ -213,11 +213,12 @@ describe('TransformationLayer', () => {
     });
 
     it('details - cuando tiene varios keyframes', () => {
-        const transformationLayer = new TransformationLayer();
+        const transformationLayer = new TransformationLayer('capa');
         transformationLayer.createKeyFrameForXAtFrame(3);
         transformationLayer.changeKeyFrameValueForX({frameNumber: 3, value: 4})
 
         expect(transformationLayer.details).toEqual({
+            name: 'capa',
             frames: {
                 x: [
                     { value: 0, isKeyFrame: true },
@@ -230,13 +231,14 @@ describe('TransformationLayer', () => {
         });
     });
 
-    it('details - cuando tiene alguna capa de animacino como hija', () => {
+    it('details - cuando tiene alguna capa de animaciom como hija', () => {
         const animationLayer = createAnimationLayer();
-        const transformationLayer = new TransformationLayer();
+        const transformationLayer = new TransformationLayer('capa');
         
         transformationLayer.addChild(animationLayer);
 
         expect(transformationLayer.details).toEqual({
+            name: 'capa',
             frames: {
                 x: [{ value: 0, isKeyFrame: true }]
             },

@@ -1,8 +1,13 @@
-import {linearInterpolation} from './interpolationStrategies';
+import {linearInterpolation} from '../interpolationStrategies';
+import { Layer } from './Layer';
 
-export class TransformationLayer {
+export class TransformationLayer extends Layer {
 
-    constructor() {
+    constructor(name = 'TransformationLayer') {
+        super();
+
+        this._name = name;
+
         this._children = [];
 
         this._frames = {
@@ -21,6 +26,7 @@ export class TransformationLayer {
     // Accessing
     get details() {
         return {
+            name: this._name,
             frames: this._frames,
             children: this._children.map(child => child.details),
             type: 'TransformationLayer'

@@ -1,12 +1,15 @@
-import RegularFrame from "./frames/RegularFrame";
-import AnimationClipFrame from "./frames/AnimationClipFrame";
-import Optional from './Optional'
-import { AnimationClip } from './AnimationClip';
-import { Point } from './Point';
+import RegularFrame from "../frames/RegularFrame";
+import AnimationClipFrame from "../frames/AnimationClipFrame";
+import Optional from '../Optional'
+import { AnimationClip } from '../AnimationClip';
+import { Point } from '../Point';
+import { Layer } from './Layer';
 
-class AnimationLayer {
+class AnimationLayer extends Layer {
 
     constructor({ name, createFrameContent }) {
+        super();
+
         this._name = name;
         this._createFrameContent = createFrameContent;
         this._transformation = {

@@ -1,7 +1,7 @@
 import Optional from '../Optional';
 
-import AnimationLayer from '../AnimationLayer';
-import {TransformationLayer} from '../TransformationLayer'
+import AnimationLayer from '../layers/AnimationLayer';
+import {TransformationLayer} from '../layers/TransformationLayer'
 import {AnimationClip} from '../AnimationClip';
 import RegularFrame from "../frames/RegularFrame";
 
@@ -152,7 +152,7 @@ class AnimationDocument {
   createTransformationLayerContaining(layerName) {
     const targetLayer = this.findLayerByName(layerName);
 
-    const transformationLayer = new TransformationLayer();
+    const transformationLayer = new TransformationLayer(this.generateLayerNamej());
     transformationLayer.addChild(targetLayer);
     
     this.replaceLayerWithIndex(targetLayer, transformationLayer);
@@ -176,7 +176,7 @@ class AnimationDocument {
 
   createAnimationLayer(props = {}) {
     const newLayer = new AnimationLayer({
-      name: props.name || `Capa ${this._layers.length + 1}`,
+      name: props.name || this.generateLayerName(),
       createFrameContent: () => this._createFrameContent()
     });
 
@@ -403,6 +403,10 @@ class AnimationDocument {
     animationDocument._isPlayingOnALoop = _isPlayingOnALoop;
     
     return animationDocument;
+  }
+
+  generateLayerName() {
+    return `Capa ${this.flattenLayersDetails.length + 1}`
   }
 
 }

@@ -1,5 +1,5 @@
 import AnimationDocument from '../../model/animation-document/AnimationDocument';
-import AnimationLayer from '../../model/AnimationLayer';
+import AnimationLayer from '../../model/layers/AnimationLayer';
 import RegularFrame from '../../model/frames/RegularFrame';
 import {createFrameContent, animationDocumentMockedProps} from '../helpers/mocks';
 

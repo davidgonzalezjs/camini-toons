@@ -45,17 +45,17 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
         setCurrentFrameNumber(newCaminiToons.currentFrameNumber)
       },
       handleChangeLayerName() {
-        setLayersDetails(newCaminiToons.layersDetails);
+        setLayersDetails(newCaminiToons.flattenLayersDetails);
       },
       handleToggleVisibility() {
-        setLayersDetails(newCaminiToons.layersDetails);
+        setLayersDetails(newCaminiToons.flattenLayersDetails);
       },
       handleOnionSkinChanged() {
-        setLayersDetails(newCaminiToons.layersDetails);
+        setLayersDetails(newCaminiToons.flattenLayersDetails);
         setOnionSkinSettings(newCaminiToons.onionSkinSettings);
       },
       handleLayerUpdated() {
-        setLayersDetails(newCaminiToons.layersDetails);
+        setLayersDetails(newCaminiToons.flattenLayersDetails);
         setLastFrameNumber(newCaminiToons.lastFrameNumber);
         setAnimationClipsDetails(newCaminiToons.animationClipsDetails);
       },
@@ -74,7 +74,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     setFrameRate(newCaminiToons.frameRate);
     setCurrentFrameNumber(newCaminiToons.currentFrameNumber);
     setLastFrameNumber(newCaminiToons.lastFrameNumber);
-    setLayersDetails(newCaminiToons.layersDetails);
+    setLayersDetails(newCaminiToons.flattenLayersDetails);
     setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop());
     setPenStyle(newCaminiToons.penStyle);
     setOnionSkinSettings(newCaminiToons.onionSkinSettings);
