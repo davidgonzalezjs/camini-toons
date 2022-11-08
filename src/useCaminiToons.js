@@ -182,6 +182,14 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.insertAnimationClip({name, layerIndex, position});
   };
 
+  const handleCreateTransformationLayerContaining = (layerIndex) => {
+    caminiToons.createTransformationLayerContaining(layerIndex)
+  };
+
+  const handleCreateKeyTransformationFrame = (props) => {
+    caminiToons.createKeyTransformationFrame(props)
+  };
+
   const handleChangeOnionSkinSettings = (newOnionSkinSettings) => {
     caminiToons.changeOnionSkinSettings(newOnionSkinSettings);
   };
@@ -256,6 +264,9 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handleExtractToAnimationClip,
     handleInsertAnimation,
 
+    handleCreateTransformationLayerContaining,
+    handleCreateKeyTransformationFrame,
+
     onionSkinSettings,
     handleChangeOnionSkinSettings,
 
@@ -263,6 +274,8 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     deleteAnimationFromLocalStorage,
 
     saveToFile,
-    loadFromFile
+    loadFromFile,
+
+    model: caminiToons
   }
 }

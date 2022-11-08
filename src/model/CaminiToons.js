@@ -21,6 +21,7 @@ class CaminiToons {
       'e': () => this.useEraser(),
       'h': () => this.useHand(),
       'p': () => this.usePaintBucket(),
+      't': () => this.useTransformationTool(),
       '*': () => this.createFrameOnLayer(this._animationDocument._activeLayerIndex), // TODO: se esta rompiendo el encapsulamiento
       '+': () => this.extendFrameOnLayer({layerIndex: this._animationDocument._activeLayerIndex, frameNumber: this.currentFrameNumber}), // TODO: se esta rompiendo el encapsulamiento
       '/': () => this.convertToKeyFrame({layerIndex: this._animationDocument._activeLayerIndex, frameNumber: this.currentFrameNumber}), // TODO: se esta rompiendo el encapsulamiento
@@ -136,15 +137,26 @@ class CaminiToons {
     this.goToFrame(this.currentFrameNumber - 1);
   }
 
-  createTransformationLayerContaining(layerName) {
-    this._animationDocument.createTransformationLayerContaining(layerName);
+  createTransformationLayerContaining(layerIndex) {
+    this._animationDocument.createTransformationLayerContaining(layerIndex);
     this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
-  createKeyFrameForXAtFrame(layerName, frameNumber) {
-    this._animationDocument.createKeyFrameForXAtFrame(layerName, frameNumber);
+  createKeyTransformationFrame({layerIndex, x}) {
+    this._animationDocument.flattenLayers[layerIndex].createKeyFrameForXAtFrame(x);
+    console.log(this._animationDocument.flattenLayers[layerIndex]._frames.x)
     this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
+
+  changeKeyTransformationFrameValue({layerIndex, frameNumber, x}) {
+    this._animationDocument.flattenLayers[layerIndex].changeKeyFrameValueForX({frameNumber, value: x});
+    this._listener.ifPresent(listener => listener.handleLayerUpdated());
+  }
+
+  // createKeyFrameForXAtFrame(layerName, frameNumber) {
+  //   this._animationDocument.createKeyFrameForXAtFrame(layerName, frameNumber);
+  //   this._listener.ifPresent(listener => listener.handleLayerUpdated());
+  // }
 
   changeKeyFrameValueForX({layerName, frameNumber, value}) {
     this._animationDocument.changeKeyFrameValueForX({layerName, frameNumber, value});
@@ -268,6 +280,10 @@ class CaminiToons {
 
   usePaintBucket() {
     this.useToolNamed('paintBucket'); 
+  }
+
+  useTransformationTool() {
+    this.useToolNamed('transformationTool');
   }
 
   useToolNamed(aToolName) {

@@ -2,6 +2,7 @@ import AnimationDocument from '../../model/animation-document/AnimationDocument'
 import AnimationLayer from '../../model/layers/AnimationLayer';
 import RegularFrame from '../../model/frames/RegularFrame';
 import {createFrameContent, animationDocumentMockedProps} from '../helpers/mocks';
+import { TransformationLayer } from '../../model/layers/TransformationLayer';
 
 const createAnimationLayer = (props = {}) => new AnimationLayer({name: props.name || 'layer name', createFrameContent});
 const createAnimationDocument = (props = {}) => new AnimationDocument(animationDocumentMockedProps);
@@ -110,6 +111,57 @@ describe('Deserializacion', () => {
             expect(deserialized.isVisible()).toEqual(false);
         });
         
+    });
+
+    describe('TransformationLayer', () => {
+        it('con un keyframe', () => {
+            const transformationLayer = new TransformationLayer("layer name");
+            const serialized = transformationLayer.serialize();
+    
+            const deserialized = TransformationLayer.from(serialized, createFrameContent, frameContentDeserializer);
+
+            expect(deserialized._name).toEqual("layer name");
+            expect(deserialized._frames).toEqual({
+                x: [{value: 0, isKeyFrame: true}]
+            });
+            expect(deserialized._children).toEqual([]);
+        });
+
+        it('con algun frame interpolado', () => {
+            const transformationLayer = new TransformationLayer("layer name");
+            transformationLayer.createKeyFrameForXAtFrame(3);
+            transformationLayer.changeKeyFrameValueForX({frameNumber: 3, value: 10});
+            const serialized = transformationLayer.serialize();
+    
+            const deserialized = TransformationLayer.from(serialized, createFrameContent, frameContentDeserializer);
+
+            expect(deserialized._name).toEqual("layer name");
+            expect(deserialized._frames).toEqual({
+                x: [
+                    {value:  0, isKeyFrame: true},
+                    {value:  5, isKeyFrame: false},
+                    {value: 10, isKeyFrame: true},
+                ]
+            });
+            expect(deserialized._children).toEqual([]);
+        });
+
+        it('conteniendo algunas capas de animacion', () => {
+            const animationLayer = createAnimationLayer({name: 'animation layer name'});
+            const transformationLayer = new TransformationLayer("layer name");
+            transformationLayer.addChild(animationLayer);
+
+            const serialized = transformationLayer.serialize();
+    
+            const deserialized = TransformationLayer.from(serialized, createFrameContent, frameContentDeserializer, []);
+
+            expect(deserialized._name).toEqual("layer name");
+            expect(deserialized._frames).toEqual({
+                x: [{value: 0, isKeyFrame: true}]
+            });
+            expect(deserialized._children).toHaveLength(1);
+            expect(deserialized._children[0].isNamed('animation layer name')).toBe(true);
+        });
     });
 
     describe('AnimationDocument', () => {

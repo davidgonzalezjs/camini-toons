@@ -102,6 +102,18 @@ class RegularFrame extends Frame {
     }
 
     // PUBLIC - Serializacion
+    serialize() {
+        const content = this._content.serialize();
+        //console.log(content[1])
+        //content.position = {x: 0, y: 0};
+
+        return {
+            _content: content,
+            _isKeyFrame: this.isKeyFrame(),
+            _isAnimationClip: this.isAnimationClip()
+        }
+    }
+
     static from(serialized, contentDeserializer) {
         const content = contentDeserializer(serialized._content);
         

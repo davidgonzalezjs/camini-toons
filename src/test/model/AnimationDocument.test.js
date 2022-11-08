@@ -369,36 +369,36 @@ describe('AnimationLayer', () => {
 
     it('cuando se agrega como hija de una capa de transformacion a una capa, esta deja de ser hija directa del documento de animacion', () => {
         const animationDocument = createAnimationDocumentWithEmptyLayer();
-        const anAnimationLayer = animationDocument.createAnimationLayer();
-
-        const transformationLayer = animationDocument.createTransformationLayerContaining(anAnimationLayer.name);
+        const anAnimationLayer = animationDocument.findLayerByIndex(0);
+        
+        const transformationLayer = animationDocument.createTransformationLayerContaining(0);
 
         expect(transformationLayer.numberOfChildren).toBe(1);
         expect(transformationLayer.hasChild(anAnimationLayer)).toBe(true);
         expect(animationDocument.hasChild(anAnimationLayer)).toBe(false);
     });
 
-    it('asdasdasd', () => {
+    it('cuando una capa de animacion hija de una capa transformacion tiene mas frames que una que se encuentra en la raiz, el ultimo frame del animation document es el ultimo de la capa dentro de la capa de transformacion', () => {
         const animationDocument = createAnimationDocumentWithEmptyLayer();
-        const anAnimationLayer = animationDocument.createAnimationLayer();
+        animationDocument.createAnimationLayer();
         animationDocument.createFrameOnLayer(0);
         animationDocument.createFrameOnLayer(0);
 
-        animationDocument.createTransformationLayerContaining(anAnimationLayer.name);
+        animationDocument.createTransformationLayerContaining(0);
 
         expect(animationDocument.lastFrameNumber).toBe(2);
     });
 
-    describe('detalles de capas aplanados', () => {
+    it('detalles de capas aplanados', () => {
         const animationDocument = createAnimationDocumentWithEmptyLayer(); // Comienza con una capa
         
         const firstAnimationLayer = animationDocument.activeLayer;
         const secondAnimationLayer = animationDocument.createAnimationLayer();
-        const transformationLayer = animationDocument.createTransformationLayerContaining(firstAnimationLayer.name);
+        const transformationLayer = animationDocument.createTransformationLayerContaining(0);
 
         expect(animationDocument.flattenLayersDetails).toHaveLength(3);
-        expect(animationDocument.flattenLayersDetails[0]).toEqual(transformationLayer.details);
-        expect(animationDocument.flattenLayersDetails[1]).toEqual(firstAnimationLayer.details);
-        expect(animationDocument.flattenLayersDetails[2]).toEqual(secondAnimationLayer.details);
+        expect(animationDocument.flattenLayersDetails[0]).toEqual({...transformationLayer.details, isActive: true});
+        expect(animationDocument.flattenLayersDetails[1]).toEqual({...firstAnimationLayer.details, isActive: false});
+        expect(animationDocument.flattenLayersDetails[2]).toEqual({...secondAnimationLayer.details, isActive: false});
     })
 });

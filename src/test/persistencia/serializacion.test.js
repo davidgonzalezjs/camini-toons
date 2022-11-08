@@ -3,6 +3,7 @@ import AnimationLayer from '../../model/layers/AnimationLayer';
 import {AnimationClip} from '../../model/AnimationClip';
 
 import {createFrameContent, animationDocumentMockedProps} from '../helpers/mocks';
+import { TransformationLayer } from '../../model/layers/TransformationLayer';
 
 const createAnimationLayer = (props = {}) => new AnimationLayer({name: props.name || 'layer name', createFrameContent});
 const createAnimationDocument = (props = {}) => new AnimationDocument(animationDocumentMockedProps);
@@ -81,6 +82,63 @@ describe('Serializacion', () => {
         });
         
     });
+
+    describe('TransformationLayer', () => {
+
+        it('serializacion no conteniendo capas', () => {
+            const transformationLayer = new TransformationLayer();
+        
+            const serialized = transformationLayer.serialize();
+
+            expect(serialized).toEqual({
+                name: transformationLayer._name,
+                frames: {
+                    x: [{value: 0, isKeyFrame: true}]
+                },
+                children: [],
+                type: 'TransformationLayer'
+            });
+        });
+
+        it('serializacion conteniendo alguna capa', () => {
+            const animationLayer = createEmptyAnimationLayer();
+            const transformationLayer = new TransformationLayer();
+            transformationLayer.addChild(animationLayer);
+
+            const serialized = transformationLayer.serialize();
+
+            expect(serialized).toEqual({
+                name: transformationLayer._name,
+                frames: {
+                    x: [{value: 0, isKeyFrame: true}]
+                },
+                children: [animationLayer.serialize()],
+                type: 'TransformationLayer'
+            });
+        });
+
+        it('serializacion con algun frame interpolado', () => {
+            const transformationLayer = new TransformationLayer("layer name");
+            transformationLayer.createKeyFrameForXAtFrame(3);
+
+            const serialized = transformationLayer.serialize();
+
+            expect(serialized).toEqual({
+                name: "layer name",
+                frames: {
+                    x: [
+                        {value: 0, isKeyFrame: true},
+                        {value: 0, isKeyFrame: false},
+                        {value: 0, isKeyFrame: true}
+                    ]
+                },
+                children: [],
+                type: 'TransformationLayer'
+            });
+        });
+
+    });
+
 
     describe('AnimationClip', () => {
 

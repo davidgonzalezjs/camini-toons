@@ -9,6 +9,7 @@ import {OnionSkinBar} from '../onion-skin/OnionSkinBar';
 import {PenStylePanel} from '../contextual-penel/PenStylePanel';
 import {EraserStylePanel} from '../contextual-penel/EraserStylePanel';
 import {PaintBucketStylePanel} from '../contextual-penel/PaintBucketStylePanel';
+import {LayerTransformationPanel} from '../contextual-penel/LayerTransformationPanel';
 
 import {AnimationClipsLibrary} from '../animation-clips-library/AnimationClipsLibrary';
 
@@ -38,7 +39,8 @@ const ToolsSettings = ({caminiToons}) =>
     <>
         {caminiToons.selectedToolName === 'pen' && <PenStylePanel penStyle={caminiToons.penStyle} onChange={caminiToons.handleChangePenStyle}/>}
         {caminiToons.selectedToolName === 'eraser' && <EraserStylePanel eraserStyle={caminiToons.eraserStyle} onChange={caminiToons.handleChangeEraserStyle} />}
-        {caminiToons.selectedToolName === 'paintBucket' && <PaintBucketStylePanel paintBucketStyle={caminiToons.paintBucketStyle} onChange={caminiToons.handleChangePaintBucketStyle} />}  
+        {caminiToons.selectedToolName === 'paintBucket' && <PaintBucketStylePanel paintBucketStyle={caminiToons.paintBucketStyle} onChange={caminiToons.handleChangePaintBucketStyle} />}
+        {caminiToons.selectedToolName === 'layerTransformationTool' && <LayerTransformationPanel caminiToons={caminiToons} />}  
     </>;
 
 export const SidePanel = ({caminiToons}) => {

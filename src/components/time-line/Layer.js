@@ -42,7 +42,7 @@ const StyledLayer = styled(Row)`
 `;
 
 export const Layer = ({index, layersDetails, onLayerNameChanged, onAddFrameClick, onVisibilityClick, onOnionSkinClick}) =>
-  <StyledLayer isActive={layersDetails.isActive}>
+  <StyledLayer isActive={layersDetails.isActive} data-type={'LAYER'}>
     <Row>
       <LockButton />
       <VisibilityButton active={layersDetails.isVisible} onClick={() => onVisibilityClick(index)}/>

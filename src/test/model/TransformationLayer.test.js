@@ -92,6 +92,16 @@ describe('TransformationLayer', () => {
         expect(transformationLayer.frameForXAt(4)).toEqual(keyFrameWidthValue(0));
     });
 
+    it('cuando se crea un keyframe donde ya existe uno, el nuevo keyframe tiene el mismo valor que el keyframe previo', () => {
+        const transformationLayer = new TransformationLayer();
+        transformationLayer.changeKeyFrameValueForX({frameNumber: 1, value: 999});
+        
+        transformationLayer.createKeyFrameForXAtFrame(1);
+        
+        expect(transformationLayer.lastFrameNumberForX).toEqual(1);
+        expect(transformationLayer.frameForXAt(1)).toEqual(keyFrameWidthValue(999));
+    });
+
     it('se puede cambiar el valor de x en un keyframe', () => {
         const transformationLayer = new TransformationLayer();
 
@@ -147,6 +157,43 @@ describe('TransformationLayer', () => {
         expect(transformationLayer.frameForXAt(2)).toEqual(interpolatedFrameWithValue((-6 / 3) * 2));
         expect(transformationLayer.frameForXAt(3)).toEqual(interpolatedFrameWithValue((-6 / 3) * 1));
         expect(transformationLayer.frameForXAt(4)).toEqual(keyFrameWidthValue(0));
+    });
+
+    it('cuando se cambia el valor de dos keyframes de un segmento con varios frames interpolados en medio, el valor de dichos frames es interpolado', () => {
+        const transformationLayer = new TransformationLayer();
+        transformationLayer.createKeyFrameForXAtFrame(4);
+
+        transformationLayer.changeKeyFrameValueForX({frameNumber: 1, value: 10});
+        transformationLayer.changeKeyFrameValueForX({frameNumber: 4, value: 40});
+
+        expect(transformationLayer.lastFrameNumberForX).toEqual(4);
+        expect(transformationLayer.frameForXAt(1)).toEqual(keyFrameWidthValue(10));
+        expect(transformationLayer.frameForXAt(2)).toEqual(interpolatedFrameWithValue(20));
+        expect(transformationLayer.frameForXAt(3)).toEqual(interpolatedFrameWithValue(30));
+        expect(transformationLayer.frameForXAt(4)).toEqual(keyFrameWidthValue(40));
+    });
+
+    it('cuando se cambia el valor de dos keyframes de un segmento con varios frames interpolados en medio, el valor de dichos frames es interpolado', () => {
+        const transformationLayer = new TransformationLayer();
+        transformationLayer.createKeyFrameForXAtFrame(7);
+        transformationLayer.changeKeyFrameValueForX({frameNumber: 1, value: 10});
+        transformationLayer.changeKeyFrameValueForX({frameNumber: 7, value: 10});
+        transformationLayer.createKeyFrameForXAtFrame(4);
+
+        transformationLayer.changeKeyFrameValueForX({frameNumber: 4, value: 40});
+        
+        expect(transformationLayer.lastFrameNumberForX).toEqual(7);
+        
+        expect(transformationLayer.frameForXAt(1)).toEqual(keyFrameWidthValue(10));
+        expect(transformationLayer.frameForXAt(2)).toEqual(interpolatedFrameWithValue(20));
+        expect(transformationLayer.frameForXAt(3)).toEqual(interpolatedFrameWithValue(30));
+        
+        expect(transformationLayer.frameForXAt(4)).toEqual(keyFrameWidthValue(40));
+        
+        expect(transformationLayer.frameForXAt(5)).toEqual(interpolatedFrameWithValue(30));
+        expect(transformationLayer.frameForXAt(6)).toEqual(interpolatedFrameWithValue(20));
+        expect(transformationLayer.frameForXAt(7)).toEqual(keyFrameWidthValue(10));
+    
     });
 
     it('cuando se crea un keyframe en donde existe un frame interpolado, el frame interpolado es reemplazado por un keyframe con el mismo valor', () => {
@@ -205,7 +252,7 @@ describe('TransformationLayer', () => {
         expect(transformationLayer.details).toEqual({
             name: 'capa',
             frames: {
-                x: [{ value: 0, isKeyFrame: true }]
+                x: [{ value: 0, isKeyFrame: true, number: 1 }]
             },
             children: [],
             type: 'TransformationLayer'
@@ -221,9 +268,9 @@ describe('TransformationLayer', () => {
             name: 'capa',
             frames: {
                 x: [
-                    { value: 0, isKeyFrame: true },
-                    { value: 2, isKeyFrame: false },
-                    { value: 4, isKeyFrame: true }
+                    { number: 1, value: 0, isKeyFrame: true },
+                    { number: 2, value: 2, isKeyFrame: false },
+                    { number: 3, value: 4, isKeyFrame: true }
                 ]
             },
             children: [],
@@ -240,7 +287,7 @@ describe('TransformationLayer', () => {
         expect(transformationLayer.details).toEqual({
             name: 'capa',
             frames: {
-                x: [{ value: 0, isKeyFrame: true }]
+                x: [{ value: 0, isKeyFrame: true, number: 1 }]
             },
             children: [animationLayer.details],
             type: 'TransformationLayer'

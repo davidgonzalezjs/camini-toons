@@ -1,4 +1,5 @@
 import {linearInterpolation} from '../interpolationStrategies';
+import AnimationLayer from './AnimationLayer';
 import { Layer } from './Layer';
 
 export class TransformationLayer extends Layer {
@@ -11,7 +12,7 @@ export class TransformationLayer extends Layer {
         this._children = [];
 
         this._frames = {
-            x: [this.buildKeyFrame({frameNumber: 1, value: 0})]
+            x: [this.buildKeyFrame({value: 0})]
         };
 
         this._visibleFrameNumber = 1;
@@ -27,7 +28,12 @@ export class TransformationLayer extends Layer {
     get details() {
         return {
             name: this._name,
-            frames: this._frames,
+            frames: {
+                x: this._frames.x.map((frame, index) => ({
+                    ...frame,
+                    number: index + 1
+                }))
+            },
             children: this._children.map(child => child.details),
             type: 'TransformationLayer'
         };
@@ -125,6 +131,10 @@ export class TransformationLayer extends Layer {
     }
 
     // Actions
+    activateFrame() {
+        // TODO: ¿que significa estar activada para una TransformationLayer
+    }
+
     addChild(aLayer) {
         this._children.push(aLayer);
 
@@ -143,6 +153,10 @@ export class TransformationLayer extends Layer {
     }
 
     createKeyFrameForXAtFrame(frameNumber) {
+        if (this.hasKeyFrameAt(frameNumber)) {
+            return;
+        }
+
         if (this.hasInterpolatedFrameAt(frameNumber)) { 
             this.frameForXAt(frameNumber).isKeyFrame = true;
         }
@@ -162,8 +176,27 @@ export class TransformationLayer extends Layer {
         const interpolatedFramesBefore = this.interpolatedFrameNumbersBefore(frameNumber);
         const interpolatedFramesAfter = this.interpolatedFrameNumbersAfter(frameNumber);
 
-        this.changeInterpolatedFramesValues(interpolatedFramesBefore, value, this._interpolationStrategy);
-        this.changeInterpolatedFramesValues(interpolatedFramesAfter.reverse(), value, this._interpolationStrategy);     
+        if (interpolatedFramesBefore.length > 0) {
+            const previousKeyFrameNumber = interpolatedFramesBefore[0] - 1;
+            const previousKeyFrameValue = this._frames.x[previousKeyFrameNumber - 1].value;
+
+            console.log('previousKeyFrameNumber: ' + previousKeyFrameNumber)
+            console.log('previousKeyFrameValue: ' + previousKeyFrameValue)
+            
+
+            this.changeInterpolatedFramesValues(interpolatedFramesBefore, previousKeyFrameValue, value, this._interpolationStrategy);
+        }
+
+        if (interpolatedFramesAfter.length > 0) {
+            const nextKeyFrameNumber = interpolatedFramesAfter.slice(-1)[0] + 1;
+            const nextKeyFrameValue = this._frames.x[nextKeyFrameNumber - 1].value;
+
+            // console.log(this._frames.x)
+            // console.log('number: ' + nextKeyFrameNumber)
+            // console.log('value: ' + nextKeyFrameValue)
+
+            this.changeInterpolatedFramesValues(interpolatedFramesAfter, value, nextKeyFrameValue, this._interpolationStrategy);
+        }     
     }
 
     // PRIVATE
@@ -173,10 +206,11 @@ export class TransformationLayer extends Layer {
             .map(frameNumber => this.buildInterpolationFrameWith({value}));
     }
 
-    changeInterpolatedFramesValues(interpolatedFramesNumbers, referenceValue, interpolationStrategy) {
+    changeInterpolatedFramesValues(interpolatedFramesNumbers, firstValue, secondValue, interpolationStrategy) {
         interpolatedFramesNumbers.forEach((frameNumberOfInterpolatedFrame, index) => {
             const interpolatedValue = interpolationStrategy.applyTo(
-                referenceValue,
+                firstValue,
+                secondValue,
                 index,
                 interpolatedFramesNumbers.length
             );
@@ -185,7 +219,7 @@ export class TransformationLayer extends Layer {
         });
     }
 
-    buildKeyFrame({frameNumber, value}) {
+    buildKeyFrame({value}) {
         return {
             value,
             isKeyFrame: true,
@@ -208,4 +242,28 @@ export class TransformationLayer extends Layer {
         this._children.forEach(child => child.stopPlaying());
     }
 
+    serialize() {
+        return {
+            children: this._children.map(child => child.serialize()),
+            frames: this._frames,
+            name: this._name,
+            type: "TransformationLayer"
+        };
+    }
+
+    static from(serialized, createFrameContent, frameContentDeserializer, animationClips) {
+        const deserialized = new this(serialized.name)
+
+        deserialized._frames = serialized.frames;
+        deserialized._children = serialized.children.map(layer =>
+            AnimationLayer.from(
+                layer,
+                createFrameContent,
+                frameContentDeserializer,
+                animationClips
+              )
+        );
+
+        return deserialized;
+    }
 }

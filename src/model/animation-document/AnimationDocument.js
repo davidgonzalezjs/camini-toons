@@ -52,6 +52,7 @@ class AnimationDocument {
     return this.findLayerByIndex(this._activeLayerIndex);
   }
 
+  // TODO: ¿eliminar y dejar solo flattenLayersDetails?
   get layersDetails() {
     return this._layers.map((animationLayer, index) => ({
       ...animationLayer.details,
@@ -60,11 +61,16 @@ class AnimationDocument {
   }
 
   get flattenLayersDetails() {
-    return this._layers
-      .flatMap(layer => layer.layersFlattened)
-      .map(layer => layer.details)
+    return this.flattenLayers.map((layer, index) => ({
+      ...layer.details,
+      isActive: index === this._activeLayerIndex
+    }));
   }
 
+  get flattenLayers() {
+    return this._layers.flatMap(layer => layer.layersFlattened);
+  }
+  
   // Accessing - frames
   get currentFrameNumber() {
     return this._currentFrameNumber;
@@ -78,6 +84,7 @@ class AnimationDocument {
   }
 
   get currentFrameContent() {
+    // TODO: solo funciona para AnimationLayers
     return this.activeLayer.visibleFrame._content;
   }
 
@@ -149,13 +156,13 @@ class AnimationDocument {
   }
 
   // Actions - layers
-  createTransformationLayerContaining(layerName) {
-    const targetLayer = this.findLayerByName(layerName);
+  createTransformationLayerContaining(layerIndex) {
+    const targetLayer = this.findLayerByIndex(layerIndex);
 
     const transformationLayer = new TransformationLayer(this.generateLayerName());
     transformationLayer.addChild(targetLayer);
     
-    this.replaceLayerWithIndex(targetLayer, transformationLayer);
+    this.replaceLayer(targetLayer, transformationLayer);
 
     return transformationLayer;
   }
@@ -174,6 +181,11 @@ class AnimationDocument {
     this._layers.forEach(layer => layer.moveBy(aDeltaPoint));
   }
 
+  transformActiveTransformationLayerBy({x}) {
+    // this._layers[0].createK
+    // this._layers.forEach(layer => layer.moveBy(aDeltaPoint));
+  }
+
   createAnimationLayer(props = {}) {
     const newLayer = new AnimationLayer({
       name: props.name || this.generateLayerName(),
@@ -189,7 +201,7 @@ class AnimationDocument {
 
   activateLayer(aLayerIndex) {
     this._activeLayerIndex = aLayerIndex; // TODO: agregar test
-    this.findLayerByIndex(aLayerIndex).activateFrame();
+    this.findLayerByFlattenIndex(aLayerIndex).activateFrame();
   }
 
   changeNameOfLayer(aLayerIndex, newLayerName) {
@@ -329,11 +341,15 @@ class AnimationDocument {
 
   // PRIVATE - accessing - layers
   findLayerByName(layerName) {
-    return this._layers.find(layer => layer.isNamed(layerName))
+    return this.flattenLayers.find(layer => layer.isNamed(layerName))
   }
 
   findLayerByIndex(aLayerIndex) {
-    return this._layers[aLayerIndex];
+    return this.flattenLayers[aLayerIndex];
+  }
+
+  findLayerByFlattenIndex(aLayerIndex) {
+    return this.flattenLayers[aLayerIndex];
   }
 
   findLayerIndexFor(aLayer) {
@@ -341,7 +357,8 @@ class AnimationDocument {
   }
 
   // PRIVATE - actions - layers
-  replaceLayerWithIndex(targetLayer, newLayer) {
+  replaceLayer(targetLayer, newLayer) {
+    // TODO: solo funciona si no hay transformation layers
     const targetLayerIndex = this.findLayerIndexFor(targetLayer);
     
     this._layers.splice(targetLayerIndex, 1, newLayer);
@@ -390,19 +407,25 @@ class AnimationDocument {
         frames.map(_frame => new RegularFrame(animationDocumentProps.frameContentDeserializer(_frame._content), {isKeyFrame: _frame._isKeyFrame})))
     );
 
-    animationDocument._layers = layers.map(aSerializedAnimationLayer =>
-      AnimationLayer.from(
-        aSerializedAnimationLayer,
-        animationDocumentProps.createFrameContent,
-        animationDocumentProps.frameContentDeserializer,
-        animationDocument._animationClips
-      )
-    );
+    animationDocument._layers = layers.map(aSerializedLayer => this.deserializeLayer(aSerializedLayer, animationDocumentProps, animationDocument._animationClips));
     
     animationDocument._currentFrameNumber = _currentFrameNumber;
     animationDocument._isPlayingOnALoop = _isPlayingOnALoop;
     
     return animationDocument;
+  }
+
+  static deserializeLayer(aSerializedLayer, animationDocumentProps, animationClips) {
+    const layerClass = aSerializedLayer.type === 'TransformationLayer'
+      ? TransformationLayer
+      : AnimationLayer;
+
+    return layerClass.from(
+      aSerializedLayer,
+      animationDocumentProps.createFrameContent,
+      animationDocumentProps.frameContentDeserializer,
+      animationClips
+    )
   }
 
   generateLayerName() {

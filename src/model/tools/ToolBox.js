@@ -3,6 +3,7 @@ import Hand from "./Hand";
 import Pen from "./Pen";
 import SelectionTool from "./SelectionTool";
 import PaintBucket from "./PaintBucket";
+import LayerTransformationTool from "./LayerTransformationTool";
 
 class ToolBox {
 
@@ -12,7 +13,8 @@ class ToolBox {
       new Eraser(),
       new SelectionTool(),
       new Hand(),
-      new PaintBucket()
+      new PaintBucket(),
+      new LayerTransformationTool()
     ];
     
     this.usePen();
@@ -32,6 +34,10 @@ class ToolBox {
 
   get paintBucket() {
     return this.toolNamed('paintBucket');
+  }
+
+  get layerTransformationTool() {
+    return this.toolNamed('layerTransformationTool');
   }
 
   get toolsNames() {

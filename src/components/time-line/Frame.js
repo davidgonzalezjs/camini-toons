@@ -20,17 +20,20 @@ export const Frame = styled.div`
       ${props =>
         props.isNonExistingFrame ? 'lightgreen' :
         props.isAnimationClip ? 'blue' :
+        props.isTransformationFrame ? 'CornflowerBlue ' :
         'greenyellow'} 40%,
 
       ${props =>
         props.isCurrentFrame ? 'red' :
         props.isNonExistingFrame ? 'lightgreen' :
         props.isAnimationClip ? 'blue' :
+        props.isTransformationFrame ? 'CornflowerBlue ' :
         'greenyellow'} 40% 60%,
       
       ${props =>
         props.isNonExistingFrame ? 'lightgreen' :
         props.isAnimationClip ? 'blue' :
+        props.isTransformationFrame ? 'CornflowerBlue ' :
         'greenyellow'} 60%
     );
 
