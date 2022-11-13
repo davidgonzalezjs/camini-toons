@@ -180,20 +180,12 @@ export class TransformationLayer extends Layer {
             const previousKeyFrameNumber = interpolatedFramesBefore[0] - 1;
             const previousKeyFrameValue = this._frames.x[previousKeyFrameNumber - 1].value;
 
-            console.log('previousKeyFrameNumber: ' + previousKeyFrameNumber)
-            console.log('previousKeyFrameValue: ' + previousKeyFrameValue)
-            
-
             this.changeInterpolatedFramesValues(interpolatedFramesBefore, previousKeyFrameValue, value, this._interpolationStrategy);
         }
 
         if (interpolatedFramesAfter.length > 0) {
             const nextKeyFrameNumber = interpolatedFramesAfter.slice(-1)[0] + 1;
             const nextKeyFrameValue = this._frames.x[nextKeyFrameNumber - 1].value;
-
-            // console.log(this._frames.x)
-            // console.log('number: ' + nextKeyFrameNumber)
-            // console.log('value: ' + nextKeyFrameValue)
 
             this.changeInterpolatedFramesValues(interpolatedFramesAfter, value, nextKeyFrameValue, this._interpolationStrategy);
         }     

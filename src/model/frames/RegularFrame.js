@@ -7,11 +7,16 @@ class RegularFrame extends Frame {
     constructor(content, {isKeyFrame}) {
         super();
         this._isKeyFrame = isKeyFrame;
+        
         this._content = content;
         this._content.pivot = {x: 0, y: 0};
-        this._optionalOnionSkin = Optional.empty();
-        this._position = Point.at(0, 0);
+        
         this._originalPosition = this._content.position;
+
+        this._position = Point.at(0, 0);
+        
+        this._optionalOnionSkin = Optional.empty();
+        
         this.hide();
     }
 
@@ -73,7 +78,18 @@ class RegularFrame extends Frame {
     }
 
     extended() {
+        const currentX = this._content.position.x;
+        const currentY = this._content.position.y;
+        
+        this._content.position.x = 0;
+        this._content.position.y = 0;
+        
         const extendedFrame = new RegularFrame(this._content, {isKeyFrame: false}); 
+        
+        this._content.position.x = currentX;
+        this._content.position.y = currentY;
+        
+        
         extendedFrame.show();
 
         return extendedFrame;
@@ -103,15 +119,24 @@ class RegularFrame extends Frame {
 
     // PUBLIC - Serializacion
     serialize() {
-        const content = this._content.serialize();
-        //console.log(content[1])
-        //content.position = {x: 0, y: 0};
+        const currentX = this._content.position.x;
+        const currentY = this._content.position.y;
+        
+        this._content.position.x = 0;
+        this._content.position.y = 0;
+        
+        const serializedContent = this._content.serialize();
 
-        return {
-            _content: content,
+        const serialized = {
+            _content: serializedContent,
             _isKeyFrame: this.isKeyFrame(),
             _isAnimationClip: this.isAnimationClip()
         }
+
+        this._content.position.x = currentX;
+        this._content.position.y = currentY;
+
+        return serialized
     }
 
     static from(serialized, contentDeserializer) {
