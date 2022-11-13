@@ -142,21 +142,23 @@ class CaminiToons {
     this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
-  createKeyTransformationFrame({layerIndex, x}) {
-    this._animationDocument.flattenLayers[layerIndex].createKeyFrameForXAtFrame(x);
-    console.log(this._animationDocument.flattenLayers[layerIndex]._frames.x)
+  convertToKeyFrame({layerIndex, frameNumber}) {
+    this._animationDocument.flattenLayers[layerIndex].convertToKeyFrame(frameNumber);
+    
     this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
 
-  changeKeyTransformationFrameValue({layerIndex, frameNumber, x}) {
-    this._animationDocument.flattenLayers[layerIndex].changeKeyFrameValueForX({frameNumber, value: x});
+  changeTransformationKeyFrameValue({layerIndex, frameNumber, x, y}) {
+    if (x) {
+      this._animationDocument.flattenLayers[layerIndex].changeKeyFrameValueForX({frameNumber, value: x});
+    }
+    
+    if (y) {
+      this._animationDocument.flattenLayers[layerIndex].changeKeyFrameValueForY({frameNumber, value: y});
+    }
+
     this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
-
-  // createKeyFrameForXAtFrame(layerName, frameNumber) {
-  //   this._animationDocument.createKeyFrameForXAtFrame(layerName, frameNumber);
-  //   this._listener.ifPresent(listener => listener.handleLayerUpdated());
-  // }
 
   changeKeyFrameValueForX({layerName, frameNumber, value}) {
     this._animationDocument.changeKeyFrameValueForX({layerName, frameNumber, value});
@@ -283,7 +285,7 @@ class CaminiToons {
   }
 
   useTransformationTool() {
-    this.useToolNamed('transformationTool');
+    this.useToolNamed('layerTransformationTool');
   }
 
   useToolNamed(aToolName) {

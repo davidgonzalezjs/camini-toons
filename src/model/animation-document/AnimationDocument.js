@@ -167,16 +167,6 @@ class AnimationDocument {
     return transformationLayer;
   }
 
-  // TODO: escribir test
-  createKeyFrameForXAtFrame(layerName, frameNumber) {
-    this.findLayerByName(layerName).createKeyFrameForXAtFrame(frameNumber);
-  }
-
-  // TODO: escribir test
-  changeKeyFrameValueForX({layerName, frameNumber, value}) {
-    this.findLayerByName(layerName).changeKeyFrameValueForX({frameNumber, value});
-  }
-
   moveAnimationLayersBy(aDeltaPoint) {
     this._layers.forEach(layer => layer.moveBy(aDeltaPoint));
   }

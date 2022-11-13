@@ -12,7 +12,8 @@ export class TransformationLayer extends Layer {
         this._children = [];
 
         this._frames = {
-            x: [this.buildKeyFrame({value: 0})]
+            x: [this.buildKeyFrame({value: 0})],
+            y: [this.buildKeyFrame({value: 0})]
         };
 
         this._visibleFrameNumber = 1;
@@ -32,6 +33,10 @@ export class TransformationLayer extends Layer {
                 x: this._frames.x.map((frame, index) => ({
                     ...frame,
                     number: index + 1
+                })),
+                y: this._frames.y.map((frame, index) => ({
+                    ...frame,
+                    number: index + 1
                 }))
             },
             children: this._children.map(child => child.details),
@@ -43,12 +48,12 @@ export class TransformationLayer extends Layer {
         return Math.max(...this._children.map(child => child.lastFrameNumber));
     }
 
-    get lastFrameNumberForX() {
-        return this._frames.x.length;
+    get lastTransformationFrameNumber() {
+        return Math.max(this.lastFrameNumberFor('x'), this.lastFrameNumberFor('y'));
     }
 
-    get lastFrameForX() {
-        return this.frameForXAt(this.lastFrameNumberForX)
+    lastFrameNumberFor(property) {
+        return this._frames[property].length;
     }
 
     get numberOfChildren() {
@@ -59,25 +64,23 @@ export class TransformationLayer extends Layer {
     }
 
     frameForXAt(frameNumber) {
-        return this._frames.x[Math.min(frameNumber, this.lastFrameNumberForX) - 1];
+        return this.frameAt({property: 'x', frameNumber});
     }
 
-    keyFrameNumberBefore(targetFrameNumber) {
-        let currentFrameNumber = targetFrameNumber;
-
-        while (currentFrameNumber > 1 && !this.hasKeyFrameAt(currentFrameNumber - 1)) {
-            currentFrameNumber -= 1;
-        }
-
-        return currentFrameNumber;
+    frameForYAt(frameNumber) {
+        return this.frameAt({property: 'y', frameNumber});
     }
 
-    interpolatedFrameNumbersBefore(targetFrameNumber) {
+    frameAt({property, frameNumber}) {
+        return this._frames[property][Math.min(frameNumber, this.lastFrameNumberFor(property)) - 1];
+    }
+
+    interpolatedFrameNumbersBefore({property, frameNumber}) {
         const frameNumbers = [];
 
         for (
-            let currentFrameNumber = targetFrameNumber - 1;
-            currentFrameNumber > 1 && (this.hasNoFrameAt(currentFrameNumber) || !this.hasKeyFrameAt(currentFrameNumber));
+            let currentFrameNumber = frameNumber - 1;
+            currentFrameNumber > 1 && (this.hasNoFrameAt(currentFrameNumber) || !this.hasKeyFrameForPropertyAt({property, frameNumber: currentFrameNumber}));
             currentFrameNumber--
         ) {
             frameNumbers.push(currentFrameNumber);
@@ -86,12 +89,12 @@ export class TransformationLayer extends Layer {
         return frameNumbers.reverse();
     }
 
-    interpolatedFrameNumbersAfter(targetFrameNumber) {
+    interpolatedFrameNumbersAfter({property, frameNumber}) {
         const frameNumbers = [];
 
         for (
-            let currentFrameNumber = targetFrameNumber + 1;
-            this.hasInterpolatedFrameAt(currentFrameNumber);
+            let currentFrameNumber = frameNumber + 1;
+            this.hasInterpolatedFrameForPropertyAt({property, frameNumber: currentFrameNumber});
             currentFrameNumber++
         ) {
             frameNumbers.push(currentFrameNumber);
@@ -114,20 +117,23 @@ export class TransformationLayer extends Layer {
     }
 
     hasFrameAt(frameNumber) {
-        return frameNumber <= this.lastFrameNumberForX;
-        //return this.frameForXAt(frameNumber) !== undefined;
+        return frameNumber <= this.lastTransformationFrameNumber;
     }
 
     hasNoFrameAt(frameNumber) {
         return !this.hasFrameAt(frameNumber);
     }
 
-    hasKeyFrameAt(frameNumber) {
-        return this.hasFrameAt(frameNumber) && this.frameForXAt(frameNumber).isKeyFrame;
+    hasFrameForPropertyAt({property, frameNumber}) {
+        return frameNumber <= this.lastFrameNumberFor(property);
     }
 
-    hasInterpolatedFrameAt(frameNumber) {
-        return frameNumber > 1 && this.hasFrameAt(frameNumber) && !this.hasKeyFrameAt(frameNumber);
+    hasKeyFrameForPropertyAt({property, frameNumber}) {
+        return this.hasFrameForPropertyAt({property, frameNumber}) && this.frameAt({property, frameNumber}).isKeyFrame;
+    }
+
+    hasInterpolatedFrameForPropertyAt({property, frameNumber}) {
+        return frameNumber > 1 && this.hasFrameForPropertyAt({property, frameNumber}) && !this.hasKeyFrameForPropertyAt({property, frameNumber});
     }
 
     // Actions
@@ -137,68 +143,80 @@ export class TransformationLayer extends Layer {
 
     addChild(aLayer) {
         this._children.push(aLayer);
-
-        //aLayer.changeTransformation();
     }
 
     showFrame(aFrameNumber) {
         this._visibleFrameNumber = aFrameNumber;
 
         this._children.forEach(child => {
-            const frame = this.frameForXAt(aFrameNumber);
+            const x = this.frameForXAt(aFrameNumber).value;
+            const y = this.frameForYAt(aFrameNumber).value;
 
-            child.changeTransformation({x: frame.value, y: 0});
+            child.changeTransformation({x, y});
             child.showFrame(aFrameNumber)
         });
     }
 
-    createKeyFrameForXAtFrame(frameNumber) {
-        if (this.hasKeyFrameAt(frameNumber)) {
+    convertToKeyFrame(frameNumber) {
+        this.createKeyFrameAtFrame({property: 'x', frameNumber});
+        this.createKeyFrameAtFrame({property: 'y', frameNumber});
+    }
+
+    createKeyFrameAtFrame({property, frameNumber}) {
+        if (this.hasKeyFrameForPropertyAt({property, frameNumber})) {
             return;
         }
 
-        if (this.hasInterpolatedFrameAt(frameNumber)) { 
-            this.frameForXAt(frameNumber).isKeyFrame = true;
+        if (this.hasInterpolatedFrameForPropertyAt({property, frameNumber})) {
+            this.frameAt({property, frameNumber}).isKeyFrame = true;
         }
         else {
-            const value = this.lastFrameForX.value;
+            const newKeyFrameValue = this._frames[property][this.lastFrameNumberFor(property) - 1].value;
 
-            const newInterpolatedFrames = this.buildInterpolatedFrames(frameNumber, value);
-            const newKeyFrame = this.buildKeyFrame({frameNumber, value});
+            const newInterpolatedFramesBefore = this.buildInterpolatedFramesBefore({property, frameNumber, value: newKeyFrameValue});
+            const newKeyFrame = this.buildKeyFrame({frameNumber, value: newKeyFrameValue});
 
-            this._frames.x.push(...newInterpolatedFrames, newKeyFrame);
+            this._frames[property].push(...newInterpolatedFramesBefore, newKeyFrame);
         }
     }
 
     changeKeyFrameValueForX({frameNumber, value}) {
-        this.frameForXAt(frameNumber).value = value;
+        this.changeKeyFrameValue({property: 'x', frameNumber, value})
+    }
 
-        const interpolatedFramesBefore = this.interpolatedFrameNumbersBefore(frameNumber);
-        const interpolatedFramesAfter = this.interpolatedFrameNumbersAfter(frameNumber);
+    changeKeyFrameValueForY({frameNumber, value}) {
+        this.changeKeyFrameValue({property: 'y', frameNumber, value})
+    }
 
+    changeKeyFrameValue({property, frameNumber, value}) {
+        this.frameAt({property, frameNumber}).value = value;
+
+        const interpolatedFramesBefore = this.interpolatedFrameNumbersBefore({property, frameNumber});
+        const interpolatedFramesAfter = this.interpolatedFrameNumbersAfter({property, frameNumber});
+ 
         if (interpolatedFramesBefore.length > 0) {
             const previousKeyFrameNumber = interpolatedFramesBefore[0] - 1;
-            const previousKeyFrameValue = this._frames.x[previousKeyFrameNumber - 1].value;
+            const previousKeyFrameValue = this._frames[property][previousKeyFrameNumber - 1].value;
 
-            this.changeInterpolatedFramesValues(interpolatedFramesBefore, previousKeyFrameValue, value, this._interpolationStrategy);
+            this.changeInterpolatedFramesValues(property, interpolatedFramesBefore, previousKeyFrameValue, value, this._interpolationStrategy);
         }
 
         if (interpolatedFramesAfter.length > 0) {
             const nextKeyFrameNumber = interpolatedFramesAfter.slice(-1)[0] + 1;
-            const nextKeyFrameValue = this._frames.x[nextKeyFrameNumber - 1].value;
+            const nextKeyFrameValue = this._frames[property][nextKeyFrameNumber - 1].value;
 
-            this.changeInterpolatedFramesValues(interpolatedFramesAfter, value, nextKeyFrameValue, this._interpolationStrategy);
+            this.changeInterpolatedFramesValues(property, interpolatedFramesAfter, value, nextKeyFrameValue, this._interpolationStrategy);
         }     
     }
 
     // PRIVATE
-    buildInterpolatedFrames(frameNumber, value) {
+    buildInterpolatedFramesBefore({property, frameNumber, value}) {
         return this
-            .interpolatedFrameNumbersBefore(frameNumber)
+            .interpolatedFrameNumbersBefore({property, frameNumber})
             .map(frameNumber => this.buildInterpolationFrameWith({value}));
     }
 
-    changeInterpolatedFramesValues(interpolatedFramesNumbers, firstValue, secondValue, interpolationStrategy) {
+    changeInterpolatedFramesValues(property, interpolatedFramesNumbers, firstValue, secondValue, interpolationStrategy) {
         interpolatedFramesNumbers.forEach((frameNumberOfInterpolatedFrame, index) => {
             const interpolatedValue = interpolationStrategy.applyTo(
                 firstValue,
@@ -207,7 +225,7 @@ export class TransformationLayer extends Layer {
                 interpolatedFramesNumbers.length
             );
 
-            this.frameForXAt(frameNumberOfInterpolatedFrame).value = interpolatedValue;
+            this.frameAt({property, frameNumber: frameNumberOfInterpolatedFrame}).value = interpolatedValue;
         });
     }
 

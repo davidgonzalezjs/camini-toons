@@ -122,15 +122,17 @@ describe('Deserializacion', () => {
 
             expect(deserialized._name).toEqual("layer name");
             expect(deserialized._frames).toEqual({
-                x: [{value: 0, isKeyFrame: true}]
+                x: [{value: 0, isKeyFrame: true}],
+                y: [{value: 0, isKeyFrame: true}]
             });
             expect(deserialized._children).toEqual([]);
         });
 
         it('con algun frame interpolado', () => {
             const transformationLayer = new TransformationLayer("layer name");
-            transformationLayer.createKeyFrameForXAtFrame(3);
+            transformationLayer.convertToKeyFrame(3);
             transformationLayer.changeKeyFrameValueForX({frameNumber: 3, value: 10});
+            transformationLayer.changeKeyFrameValueForY({frameNumber: 3, value: 8});
             const serialized = transformationLayer.serialize();
     
             const deserialized = TransformationLayer.from(serialized, createFrameContent, frameContentDeserializer);
@@ -141,7 +143,12 @@ describe('Deserializacion', () => {
                     {value:  0, isKeyFrame: true},
                     {value:  5, isKeyFrame: false},
                     {value: 10, isKeyFrame: true},
-                ]
+                ],
+                y: [
+                    {value:  0, isKeyFrame: true},
+                    {value:  4, isKeyFrame: false},
+                    {value:  8, isKeyFrame: true},
+                ],
             });
             expect(deserialized._children).toEqual([]);
         });
@@ -157,7 +164,8 @@ describe('Deserializacion', () => {
 
             expect(deserialized._name).toEqual("layer name");
             expect(deserialized._frames).toEqual({
-                x: [{value: 0, isKeyFrame: true}]
+                x: [{value: 0, isKeyFrame: true}],
+                y: [{value: 0, isKeyFrame: true}]
             });
             expect(deserialized._children).toHaveLength(1);
             expect(deserialized._children[0].isNamed('animation layer name')).toBe(true);

@@ -186,10 +186,6 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.createTransformationLayerContaining(layerIndex)
   };
 
-  const handleCreateKeyTransformationFrame = (props) => {
-    caminiToons.createKeyTransformationFrame(props)
-  };
-
   const handleChangeOnionSkinSettings = (newOnionSkinSettings) => {
     caminiToons.changeOnionSkinSettings(newOnionSkinSettings);
   };
@@ -265,8 +261,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     handleInsertAnimation,
 
     handleCreateTransformationLayerContaining,
-    handleCreateKeyTransformationFrame,
-
+    
     onionSkinSettings,
     handleChangeOnionSkinSettings,
 

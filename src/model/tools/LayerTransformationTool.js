@@ -23,15 +23,16 @@ class LayerTransformationTool extends Tool {
 
         if (!activeLayer.isTransformationLayer()) return;
         
-        aCaminiToons.createKeyTransformationFrame({
+        aCaminiToons.convertToKeyFrame({
           layerIndex,
-          x: frameNumber
+          frameNumber
         });
         
-        aCaminiToons.changeKeyTransformationFrameValue({
+        aCaminiToons.changeTransformationKeyFrameValue({
           layerIndex,
           frameNumber,
-          x: activeLayer._frames.x[frameNumber - 1].value + anEvent.delta.x
+          x: activeLayer._frames.x[frameNumber - 1].value + anEvent.delta.x,
+          y: activeLayer._frames.y[frameNumber - 1].value + anEvent.delta.y
         });
 
         aCaminiToons.goToFrame(frameNumber);

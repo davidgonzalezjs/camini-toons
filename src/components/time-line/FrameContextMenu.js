@@ -59,11 +59,6 @@ export const FrameContextMenu = ({caminiToons}) => {
     const handleCreateTransformationLayer = () => caminiToons.handleCreateTransformationLayerContaining(
       parseInt(contextMenuTarget.dataset.layerIndex)
     );
-
-    const createKeyTransformationFrame = () => caminiToons.handleCreateKeyTransformationFrame({
-      layerIndex: parseInt(contextMenuTarget.dataset.layerIndex),
-      x: parseInt(contextMenuTarget.dataset.frameNumber)
-    });
     
     return (
       <FrameContextMenuContainer show={showMenu} position={position}>
@@ -73,7 +68,6 @@ export const FrameContextMenu = ({caminiToons}) => {
         <Button noBorder onClick={handleDelete}>Borrar cuadro</Button>
         <hr/>
         <Button noBorder onClick={handleCreateTransformationLayer}>Crear capa de transformación</Button>
-        <Button noBorder onClick={createKeyTransformationFrame}>Convertir en cuadro clave</Button>
       </FrameContextMenuContainer>
     );
   };

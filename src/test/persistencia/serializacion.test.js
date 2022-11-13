@@ -93,7 +93,8 @@ describe('Serializacion', () => {
             expect(serialized).toEqual({
                 name: transformationLayer._name,
                 frames: {
-                    x: [{value: 0, isKeyFrame: true}]
+                    x: [{value: 0, isKeyFrame: true}],
+                    y: [{value: 0, isKeyFrame: true}]
                 },
                 children: [],
                 type: 'TransformationLayer'
@@ -110,7 +111,8 @@ describe('Serializacion', () => {
             expect(serialized).toEqual({
                 name: transformationLayer._name,
                 frames: {
-                    x: [{value: 0, isKeyFrame: true}]
+                    x: [{value: 0, isKeyFrame: true}],
+                    y: [{value: 0, isKeyFrame: true}]
                 },
                 children: [animationLayer.serialize()],
                 type: 'TransformationLayer'
@@ -119,7 +121,7 @@ describe('Serializacion', () => {
 
         it('serializacion con algun frame interpolado', () => {
             const transformationLayer = new TransformationLayer("layer name");
-            transformationLayer.createKeyFrameForXAtFrame(3);
+            transformationLayer.convertToKeyFrame(3);
 
             const serialized = transformationLayer.serialize();
 
@@ -130,7 +132,12 @@ describe('Serializacion', () => {
                         {value: 0, isKeyFrame: true},
                         {value: 0, isKeyFrame: false},
                         {value: 0, isKeyFrame: true}
-                    ]
+                    ],
+                    y: [
+                        {value: 0, isKeyFrame: true},
+                        {value: 0, isKeyFrame: false},
+                        {value: 0, isKeyFrame: true}
+                    ],
                 },
                 children: [],
                 type: 'TransformationLayer'
