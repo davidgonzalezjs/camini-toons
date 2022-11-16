@@ -6,6 +6,7 @@ class Tool {
   constructor() {
     this._area = Optional.empty();
     this._style = {};
+    this._isActive = false;
   }
 
   get style() {

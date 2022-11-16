@@ -7,7 +7,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const [layersDetails, setLayersDetails] = useState([]);
   const [animationClipsDetails, setAnimationClipsDetails] = useState([]);
   
-  const [frameRate, setFrameRate] = useState(6);
+  const [frameRate, setFrameRate] = useState(12);
   const [currentFrameNumber, setCurrentFrameNumber] = useState(1);
   const [lastFrameNumber, setLastFrameNumber] = useState(1);
   
@@ -24,6 +24,8 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
   const [onionSkinSettings, setOnionSkinSettings] = useState({ beforeColor: "red", afterColor: "green", numberOfFramesBefore: 3, numberOfFramesAfter: 3, opacityStep: 0.22 });
 
   useEffect(() => {
+    if (window.caminiToons != undefined) return;
+    
     const newCaminiToons = createCaminiToons(canvasRef.current);
 
     const animationDocumentJSON = window.localStorage.getItem('animationDocument');
@@ -65,6 +67,12 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
       }
     });
 
+    // // TODO: borrar lo de "xs". Era para chequear si se instanciaba mas de un caminiToons
+    // if (window.caminiToons == undefined) {
+    //   window.xs = []
+    // }
+    // window.xs.push(newCaminiToons)
+
     window.caminiToons = newCaminiToons;
     
     setCaminiToons(newCaminiToons);
@@ -78,7 +86,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     setIsPlayingOnALoop(newCaminiToons.isPlayingOnALoop());
     setPenStyle(newCaminiToons.penStyle);
     setOnionSkinSettings(newCaminiToons.onionSkinSettings);
-  }, [createCaminiToons, canvasRef]);
+  }, [canvasRef]);
 
   const handleChangeTool = aToolName => {
     caminiToons.useToolNamed(aToolName);

@@ -30,9 +30,8 @@ const AppLogo = () =>
   />;
 
 function App({createCaminiToons}) {
-  const canvasRef = useRef(null)
+  const canvasRef = useRef(null);
   const caminiToons = useCaminiToons(canvasRef, createCaminiToons);
-
 
   const canvasWidth = 1280;
   const canvasHeight = 720;

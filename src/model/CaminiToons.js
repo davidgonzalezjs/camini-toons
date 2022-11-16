@@ -125,6 +125,7 @@ class CaminiToons {
   }
 
   goToFrame(aFrameNumber) {
+    this.selectedTool.clear();
     this._animationDocument.goToFrame(aFrameNumber);
     this._listener.ifPresent(listener => listener.handleFrameChanged());
   }
@@ -166,6 +167,7 @@ class CaminiToons {
   }
 
   createFrameOnLayer(aLayerIndex) {
+    this.selectedTool.clear();
     this._animationDocument.createFrameOnLayer(aLayerIndex);
     this._listener.ifPresent(listener => listener.handleLayerUpdated());
   }
@@ -346,6 +348,14 @@ class CaminiToons {
 
   handleMouseUp(anEvent) {
     this.selectedTool.handleMouseUp(anEvent, this);
+  }
+
+  handleMouseLeave(anEvent) {
+    this.selectedTool.clear();
+  }
+
+  handleMouseEnter(anEvent) {
+    //this.selectedTool.clear();
   }
 
   handleKeyDown(anEvent) {
