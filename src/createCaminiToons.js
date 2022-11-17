@@ -4,13 +4,15 @@ import Clock from './model/Clock';
 import AnimationDocument from "./model/animation-document/AnimationDocument";
 import CaminiToons from "./model/CaminiToons";
 
+window.paper = Paper;
+
 export function createCaminiToons(anHTMLCanvas) {
   preparePaperJSProyect(Paper, anHTMLCanvas);
   extendPathPrototype(Paper);
   extendLayerPrototype(Paper);
 
   const clock = new Clock({frameRate: 6});
-  const animationDocument = createAnimatinoDocument(Paper);
+  const animationDocument = createAnimationDocument(Paper);
   
   const caminiToons = new CaminiToons(animationDocument, clock);
 
@@ -25,7 +27,7 @@ function preparePaperJSProyect(Paper, anHTMLCanvas) {
   Paper.view.draw();
 }
 
-function createAnimatinoDocument(Paper) {
+function createAnimationDocument(Paper) {
   return new AnimationDocument({
     createFrameContent: () => new Paper.Layer(),
     hitTest: (aPointToCheck) => Paper.project.hitTest(aPointToCheck),

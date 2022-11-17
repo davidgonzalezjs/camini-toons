@@ -386,6 +386,11 @@ class CaminiToons {
       }
     );
     
+    this._animationDocument
+      .flattenLayers
+      .filter(layer => !layer.isTransformationLayer())
+      .forEach(layer => layer._frames.forEach(frame => frame._content.remove()));
+
     this._animationDocument = animationDocument;
     
     this.goToFrame(1);

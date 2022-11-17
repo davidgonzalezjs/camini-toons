@@ -377,6 +377,10 @@ class AnimationDocument {
   }
 
   // PUBLIC - Serializacion
+  clear() {
+    this._clear();
+  }
+
   serialize() {
     return {
       _currentFrameNumber: this.currentFrameNumber,
