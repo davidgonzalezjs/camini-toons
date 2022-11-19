@@ -175,9 +175,16 @@ class AnimationLayer extends Layer {
     }
 
     extendFrame(aFrameNumber) {
-        const frameToExtend = this.findFrame(aFrameNumber).get();
-        
-        this.insertOneFrame(frameToExtend.extended(), {position: aFrameNumber + 1});
+        let currentFrameNumber = aFrameNumber;
+
+        while(this.existFrameAt(currentFrameNumber + 1) && !this.isKeyFrame(currentFrameNumber + 1)) {
+            currentFrameNumber += 1;
+        }
+
+        //console.log(`aFrameNumber: ${aFrameNumber} | currentFrameNumber: ${currentFrameNumber}`)
+        const frameToExtend = this.findFrame(currentFrameNumber).get();
+
+        this.insertOneFrame(frameToExtend.extended(), {position: currentFrameNumber + 1});
     }
 
     convertToKeyFrame(aFrameNumber) {

@@ -11,8 +11,20 @@ class AnimationClipFrame extends Frame {
     }
 
     // Accessing
-    get _content() {
-        return this._frames[this._frameNumber - 1];
+    get _content() {    
+        return this._frames[this.frameIndex];
+    }
+
+    get frameIndex() {
+        return this._frameNumber - 1;
+        // return this._frameNumber % (this._frames.length + 1) - 1;
+        // return this._frameNumber <= this._frames.length
+        // ? this._frameNumber - 1
+        // : (this._frameNumber % (this._frames.length + 1));
+    }
+
+    get lastFrameNumber() {
+        return this._frames.length;
     }
 
     // Testing
@@ -54,8 +66,21 @@ class AnimationClipFrame extends Frame {
     }
 
     extended() {
-        const extendedFrame = new AnimationClipFrame(this._content, {isKeyFrame: false}); 
-        extendedFrame.show();
+        const nextFrameNumber =
+            this._frameNumber === this.lastFrameNumber
+                ? 1
+                : this._frameNumber + 1;
+
+        const extendedFrame = new AnimationClipFrame({
+            name: this._name,
+            frameNumber: nextFrameNumber,
+            frames: this._frames,
+            isKeyFrame: false
+        });
+
+        window.extendedFrame = extendedFrame
+        // console.log(`frameNumber: ${extendedFrame._frameNumber} | frameIndex: ${this.frameIndex}`)
+        this.hide();
 
         return extendedFrame;
     }
