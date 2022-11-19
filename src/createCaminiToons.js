@@ -39,7 +39,14 @@ function createAnimationDocument(Paper) {
     createCircle(circleSettings) {
       return new Paper.Path.Circle(circleSettings);
     },
-    frameContentDeserializer: content => Paper.importJSON(content)
+    frameContentDeserializer: content => Paper.importJSON(content),
+    importSVG(url, onImageImported) {
+      return Paper.project.importSVG(url, image => {
+        image.hide();
+        image.remove();
+        onImageImported(image);
+      })
+    }
   });
 }
 

@@ -36,6 +36,14 @@ function App({createCaminiToons}) {
   const canvasWidth = 1280;
   const canvasHeight = 720;
 
+  const handleImportSVG = () => {
+    const imageURL = prompt("Ingrese la url de la imagen");
+    
+    if (imageURL != null) {
+      caminiToons.importSVG(imageURL);
+    }
+  }
+
   return (
     <AppContainer>
       <Row>
@@ -52,6 +60,7 @@ function App({createCaminiToons}) {
         <button onClick={caminiToons.saveAnimationOnLocalStorage}>Guardar</button>
         <button onClick={caminiToons.deleteAnimationFromLocalStorage}>Borrar</button>
         <button onClick={caminiToons.saveToFile}>Guardar en archivo</button>
+        <button onClick={handleImportSVG}>Importar SVG</button>
 
         <label>
           Abrir animación

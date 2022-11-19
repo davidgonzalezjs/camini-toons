@@ -228,6 +228,10 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
     caminiToons.deserializeAnimationDocument(JSON.parse(JSON.parse(text)));
   };  
 
+  const importSVG = url => {
+    caminiToons.importSVG(url);
+  }
+
   return {
     toolsNames,
     selectedToolName,
@@ -278,6 +282,8 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
 
     saveToFile,
     loadFromFile,
+
+    importSVG,
 
     model: caminiToons
   }

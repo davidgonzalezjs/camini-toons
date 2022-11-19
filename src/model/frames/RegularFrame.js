@@ -117,6 +117,10 @@ class RegularFrame extends Frame {
         return new RegularFrame(this._content.clone(), {isKeyFrame: this.isKeyFrame()});
     }
 
+    addToContent(anElement) {
+        this._content.addChild(anElement)
+    }
+
     // PUBLIC - Serializacion
     serialize() {
         const currentX = this._content.position.x;

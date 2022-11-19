@@ -15,7 +15,8 @@ class AnimationDocument {
     createPath,
     createCircle,
     frameContentDeserializer,
-    hitTest
+    hitTest,
+    importSVG
   }) {
     this._createFrameContent = createFrameContent;
     this._createPath = createPath;
@@ -24,6 +25,8 @@ class AnimationDocument {
     this._hitTestFunction = hitTest;
 
     this._frameContentDeserializer = frameContentDeserializer;
+
+    this._importSVG = importSVG;
 
     this._listener = Optional.empty();
 
@@ -327,6 +330,15 @@ class AnimationDocument {
       .forEach(layer => layer.activateOnionSkin(newOnionSkinSettings));
     
     this._onionSkinSettings = newOnionSkinSettings;
+  }
+
+  // Actions - SVG
+  importSVG(url) {
+    this._importSVG(url, svgImage => {
+      this.activeLayer.findFrame(this.currentFrameNumber).ifPresent(frame => {
+        frame.addToContent(svgImage);
+      })
+    })
   }
 
   // PRIVATE - accessing - layers
