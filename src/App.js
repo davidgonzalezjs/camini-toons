@@ -60,7 +60,7 @@ function App({createCaminiToons}) {
         <button onClick={caminiToons.saveAnimationOnLocalStorage}>Guardar</button>
         <button onClick={caminiToons.deleteAnimationFromLocalStorage}>Borrar</button>
         <button onClick={caminiToons.saveToFile}>Guardar en archivo</button>
-        <button onClick={handleImportSVG}>Importar SVG</button>
+        <button onClick={handleImportSVG}>Importar imagen</button>
 
         <label>
           Abrir animación
