@@ -16,7 +16,7 @@ class AnimationDocument {
     createCircle,
     frameContentDeserializer,
     hitTest,
-    importSVG
+    importImage
   }) {
     this._createFrameContent = createFrameContent;
     this._createPath = createPath;
@@ -26,7 +26,7 @@ class AnimationDocument {
 
     this._frameContentDeserializer = frameContentDeserializer;
 
-    this._importSVG = importSVG;
+    this._importImage = importImage;
 
     this._listener = Optional.empty();
 
@@ -333,8 +333,8 @@ class AnimationDocument {
   }
 
   // Actions - SVG
-  importSVG(url) {
-    this._importSVG(url, svgImage => {
+  importImage(url) {
+    this._importImage(url, svgImage => {
       this.activeLayer.findFrame(this.currentFrameNumber).ifPresent(frame => {
         frame.addToContent(svgImage);
       })

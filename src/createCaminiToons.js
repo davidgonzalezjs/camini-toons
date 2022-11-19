@@ -40,12 +40,26 @@ function createAnimationDocument(Paper) {
       return new Paper.Path.Circle(circleSettings);
     },
     frameContentDeserializer: content => Paper.importJSON(content),
-    importSVG(url, onImageImported) {
-      return Paper.project.importSVG(url, image => {
-        image.hide();
-        image.remove();
-        onImageImported(image);
-      })
+    importImage(url, onImageImported) {
+      const lowerCaseURL = url.toLowerCase();
+
+      if (lowerCaseURL.endsWith('.svg')) {
+        Paper.project.importSVG(url, image => {
+          image.hide();
+          image.remove();
+          
+          onImageImported(image);
+        })
+      }
+      else if (lowerCaseURL.endsWith('.png')) {
+        const image = new Paper.Raster(url)
+        image.onLoad(() => {
+          image.hide();
+          image.remove();
+
+          onImageImported(image);
+        })
+      }
     }
   });
 }

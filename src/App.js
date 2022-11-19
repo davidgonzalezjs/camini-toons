@@ -40,7 +40,7 @@ function App({createCaminiToons}) {
     const imageURL = prompt("Ingrese la url de la imagen");
     
     if (imageURL != null) {
-      caminiToons.importSVG(imageURL);
+      caminiToons.importImage(imageURL);
     }
   }
 

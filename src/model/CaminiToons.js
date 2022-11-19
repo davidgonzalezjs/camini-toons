@@ -368,8 +368,8 @@ class CaminiToons {
     this._animationDocument.tick();
   }
 
-  importSVG(url) {
-    this._animationDocument.importSVG(url);
+  importImage(url) {
+    this._animationDocument.importImage(url);
   }
 
 
