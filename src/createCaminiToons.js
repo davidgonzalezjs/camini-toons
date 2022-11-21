@@ -9,6 +9,7 @@ window.paper = Paper;
 export function createCaminiToons(anHTMLCanvas) {
   preparePaperJSProyect(Paper, anHTMLCanvas);
   extendPathPrototype(Paper);
+  extendRasterPrototype(Paper);
   extendLayerPrototype(Paper);
 
   const clock = new Clock({frameRate: 6});
@@ -95,6 +96,23 @@ function extendPathPrototype(paper) {
     this.fillColor = new paper.Color(0, 0, 0, 0);
     console.log(this.fillColor)
   }
+}
+
+function extendRasterPrototype(paper) {
+  const pathPrototype = paper.Raster.prototype;
+  
+  pathPrototype.deselect = function() {
+    this.selected = false;
+  }
+
+  pathPrototype.select = function() {
+    this.selected = true;
+  }
+
+  pathPrototype.moveBy = function(aDelta) {
+    this.position = this.position.add(aDelta);
+  }
+
 }
 
 function extendLayerPrototype(paper) {
