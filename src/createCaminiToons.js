@@ -51,14 +51,15 @@ function createAnimationDocument(Paper) {
           onImageImported(image);
         })
       }
-      else if (lowerCaseURL.endsWith('.png')) {
+      else if (lowerCaseURL.endsWith('.png') || lowerCaseURL.endsWith('.jpg')) {
         const image = new Paper.Raster(url)
-        image.onLoad(() => {
-          image.hide();
+
+        image.onLoad =() => {
           image.remove();
+          image.position = Paper.view.center;
 
           onImageImported(image);
-        })
+        };
       }
     }
   });
@@ -88,6 +89,11 @@ function extendPathPrototype(paper) {
 
   pathPrototype.moveBy = function(aDelta) {
     this.position = this.position.add(aDelta);
+  }
+
+  pathPrototype.removeFillColor = function() {
+    this.fillColor = new paper.Color(0, 0, 0, 0);
+    console.log(this.fillColor)
   }
 }
 

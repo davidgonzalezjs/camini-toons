@@ -62,6 +62,8 @@ class RegularFrame extends Frame {
         onionSkin.opacity = opacity;
         onionSkin.visible = true;
 
+        onionSkin.removeFillColor();
+
         this._optionalOnionSkin = Optional.with(onionSkin);
     }
 
