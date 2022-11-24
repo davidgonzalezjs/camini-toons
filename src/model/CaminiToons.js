@@ -386,7 +386,8 @@ class CaminiToons {
         createPath: this._animationDocument._createPath,
         createCircle: this._animationDocument._createCircle,
         frameContentDeserializer: this._animationDocument._frameContentDeserializer,
-        hitTest: this._animationDocument._hitTestFunction
+        hitTest: this._animationDocument._hitTestFunction,
+        importImage: this._animationDocument._importImage
       }
     );
     

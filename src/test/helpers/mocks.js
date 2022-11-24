@@ -21,7 +21,7 @@ export const createFrameContent = () => ({
         x: 0,
         y: 0
     },
-    
+    removeFillColor: () => {},
     isEmpty: () => true,
     visible: true,
     serialize: () => ({visible: true})
