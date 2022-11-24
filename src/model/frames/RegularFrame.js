@@ -120,8 +120,9 @@ class RegularFrame extends Frame {
     }
 
     addToContent(anElement) {
-        this._content.addChild(anElement);
+        this._content.insertBelow(anElement);
         this._content.sendToBack();
+        anElement.sendToBack();
     }
 
     // PUBLIC - Serializacion

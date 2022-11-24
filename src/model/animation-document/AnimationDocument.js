@@ -221,6 +221,8 @@ class AnimationDocument {
 
     this._currentFrameNumber = targetFrame;
     this._layers.forEach(layer => layer.showFrame(targetFrame));
+
+    this.arrangeLayers();
     
     this._listener.ifPresent(listener => listener.handleFrameChanged(targetFrame));
   }
@@ -335,7 +337,11 @@ class AnimationDocument {
   // Actions - SVG
   importImage(url) {
     this._importImage(url, svgImage => {
+      console.log('importImage CALLBACK')
+        
       this.activeLayer.findFrame(this.currentFrameNumber).ifPresent(frame => {
+        console.log('svgImage.sendToBack')
+        console.log(svgImage.sendToBack)
         frame.addToContent(svgImage);
       })
     })
@@ -364,6 +370,14 @@ class AnimationDocument {
     const targetLayerIndex = this.findLayerIndexFor(targetLayer);
     
     this._layers.splice(targetLayerIndex, 1, newLayer);
+  }
+
+  arrangeLayers() {
+    this.flattenLayers.forEach(layer => {
+      if (layer.visibleFrame && layer.visibleFrame._content.sendToBack) {
+        layer.visibleFrame._content.sendToBack();
+      }
+    });
   }
 
   // PRIVATE - actions - animation
