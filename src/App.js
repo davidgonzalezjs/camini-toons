@@ -6,13 +6,13 @@ import {useCaminiToons} from './useCaminiToons';
 
 import caminiToonsLogo from './assets/Camini-Toons-logo.png';
 
+import {Button, LabelAsButton} from './components/input/Input';
 import Column from './components/Column';
 import Row from './components/Row';
 import {ToolBoxBar} from './components/tool-box/ToolBoxBar';
 import TimeLine from './components/time-line/TimeLine';
 import {PlaybackBar} from './components/playback/PlaybackBar';
 import {SidePanel} from './components/side-panel/SidePanel';
-
 import Canvas from './components/Canvas';
 
 const AppContainer = styled(Column)`
@@ -57,15 +57,15 @@ function App({createCaminiToons}) {
       </Row>
 
       <Row>
-        <button onClick={caminiToons.saveAnimationOnLocalStorage}>Guardar</button>
-        <button onClick={caminiToons.deleteAnimationFromLocalStorage}>Borrar</button>
-        <button onClick={caminiToons.saveToFile}>Guardar en archivo</button>
-        <button onClick={handleImportSVG}>Importar imagen</button>
+        <Button onClick={caminiToons.saveAnimationOnLocalStorage}>Guardar</Button>
+        <Button onClick={caminiToons.deleteAnimationFromLocalStorage}>Borrar</Button>
+        <Button onClick={caminiToons.saveToFile}>Guardar en archivo</Button>
+        <Button onClick={handleImportSVG}>Importar imagen</Button>
 
-        <label>
+        <LabelAsButton>
           Abrir animación
           <input style={{display: 'none'}} type="file" accept=".animationDocument" onChange={(e) => caminiToons.loadFromFile(e.target.files[0])}/>
-        </label>
+        </LabelAsButton>
       </Row>
 
       <Row>

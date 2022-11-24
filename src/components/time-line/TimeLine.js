@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import {Button} from '../input/Input';
 import {Card} from '../Card';
 import Row from '../Row';
 import {Layer} from './Layer';
@@ -23,7 +24,7 @@ const Timeline = ({caminiToons}) => {
       <FrameContextMenu caminiToons={caminiToons}/>
 
       <div>
-        <button onClick={caminiToons.handleCreateLayerClick}>Crear capa</button>
+        <Button onClick={caminiToons.handleCreateLayerClick}>Crear capa</Button>
       </div>
       
       <LayersContainer>

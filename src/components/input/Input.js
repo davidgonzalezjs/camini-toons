@@ -25,6 +25,41 @@ export const Input = styled.input`
     width: 90px;
 `;
 
+export const Button = styled.button`
+  background-color: green;
+  border: none;
+  border-radius: 3;
+  color: white;
+  padding: 5px;
+  margin: 3px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+
+  &:hover {
+    background-color: lightgreen;
+  }
+`;
+
+export const LabelAsButton = styled.label`
+  background-color: green;
+  border: none;
+  border-radius: 3;
+  color: white;
+  padding: 5px;
+  margin: 3px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+
+  &:hover {
+    background-color: lightgreen;
+  }
+`;
+
+
 export const ColorPicker = ({color, onChange}) => {
     const [showColorPicker, openColorPicker, closeColorPicker] = useModalState();
 
