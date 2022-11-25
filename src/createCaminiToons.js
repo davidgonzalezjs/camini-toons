@@ -94,7 +94,6 @@ function extendPathPrototype(paper) {
 
   pathPrototype.removeFillColor = function() {
     this.fillColor = new paper.Color(0, 0, 0, 0);
-    console.log(this.fillColor)
   }
 }
 

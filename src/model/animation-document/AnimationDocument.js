@@ -337,11 +337,8 @@ class AnimationDocument {
   // Actions - SVG
   importImage(url) {
     this._importImage(url, svgImage => {
-      console.log('importImage CALLBACK')
         
       this.activeLayer.findFrame(this.currentFrameNumber).ifPresent(frame => {
-        console.log('svgImage.sendToBack')
-        console.log(svgImage.sendToBack)
         frame.addToContent(svgImage);
       })
     })
@@ -373,11 +370,16 @@ class AnimationDocument {
   }
 
   arrangeLayers() {
-    this.flattenLayers.forEach(layer => {
-      if (layer.visibleFrame && layer.visibleFrame._content.sendToBack) {
-        layer.visibleFrame._content.sendToBack();
-      }
-    });
+    // this.flattenLayers.forEach(layer => {
+    //   if (layer.visibleFrame && layer.visibleFrame._content.sendToBack) {
+    //     layer.visibleFrame._content.sendToBack();
+    //   }
+    // });
+    console.log('this.flattenLayers.length: ' + this.flattenLayers.length)
+    if (this.flattenLayers.length === 5) {
+      console.log(123123)
+      this.flattenLayers[4]._frames[0]._content.sendToBack()
+    }
   }
 
   // PRIVATE - actions - animation
