@@ -222,7 +222,7 @@ class AnimationDocument {
     this._currentFrameNumber = targetFrame;
     this._layers.forEach(layer => layer.showFrame(targetFrame));
 
-    this.arrangeLayers();
+    // this.arrangeLayers();
     
     this._listener.ifPresent(listener => listener.handleFrameChanged(targetFrame));
   }
@@ -375,11 +375,11 @@ class AnimationDocument {
     //     layer.visibleFrame._content.sendToBack();
     //   }
     // });
-    console.log('this.flattenLayers.length: ' + this.flattenLayers.length)
-    if (this.flattenLayers.length === 5) {
-      console.log(123123)
-      this.flattenLayers[4]._frames[0]._content.sendToBack()
-    }
+    // console.log('this.flattenLayers.length: ' + this.flattenLayers.length)
+    // if (this.flattenLayers.length === 5) {
+    //   console.log(123123)
+    //   this.flattenLayers[4]._frames[0]._content.sendToBack()
+    // }
   }
 
   // PRIVATE - actions - animation
