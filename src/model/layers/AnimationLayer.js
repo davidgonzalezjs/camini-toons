@@ -146,7 +146,7 @@ class AnimationLayer extends Layer {
     }
 
     activateFrame() {
-        this.visibleFrame.activate();
+        if (this.visibleFrame) this.visibleFrame.activate();
     }
 
     createFrameAt(aTargetFrameNumber) {

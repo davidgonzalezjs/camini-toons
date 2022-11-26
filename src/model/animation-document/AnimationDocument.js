@@ -370,13 +370,14 @@ class AnimationDocument {
   }
 
   arrangeLayers() {
-    // this.flattenLayers.forEach(layer => {
-    //   if (layer.visibleFrame && layer.visibleFrame._content.sendToBack) {
-    //     layer.visibleFrame._content.sendToBack();
-    //   }
-    // });
+    this.flattenLayers.forEach(layer => {
+      // TODO: Corregir. Se esta rompiendo el encapsulamiento
+      if (layer.visibleFrame && layer.visibleFrame._content.sendToBack) {
+        layer.visibleFrame._content.sendToBack();
+      }
+    });
 
-    // this.activeLayer.activateFrame();
+    this.activeLayer.activateFrame();
 
     
     // console.log('this.flattenLayers.length: ' + this.flattenLayers.length)
