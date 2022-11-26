@@ -57,6 +57,7 @@ export function useCaminiToons(canvasRef, createCaminiToons) {
         setOnionSkinSettings(newCaminiToons.onionSkinSettings);
       },
       handleLayerUpdated() {
+        setCurrentFrameNumber(newCaminiToons.currentFrameNumber)
         setLayersDetails(newCaminiToons.flattenLayersDetails);
         setLastFrameNumber(newCaminiToons.lastFrameNumber);
         setAnimationClipsDetails(newCaminiToons.animationClipsDetails);
