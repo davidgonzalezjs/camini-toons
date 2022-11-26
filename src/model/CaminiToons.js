@@ -125,8 +125,9 @@ class CaminiToons {
   }
 
   goToFrame(aFrameNumber) {
-    this.selectedTool.clear();
     this._animationDocument.goToFrame(aFrameNumber);
+    this.selectedTool.clear();
+
     this._listener.ifPresent(listener => listener.handleFrameChanged());
   }
 
