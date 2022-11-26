@@ -1,16 +1,18 @@
-import LessMokedAnimationDocument from "../../model/animation-document/LessMokedAnimationDocument";
+import AnimationDocument from "../../model/animation-document/AnimationDocument";
 import Clock from "../../model/Clock";
 import CaminiToons from "../../model/CaminiToons";
 
 import { clickEvent, mouseDragEvent, mouseUpEvent } from '../helpers/mouse-event-factory'
-import { mockPath, mockFunctionReturning, mockFunctionReturningSequence } from "../helpers/mocks";
+import { mockPath, mockFunctionReturning, mockFunctionReturningSequence, createAnimationDocumentMockedProps } from "../helpers/mocks";
 
 describe('Dibujo con lapiz', () => {
+    let animationDocumentMockedProps;
     let animationDocument;
     let caminiToons;
 
     beforeEach(() => {
-        animationDocument = new LessMokedAnimationDocument();
+        animationDocumentMockedProps = createAnimationDocumentMockedProps();
+        animationDocument = new AnimationDocument(animationDocumentMockedProps);
         caminiToons = new CaminiToons(animationDocument, new Clock({frameRate: 6}));
     });
 
@@ -47,6 +49,9 @@ describe('Dibujo con lapiz', () => {
     });
     
     it('si mientras se estaba dibujando un trazo se desclickea el mouse y se lo mueve ya no se sigue dibujando', () => {
+        const mockedPath = mockPath();
+        animationDocument.createPath = mockFunctionReturning(mockedPath);
+        
         caminiToons.handleMouseDown(clickEvent({x: 10, y: 20}))
         caminiToons.handleMouseMove(mouseDragEvent({x: 15, y: 25}))
         caminiToons.handleMouseUp(mouseUpEvent({x: 15, y: 25}))
@@ -84,6 +89,9 @@ describe('Dibujo con lapiz', () => {
     });
 
     it('cuando se cambia el lapiz por una herramienta que no es de dibujo y se hace click no se dibuja ningun trazo', () => { 
+        const mockedPath = mockPath();
+        animationDocument.createPath = mockFunctionReturning(mockedPath);
+        
         caminiToons.useSelectionTool();
         
         caminiToons.handleMouseDown(clickEvent());
@@ -92,6 +100,9 @@ describe('Dibujo con lapiz', () => {
     });
 
     it('cuando se cambia una herramienta que no es de dibujo por el lapiz y se hace click se puede dibujar', () => { 
+        const mockedPath = mockPath();
+        animationDocument.createPath = mockFunctionReturning(mockedPath);
+        
         caminiToons.useSelectionTool();
 
         caminiToons.usePen();
@@ -100,4 +111,61 @@ describe('Dibujo con lapiz', () => {
 
         expect(animationDocument.createPath).toBeCalledTimes(1);
     })
+
+    it('se puede consultar el estilo del lapiz', () => {
+        expect(caminiToons.penStyle).toEqual({
+            fillColor: 'crimson',
+            shouldFill: false,
+            strokeCap: 'round',
+            strokeColor: "black",
+            strokeWidth: 3,
+            smoothing: 3
+        });
+    });
+
+    it('se puede cambiar el color del trazo', () => { 
+        const initialStyle = caminiToons.penStyle;
+        const newStokeColor = 'red';
+        caminiToons.changePenStyle({strokeColor: newStokeColor});
+
+        expect(caminiToons.penStyle).toEqual({
+            fillColor: initialStyle.fillColor,
+            shouldFill: initialStyle.shouldFill,
+            strokeCap: initialStyle.strokeCap,
+            strokeColor: newStokeColor,
+            strokeWidth: initialStyle.strokeWidth,
+            smoothing: initialStyle.smoothing
+        });
+    });
+
+    it('se puede cambiar el grosor del trazo', () => { 
+        const initialStyle = caminiToons.penStyle;
+        const newStrokeWidth = initialStyle.strokeWidth + 10;
+        caminiToons.changePenStyle({strokeWidth: newStrokeWidth});
+
+        expect(caminiToons.penStyle).toEqual({
+            fillColor: initialStyle.fillColor,
+            shouldFill: initialStyle.shouldFill,
+            strokeCap: initialStyle.strokeCap,
+            strokeColor: initialStyle.strokeColor,
+            strokeWidth: newStrokeWidth,
+            smoothing: initialStyle.smoothing
+        });
+    });
+
+    it('se puede cambiar el suavizado del trazo', () => { 
+        const initialStyle = caminiToons.penStyle;
+        const newSmoothing = initialStyle.smoothing + 10;
+        caminiToons.changePenStyle({smoothing: newSmoothing});
+
+        expect(caminiToons.penStyle).toEqual({
+            fillColor: initialStyle.fillColor,
+            shouldFill: initialStyle.shouldFill,
+            strokeCap: initialStyle.strokeCap,
+            strokeColor: initialStyle.strokeColor,
+            strokeWidth: initialStyle.strokeWidth,
+            smoothing: newSmoothing
+        });
+    });
+
 });

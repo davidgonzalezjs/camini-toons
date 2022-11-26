@@ -1,19 +1,24 @@
 import styled from 'styled-components';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
+
+import {useCaminiToons} from './useCaminiToons';
 
 import caminiToonsLogo from './assets/Camini-Toons-logo.png';
 
+import {Button, LabelAsButton} from './components/input/Input';
 import Column from './components/Column';
 import Row from './components/Row';
 import {ToolBoxBar} from './components/tool-box/ToolBoxBar';
 import TimeLine from './components/time-line/TimeLine';
 import {PlaybackBar} from './components/playback/PlaybackBar';
+import {SidePanel} from './components/side-panel/SidePanel';
 import Canvas from './components/Canvas';
 
 const AppContainer = styled(Column)`
   align-items: stretch;
   background-color: mediumpurple;
+  height: 100vh;
 `;
 
 const AppLogo = () =>
@@ -21,47 +26,22 @@ const AppLogo = () =>
     style={{margin: 'auto'}}
     width={'300px'}
     src={caminiToonsLogo}
+    alt='Camini-Toons logo'
   />;
 
 function App({createCaminiToons}) {
-  const canvasRef = useRef(null)
-  const [caminiToons, setCaminiToons] = useState();
-  const [toolsNames, setToolsNames] = useState([]);
-  const [selectedToolName, setSelectedToolName] = useState('pen');
-  const [frames, setFrames] = useState([{number: 1}]);
-  const [frameRate, setFrameRate] = useState(6);
-
-  useEffect(() => {
-    const newCaminiToons = createCaminiToons(canvasRef.current);
-    
-    setCaminiToons(newCaminiToons);
-    setSelectedToolName(newCaminiToons.selectedTool.name);
-    setToolsNames(newCaminiToons.toolsNames);
-  }, [createCaminiToons]);
+  const canvasRef = useRef(null);
+  const caminiToons = useCaminiToons(canvasRef, createCaminiToons);
 
   const canvasWidth = 1280;
   const canvasHeight = 720;
 
-  const handleToolIconClicked = aToolName => {
-    caminiToons.useToolNamed(aToolName);
-    setSelectedToolName(aToolName);
-  };
-
-  const handleCreateFrame = (layerName) => {
-    caminiToons.createFrame();
-    setFrames([...frames, {number: frames.length + 1}]);
-  };
-
-  const handleFrameClick = frame => {
-    caminiToons.goToFrame(frame.number);
-  };
-
-  const handlePlayAnimation = () => {
-    caminiToons.playAnimation();
-  };
-
-  const handleRepeatAnimation = () => {
-
+  const handleImportSVG = () => {
+    const imageURL = prompt("Ingrese la url de la imagen");
+    
+    if (imageURL != null) {
+      caminiToons.importImage(imageURL);
+    }
   }
 
   return (
@@ -70,35 +50,40 @@ function App({createCaminiToons}) {
         <AppLogo />
       </Row>
       
-      <TimeLine
-        frames={frames}
-        onAddFrameClick={handleCreateFrame}
-        onFrameClick={handleFrameClick}
-      />
+      <TimeLine caminiToons={caminiToons}/>
 
-      <PlaybackBar
-        frameRate={frameRate}
-        onPlay={handlePlayAnimation}
-        onRepeat={handleRepeatAnimation}
-      />
+      <Row>
+        <PlaybackBar caminiToons={caminiToons}/>
+      </Row>
+
+      <Row>
+        <Button onClick={caminiToons.saveAnimationOnLocalStorage}>Guardar</Button>
+        <Button onClick={caminiToons.deleteAnimationFromLocalStorage}>Borrar</Button>
+        <Button onClick={caminiToons.saveToFile}>Guardar en archivo</Button>
+        
+        <LabelAsButton>
+          Abrir animación
+          <input style={{display: 'none'}} type="file" accept=".animationDocument" onChange={(e) => caminiToons.loadFromFile(e.target.files[0])}/>
+        </LabelAsButton>
+      
+        <Button onClick={handleImportSVG}>Importar imagen</Button>
+      </Row>
 
       <Row>
         <ToolBoxBar
-          selectedToolName={selectedToolName}
-          toolsNames={toolsNames}
-          onToolIconClicked={handleToolIconClicked}
+          selectedToolName={caminiToons.selectedToolName}
+          toolsNames={caminiToons.toolsNames}
+          onToolIconClicked={caminiToons.handleChangeTool}
         />
 
         <Canvas
           ref={canvasRef}
           width={canvasWidth}
           height={canvasHeight}
-          selectedToolName={selectedToolName}
+          selectedToolName={caminiToons.selectedToolName}
         />
 
-        <Column style={{backgroundColor: 'lightBlue', flexGrow: 1}}>
-          
-        </Column>
+        <SidePanel caminiToons={caminiToons}/>
       </Row>
     </AppContainer>
   );

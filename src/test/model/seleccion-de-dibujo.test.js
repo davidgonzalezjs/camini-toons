@@ -13,6 +13,7 @@ describe('Seleccion de dibujo', () => {
 
     beforeEach(() => {
         animationDocument = new MokedAnimationDocument();
+        animationDocument.hitTest = jest.fn(() => Optional.empty())
         caminiToons = new CaminiToons(animationDocument, new Clock({frameRate: 6}));
         caminiToons.useSelectionTool();
     });

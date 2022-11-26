@@ -7,8 +7,16 @@ class Clock {
     this._listener = Optional.empty();
   }
 
+  get frameRate() {
+    return this._frameRate;
+  }
+
   get frameDurationInSeconds() {
-    return 1 / this._frameRate;
+    return 1 / this.frameRate;
+  }
+
+  changeFrameRateTo(aFrameRate) {
+    this._frameRate = aFrameRate;
   }
 
   registerListener(aListener) {

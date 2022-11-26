@@ -1,29 +1,15 @@
 import styled from 'styled-components';
 
-import lockIcon from '../../assets/layer/lock.svg';
-import onionIcon from '../../assets/layer/onion.svg';
-import eyeIcon from '../../assets/layer/eye.svg';
+import {Button} from '../input/Input';
+import {Card} from '../Card';
+import Row from '../Row';
+import {Layer} from './Layer';
+import {Frame} from './Frame';
 
-import {Icon} from '../Icon'
+import {FrameContextMenu} from './FrameContextMenu';
 
-import newFrameIcon from '../../assets/layer/new-frame.svg';
-
-import Row from '../Row'
-import Frame from './Frame'
-
-const TimeLineRow = styled(Row)`
-  height: 40px;
+const LayersContainer = styled(Card)`
   align-items: stretch;
-`;
-
-const StyledLayer = styled(Row)`
-  align-items: center;
-  padding-left: 5px;
-  padding-right: 5px;
-  background-color: orange;
-  gap: 5px;
-  width: 320px;
-  border: 2px solid darkorange;
 `;
 
 const FramesContainer = styled(Row)`
@@ -32,46 +18,123 @@ const FramesContainer = styled(Row)`
   border: 1px solid darkgreen;
 `;
 
-const LayerIcon = styled(Icon)`
-  opacity: ${props => props.active ?  1 : 0.4 };
-  width: 25px;
-  height: 25px;
-`;
-
-const VisibilityButton = () => <LayerIcon src={eyeIcon} active />
-const LockButton = () => <LayerIcon src={lockIcon} />;
-const OnionSkinButton = () => <LayerIcon src={onionIcon} />;
-
-const AddFrameButton = (props) => <LayerIcon {...props} active src={newFrameIcon} />;
-
-const LayerLabel = styled.p`
-  flex-grow: 1;
-`;
-
-
-const Layer = ({name, onAddFrameClick}) =>
-  <StyledLayer>
-    <Row>
-      <LockButton />
-      <VisibilityButton />
-      <OnionSkinButton />
-    </Row>
-    
-    <LayerLabel>{name}</LayerLabel>
-    
-    <AddFrameButton onClick={() => onAddFrameClick(name)} />
-  </StyledLayer>
-
-
-const Timeline = ({ frames, onAddFrameClick, onFrameClick }) => {
+const Timeline = ({caminiToons}) => {
   return (
-    <TimeLineRow>
-      <Layer name={'Layer 1'} onAddFrameClick={onAddFrameClick} />
-      <FramesContainer>
-        {frames.map(frame => <Frame onClick={() => onFrameClick(frame)}/>)}    
-      </FramesContainer>
-    </TimeLineRow>
+    <>
+      <FrameContextMenu caminiToons={caminiToons}/>
+
+      <div>
+        <Button onClick={caminiToons.handleCreateLayerClick}>Crear capa</Button>
+      </div>
+      
+      <LayersContainer>
+        {caminiToons.layersDetails.map((layersDetail, layerIndex) => {
+          const LayerRow = layersDetail.type === 'TransformationLayer' ? TransformationLayerRow : AnimationLayerRow;
+          
+          return (
+            <LayerRow
+              layerIndex={layerIndex}
+              layersDetail={layersDetail}
+              caminiToons={caminiToons}
+              onClick={() => caminiToons.handleActivateLayer(layerIndex)}
+            />
+          );
+        })}
+      </LayersContainer>
+    </>
   );
 };
+
+function TransformationLayerRow({layerIndex, layersDetail, caminiToons, onClick}) {
+  return (
+    <Row onClick={onClick}>
+      <Layer
+        index={layerIndex}
+        layersDetails={layersDetail}
+        onLayerNameChanged={caminiToons.handleChangeLayerName}
+        onAddFrameClick={caminiToons.handleCreateFrame}
+        onVisibilityClick={caminiToons.handleToggleVisibility}
+        onOnionSkinClick={caminiToons.handleToggleOnionSkin}
+      />
+      {/* <div>{JSON.stringify(layersDetail.frames.x)}</div> */}
+      <FramesContainer>
+        {layersDetail.frames.x.map(frame =>
+          <Frame
+            data-type={'FRAME'}
+            data-layer-index={layerIndex}
+            data-frame-number={frame.number}
+            
+            isCurrentFrame={frame.number === caminiToons.currentFrameNumber}
+            isEmpty={frame.isEmpty} // TODO: ver que hacer con esto para capa de transformacion
+            isKeyFrame={frame.isKeyFrame}
+            isTransformationFrame={true}
+            
+            onClick={() => caminiToons.handleGoToFrame({layerIndex, frameNumber: frame.number})}
+          />)}
+        
+        {new Array(caminiToons.lastFrameNumber - layersDetail.frames.x.length)
+          .fill()
+          .map((_, index) => {
+            const frame = {number: layersDetail.frames.x.length + index + 1};
+            
+            return <Frame
+                      data-type={'FRAME'}
+                      data-layer-index={layerIndex}
+                      data-frame-number={frame.number}
+                      
+                      isCurrentFrame={frame.number === caminiToons.currentFrameNumber}
+                      isEmpty={true}
+                      isKeyFrame={false}
+                      isNonExistingFrame={true}
+                      isTransformationFrame={true}
+            
+                      onClick={() => caminiToons.handleGoToFrame({layerIndex, frameNumber: frame.number})}
+                    />;
+          })}
+      </FramesContainer>
+    </Row>
+  );
+}
+
+function AnimationLayerRow({layerIndex, layersDetail, caminiToons, onClick}) {
+  return (
+    <Row onClick={onClick}>
+      <Layer
+        data-type={'LAYER'}
+        index={layerIndex}
+        layersDetails={layersDetail}
+        onLayerNameChanged={caminiToons.handleChangeLayerName}
+        onAddFrameClick={caminiToons.handleCreateFrame}
+        onVisibilityClick={caminiToons.handleToggleVisibility}
+        onOnionSkinClick={caminiToons.handleToggleOnionSkin}
+      />
+      <FramesContainer>
+        {layersDetail.frames.map(frame =>
+          <Frame
+            data-type={'FRAME'}
+            data-layer-index={layerIndex}
+            data-frame-number={frame.number}
+            isCurrentFrame={frame.number === caminiToons.currentFrameNumber}
+            isEmpty={frame.isEmpty}
+            isKeyFrame={frame.isKeyFrame}
+            isAnimationClip={frame.isAnimationClip}
+            onClick={() => caminiToons.handleGoToFrame({layerIndex, frameNumber: frame.number})}
+          />)}
+        
+        {new Array(caminiToons.lastFrameNumber - layersDetail.frames.length)
+          .fill()
+          .map((_, index) => {
+            const frame = {number: layersDetail.frames.length + index + 1};
+            return <Frame
+                      isCurrentFrame={frame.number === caminiToons.currentFrameNumber}
+                      isEmpty={true}
+                      isNonExistingFrame={true}
+                      onClick={() => caminiToons.handleGoToFrame({layerIndex, frameNumber: frame.number})}
+                    />;
+          })}
+      </FramesContainer>
+    </Row>
+  );
+}
 
 export default Timeline;

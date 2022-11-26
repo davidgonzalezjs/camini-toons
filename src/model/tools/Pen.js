@@ -9,10 +9,13 @@ class Pen extends Tool {
     this._style = {
       strokeCap: 'round',
       strokeColor: "black",
-      strokeWidth: 3
-    }
+      fillColor: 'crimson',
+      strokeWidth: 3,
+      smoothing: 3,
+
+      shouldFill: false,
+    };
     
-    this._simplification = 3;
     this._currentPath = Optional.empty();
   }
 
@@ -21,25 +24,43 @@ class Pen extends Tool {
   }
 
   handleMouseDown(anEvent, aCaminiToons) {
+    super.handleMouseDown(anEvent, aCaminiToons);
+    this.startDrawing(anEvent.point, aCaminiToons);
+  }
+
+  handleMouseMove(anEvent, aCaminiToons) {
+    super.handleMouseMove(anEvent, aCaminiToons);
+    this.continueDrawing(anEvent.point);
+  }
+
+  handleMouseUp(anEvent, aCaminiToons) {
+    super.handleMouseUp(anEvent, aCaminiToons);
+    this.finishDrawing();
+  }
+
+  createArea(aPosition, aCaminiToons) {
+    const area = aCaminiToons.createCircle({center: aPosition, ...this.style})
+    this._area = Optional.fromNullable(area);
+  }
+
+  startDrawing(aPoint, aCaminiToons) {
     const newPath = aCaminiToons.createPath(this._style);
-    newPath.add(anEvent.point);
+    newPath.add(aPoint);
+
+    newPath.fillColor.alpha = this.style.shouldFill ? 1 : 0;    
 
     this._currentPath = Optional.with(newPath);
   }
 
-  handleMouseMove(anEvent, aCaminiToons) {
-    this._currentPath.ifPresent(path => path.add(anEvent.point))
+  continueDrawing(aPoint) {
+    this._currentPath.ifPresent(path => path.add(aPoint))
   }
-
-  handleMouseUp(anEvent, aCaminiToons) {
-    this._currentPath.ifPresent(path => path.simplify(this._simplification));
+  
+  finishDrawing() {
+    this._currentPath.ifPresent(path => path.simplify(this.style.smoothing));
     this._currentPath = Optional.empty();
   }
 
-  handleKeyDown(anEvent) {
-    
-  }
-  
 }
 
 export default Pen;

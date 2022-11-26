@@ -1,14 +1,19 @@
 
 import AnimationDocument from './AnimationDocument';
-import { mockPath } from '../../test/helpers/mocks';
+import { mockLayer, mockPath, createFrameContent } from '../../test/helpers/mocks';
 import Optional from '../Optional';
+import RegularFrame from '../frames/RegularFrame';
+
 
 class MokedAnimationDocument extends AnimationDocument {
 
   constructor() {
-    super();
-    this.hitTest = jest.fn(() => Optional.empty());
-    this.createFrame = jest.fn(() => mockPath());
+    super({
+      createFrameContent: createFrameContent,
+      hitTest: jest.fn(() => Optional.empty())
+    });
+
+    this.createFrame = jest.fn(() => new RegularFrame(createFrameContent(), {isKeyFrame: true}));
     this.createPath = jest.fn(() => mockPath());
     this.deselectAllDrawings = jest.fn();
     this.selectDrawing = jest.fn();

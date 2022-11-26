@@ -1,14 +1,21 @@
 import styled, {css} from 'styled-components'
 
-//import pencilIcon from '../assets/pencil.svg'
-
 const Canvas = styled.canvas`
   border: 1px solid grey;
   background-color: white;
-   
-  ${({selectedToolName}) => selectedToolName === 'pen' && css`    
+
+  margin-top: 5px;
+  margin-bottom: 5px;
+     
+  ${({selectedToolName}) => (selectedToolName === 'pen' || selectedToolName === 'eraser') && css`    
     &:hover {
-      cursor: crosshair;
+      cursor: none;
+    }
+  `}
+
+  ${({selectedToolName}) => selectedToolName === 'hand' && css`    
+    &:hover {
+      cursor: grab;
     }
   `}
 `;

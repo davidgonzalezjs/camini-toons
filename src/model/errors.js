@@ -1,1 +1,1 @@
-export const subclassResponsibility = () => { throw "Subclass responsibility" };
+export const subclassResponsibility = (messageName = '') => { throw `Subclass responsibility #${messageName}` };
